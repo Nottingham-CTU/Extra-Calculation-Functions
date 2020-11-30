@@ -67,6 +67,26 @@ function ifnull()
 
 
 
+// strenc
+
+function strenc( str )
+{
+	str = '' + str
+	var enc = ''
+	for ( var i = 0; i < str.length; i++ )
+	{
+		var chr = str.charCodeAt( i ) - 32
+		if ( chr >= 0 && chr <= 94 )
+		{
+			chr = ( chr < 10 ? '0' : '' ) + chr
+			enc += chr
+		}
+	}
+	return enc
+}
+
+
+
 // substr: given a string, start position and length, returns a substring
 
 function substr( str, start, len )

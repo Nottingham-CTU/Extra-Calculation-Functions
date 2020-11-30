@@ -34,6 +34,25 @@ function ifnull()
 
 
 
+// strenc
+
+function strenc( $str )
+{
+	$len = strlen( $str );
+	$enc = '';
+	for ( $i = 0; $i < $len; $i++ )
+	{
+		$chr = ord( substr( $str, $i, 1 ) ) - 32;
+		if ( $chr >= 0 && $chr <= 94 )
+		{
+			$enc .= sprintf( '%02u', $chr );
+		}
+	}
+	return $enc;
+}
+
+
+
 // substr: given a string, start position and length, returns a substring
 
 // Uses built-in PHP function.

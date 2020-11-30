@@ -4,7 +4,9 @@
 	"description": "Provide additional functions for calculated fields and data quality rules.",
 	"permissions": [
 		"redcap_every_page_before_render",
-		"redcap_every_page_top"
+		"redcap_every_page_top",
+		"redcap_data_entry_form_top",
+		"redcap_survey_page_top"
 	],
 	"authors": [
 		{
