@@ -18,6 +18,22 @@ function concat()
 
 
 
+// datalookup: retrieve data from any REDCap project
+
+function datalookup()
+{
+	$args = func_get_args();
+	if ( count( $args ) < 1 )
+	{
+		return '';
+	}
+	$name = array_shift( $args );
+	$doDataLookup = true;
+	require 'datalookup.php';
+}
+
+
+
 // ifnull: return the first argument to the function which is not null
 
 function ifnull()
@@ -34,7 +50,16 @@ function ifnull()
 
 
 
-// strenc
+// randomnumber: generate a secure random number between 0 and 1
+
+function randomnumber()
+{
+	return random_int( 0, ( PHP_INT_MAX - 1 ) ) / PHP_INT_MAX;
+}
+
+
+
+// strenc: converts a string into a numeric representation
 
 function strenc( $str )
 {

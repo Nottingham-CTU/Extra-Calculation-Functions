@@ -8,7 +8,9 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 	public function redcap_every_page_before_render()
 	{
 		\LogicParser::$allowedFunctions[ 'concat' ] = true;
+		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifnull' ] = true;
+		\LogicParser::$allowedFunctions[ 'randomnumber' ] = true;
 		\LogicParser::$allowedFunctions[ 'strenc' ] = true;
 		\LogicParser::$allowedFunctions[ 'substr' ] = true;
 
@@ -141,6 +143,7 @@ $(function()
     vFieldObj.css('display','none')
     vFieldObj.after('<div></div>')
     vFuncUpdateStr( vFieldName )
+    setInterval( function(){ vFuncUpdateStr( vFieldName ) }, 500 )
     vFieldObj.on( 'change', function() { vFuncUpdateStr( vFieldName ) } )
   })
 })

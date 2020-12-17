@@ -23,8 +23,10 @@ header( 'Content-Type: application/javascript' );
 header( 'ETag: ' . $etag );
 $file = fopen( __FILE__, 'r' );
 fseek( $file, __COMPILER_HALT_OFFSET__ );
-echo preg_replace( "!\n{2,}!", "\n",
-                   preg_replace( "!\n//[^\n]*\n!", "\n", stream_get_contents( $file ) ) );
+echo str_replace( 'datalookup.php', $module->getUrl( 'datalookup.php' ),
+                   preg_replace( "!\n{2,}!", "\n",
+                                 preg_replace( "!\n//[^\n]*\n!", "\n",
+                                               stream_get_contents( $file ) ) ) );
 fclose( $file );
 
 // End PHP
@@ -50,6 +52,39 @@ function concat()
 
 
 
+// datalookup: retrieve data from any REDCap project
+
+function datalookup()
+{
+	if ( arguments.length < 1 )
+	{
+		return ''
+	}
+	var luName = arguments[0]
+	var luArgs = []
+	for ( var i = 1; i < arguments.length; i++ )
+	{
+		luArgs.push( arguments[i] )
+	}
+	var luResult = ''
+	$.ajax( { url : 'datalookup.php',
+	          method : 'POST',
+	          data : { name : luName,
+	                   args : JSON.stringify(luArgs) },
+	          headers : { 'X-RC-ECF-Req' : '1' },
+	          dataType : 'json',
+	          success : function ( result )
+	          {
+	            luResult = result
+	          },
+	          async : false,
+	          timeout : 10000
+	        } )
+	return luResult
+}
+
+
+
 // ifnull: return the first argument to the function which is not null
 
 function ifnull()
@@ -67,7 +102,22 @@ function ifnull()
 
 
 
-// strenc
+// randomnumber: generate a secure random number between 0 and 1
+
+function randomnumber()
+{
+	if ( crypto.getRandomValues )
+	{
+		var num = new Uint32Array( 1 )
+		crypto.getRandomValues( num )
+		return num[0] * Math.pow( 2, -32 )
+	}
+	return Math.random()
+}
+
+
+
+// strenc: converts a string into a numeric representation
 
 function strenc( str )
 {
