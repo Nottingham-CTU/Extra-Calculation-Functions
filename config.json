@@ -30,6 +30,7 @@
 			"key" : "custom-data-lookup",
 			"name" : "Custom data lookup",
 			"type" : "sub_settings",
+			"repeatable" : true,
 			"super-users-only" : true,
 			"branchingLogic" : { "field" : "custom-data-lookup-enable", "value" : true },
 			"sub_settings" : [

@@ -34,6 +34,11 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 		$lookupFilter = $module->getProjectSetting( 'custom-data-lookup-filter' )[ $lookupIndex ];
 		$lookupField = $module->getProjectSetting( 'custom-data-lookup-field' )[ $lookupIndex ];
 
+		if ( $lookupProject == '' )
+		{
+			$lookupProject = $module->getProjectId();
+		}
+
 		foreach ( $args as $arg )
 		{
 			$pos = strpos( $lookupFilter, '?' );
@@ -43,6 +48,7 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 			}
 			$lookupFilter = substr_replace( $lookupFilter, "'" . addslashes( $arg ) . "'", $pos, 1 );
 		}
+		$lookupFilter = str_replace( '?', "''", $lookupFilter );
 
 		try
 		{

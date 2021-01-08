@@ -5,6 +5,15 @@ namespace Nottingham\ExtraCalcFunctions;
 class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 {
 
+	// As the REDCap built-in module configuration only contains options for administrators, hide
+	// this configuration from all non-administrators.
+	function redcap_module_configure_button_display( $project_id )
+	{
+		return $this->framework->getUser()->isSuperUser() ? true : null;
+	}
+
+
+
 	public function redcap_every_page_before_render()
 	{
 		\LogicParser::$allowedFunctions[ 'concat' ] = true;
@@ -14,6 +23,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		\LogicParser::$allowedFunctions[ 'strenc' ] = true;
 		\LogicParser::$allowedFunctions[ 'substr' ] = true;
 
+		self::$module = $this;
 		require 'functions.php';
 	}
 
@@ -153,5 +163,35 @@ $(function()
 
 		}
 	}
+
+
+
+	// Module settings validation.
+
+	public function validateSettings( $settings )
+	{
+		$errMsg = '';
+
+		if ( $this->getProjectID() === null )
+		{
+			return null;
+		}
+
+		if ( $settings['custom-data-lookup-enable'] &&
+		     count( $settings['custom-data-lookup'] ) == 0 )
+		{
+			$errMsg .= "\n- At least 1 custom data lookup must be defined";
+		}
+
+		if ( $errMsg != '' )
+		{
+			return "Your minimization configuration contains errors:$errMsg";
+		}
+		return null;
+	}
+
+
+
+	public static $module = null;
 
 }

@@ -29,7 +29,8 @@ function datalookup()
 	}
 	$name = array_shift( $args );
 	$doDataLookup = true;
-	require 'datalookup.php';
+	$module = \Nottingham\ExtraCalcFunctions\ExtraCalcFunctions::$module;
+	return require 'datalookup.php';
 }
 
 
