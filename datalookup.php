@@ -62,6 +62,8 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 				$result = $lookupResult[0][$lookupField];
 			}
 		}
+		// Ignore any exceptions, as any error in finding the project, applying filter logic, etc.
+		// means we return the empty string, which the $result variable has already been set to.
 		catch ( Exception $e ) {}
 	}
 }

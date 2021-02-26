@@ -58,7 +58,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 
 		if ( $errMsg != '' )
 		{
-			return "Your minimization configuration contains errors:$errMsg";
+			return "Your configuration contains errors:$errMsg";
 		}
 		return null;
 	}

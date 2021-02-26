@@ -4,20 +4,6 @@
 
 
 
-// concat: returns all the arguments concatenated together
-
-function concat()
-{
-	$str = '';
-	foreach ( func_get_args() as $arg )
-	{
-		$str .= $arg;
-	}
-	return $str;
-}
-
-
-
 // datalookup: retrieve data from any REDCap project
 
 function datalookup()
@@ -57,29 +43,4 @@ function randomnumber()
 {
 	return random_int( 0, ( PHP_INT_MAX - 1 ) ) / PHP_INT_MAX;
 }
-
-
-
-// strenc: converts a string into a numeric representation
-
-function strenc( $str )
-{
-	$len = strlen( $str );
-	$enc = '';
-	for ( $i = 0; $i < $len; $i++ )
-	{
-		$chr = ord( substr( $str, $i, 1 ) ) - 32;
-		if ( $chr >= 0 && $chr <= 94 )
-		{
-			$enc .= sprintf( '%02u', $chr );
-		}
-	}
-	return $enc;
-}
-
-
-
-// substr: given a string, start position and length, returns a substring
-
-// Uses built-in PHP function.
 

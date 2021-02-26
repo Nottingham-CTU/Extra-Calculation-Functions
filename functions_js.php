@@ -38,20 +38,6 @@ __halt_compiler();
 
 
 
-// concat: returns all the arguments concatenated together
-
-function concat()
-{
-	var str = ''
-	for ( var i = 0; i < arguments.length; i++ )
-	{
-		str += arguments[i]
-	}
-	return str
-}
-
-
-
 // datalookup: retrieve data from any REDCap project
 
 function datalookup()
@@ -113,47 +99,4 @@ function randomnumber()
 		return num[0] * Math.pow( 2, -32 )
 	}
 	return Math.random()
-}
-
-
-
-// strenc: converts a string into a numeric representation
-
-function strenc( str )
-{
-	str = '' + str
-	var enc = ''
-	for ( var i = 0; i < str.length; i++ )
-	{
-		var chr = str.charCodeAt( i ) - 32
-		if ( chr >= 0 && chr <= 94 )
-		{
-			chr = ( chr < 10 ? '0' : '' ) + chr
-			enc += chr
-		}
-	}
-	return enc
-}
-
-
-
-// substr: given a string, start position and length, returns a substring
-
-function substr( str, start, len )
-{
-	str = '' + str
-	if ( start < 0 )
-	{
-		start = str.length + start
-	}
-	var end = str.length
-	if ( len >= 0 )
-	{
-		end = start + len
-	}
-	else if ( len < 0 )
-	{
-		end = str.length + len
-	}
-	return str.substring( start, end )
 }
