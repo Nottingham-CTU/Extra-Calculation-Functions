@@ -5,8 +5,12 @@ This REDCap module adds extra functions for use in calculated fields.
 * **datalookup( name, param1, param2, ... )**<br>
   supply a lookup name followed by parameters to invoke a REDCap data lookup defined in the module
   project settings
+  * The behaviour of this function will depend on the defined custom data lookups in the module
+    settings.
 * **ifnull( arg1, arg2, ... )**<br>
   returns the first argument supplied which is not null
+  * e.g. `ifnull( [field1], [field2] )` will return the value of `field1` unless it is empty, in
+    which case it will return the value of `field2`.
 * **randomnumber()**<br>
   returns a cryptographically secure random number between 0 and 1
   * Note that this function will return a different value each time the calculation is run. To
@@ -16,6 +20,7 @@ This REDCap module adds extra functions for use in calculated fields.
 
 
 ## Project-level configuration options
+These settings are only available to administrators.
 
 ### Enable custom data lookup
 This setting enables the *datalookup* function and provides the options to configure data lookup
@@ -42,3 +47,7 @@ values will be ignored.
 
 ### Lookup field
 The value of this field (from the returned record) will be returned by the *datalookup* function.
+
+### Return label instead of raw value
+If checked, the datalookup function will return the label instead of the value when looking up a
+multiple choice field.

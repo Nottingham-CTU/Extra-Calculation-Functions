@@ -33,6 +33,7 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 		$lookupProject = $module->getProjectSetting( 'custom-data-lookup-project' )[ $lookupIndex ];
 		$lookupFilter = $module->getProjectSetting( 'custom-data-lookup-filter' )[ $lookupIndex ];
 		$lookupField = $module->getProjectSetting( 'custom-data-lookup-field' )[ $lookupIndex ];
+		$lookupUseLabel = $module->getProjectSetting( 'custom-data-lookup-use-label' )[ $lookupIndex ];
 
 		if ( $lookupProject == '' )
 		{
@@ -56,7 +57,9 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 			                                                'return_format' => 'json',
 			                                                'filterLogic' => $lookupFilter,
 			                                                'exportDataAccessGroups' => true,
-			                                                'exportSurveyFields' => true ] ), true );
+			                                                'exportSurveyFields' => true,
+			                                                'exportAsLabels' => $lookupUseLabel ] ),
+			                             true );
 			if ( count( $lookupResult ) > 0 )
 			{
 				$result = $lookupResult[0][$lookupField];

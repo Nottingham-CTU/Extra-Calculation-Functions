@@ -53,6 +53,11 @@
 					"key" : "custom-data-lookup-field",
 					"name" : "Lookup field",
 					"type" : "text"
+				},
+				{
+					"key" : "custom-data-lookup-use-label",
+					"name" : "Return label instead of raw value",
+					"type" : "checkbox"
 				}
 			]
 		}
