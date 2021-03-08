@@ -1,0 +1,65 @@
+{
+	"name": "Extra Calculation Functions",
+	"namespace": "Nottingham\\ExtraCalcFunctions",
+	"description": "Provide additional functions for calculated fields and data quality rules.",
+	"permissions": [
+		"redcap_every_page_before_render",
+		"redcap_every_page_top",
+		"redcap_data_entry_form_top",
+		"redcap_survey_page_top"
+	],
+	"authors": [
+		{
+			"name": "Richard Dooley",
+			"email": "richard.dooley@nottingham.ac.uk",
+			"institution": "University of Nottingham"
+		}
+	],
+	"framework-version" : 3,
+	"compatibility": {
+		"redcap-version-min": "9.6.5"
+	},
+	"project-settings" : [
+		{
+			"key" : "custom-data-lookup-enable",
+			"name" : "Enable custom data lookup",
+			"type" : "checkbox",
+			"super-users-only" : true
+		},
+		{
+			"key" : "custom-data-lookup",
+			"name" : "Custom data lookup",
+			"type" : "sub_settings",
+			"repeatable" : true,
+			"super-users-only" : true,
+			"branchingLogic" : { "field" : "custom-data-lookup-enable", "value" : true },
+			"sub_settings" : [
+				{
+					"key" : "custom-data-lookup-name",
+					"name" : "Lookup name",
+					"type" : "text"
+				},
+				{
+					"key" : "custom-data-lookup-project",
+					"name" : "Project in which to perform lookup",
+					"type" : "project-id"
+				},
+				{
+					"key" : "custom-data-lookup-filter",
+					"name" : "Record filter logic (use ? as placeholder value)",
+					"type" : "textarea"
+				},
+				{
+					"key" : "custom-data-lookup-field",
+					"name" : "Lookup field",
+					"type" : "text"
+				},
+				{
+					"key" : "custom-data-lookup-use-label",
+					"name" : "Return label instead of raw value",
+					"type" : "checkbox"
+				}
+			]
+		}
+	]
+}
