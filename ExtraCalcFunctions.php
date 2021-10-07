@@ -17,6 +17,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 	public function redcap_every_page_before_render()
 	{
 		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
+		\LogicParser::$allowedFunctions[ 'ifenum' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifnull' ] = true;
 		\LogicParser::$allowedFunctions[ 'randomnumber' ] = true;
 

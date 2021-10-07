@@ -79,6 +79,28 @@ datalookup = (function()
 
 
 
+// ifenum (if-enumerated): return the corresponding result for the first matching value
+
+function ifenum()
+{
+	if ( arguments.length < 2 || arguments.length % 2 != 0 )
+	{
+		return ''
+	}
+	var comparator = arguments[0]
+	var defaultVal = arguments[1]
+	for ( var i = 2; i < arguments.length; i += 2 )
+	{
+		if ( comparator == arguments[i] )
+		{
+			return arguments[i+1]
+		}
+	}
+	return defaultVal
+}
+
+
+
 // ifnull: return the first argument to the function which is not null
 
 function ifnull()

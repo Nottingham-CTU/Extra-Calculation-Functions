@@ -7,6 +7,9 @@ This REDCap module adds extra functions for use in calculated fields.
   project settings
   * The behaviour of this function will depend on the defined custom data lookups in the module
     settings.
+* **ifenum( comparator, default, value1, result1, value2, result2, ... )**<br>
+  if-enumerated: returns the result corresponding to the first value which is equal to the
+  comparator, or the default value if none of the values are equal
 * **ifnull( arg1, arg2, ... )**<br>
   returns the first argument supplied which is not null
   * e.g. `ifnull( [field1], [field2] )` will return the value of `field1` unless it is empty, in
@@ -17,6 +20,11 @@ This REDCap module adds extra functions for use in calculated fields.
     preserve a generated random number, consider pairing this function with the *ifnull* function,
     so that the calculated field's current value (once set) is preferred over a new value.
     <br>e.g. `ifnull( [calc_field_name], randomnumber() )`
+
+Note that where the arguments to *ifenum* and *ifnull* are themselves functions, they will all be
+evaluated prior to the *ifenum* or *ifnull* logic execution (eager evaluation), even if those
+arguments are not needed. Using REDCap's built-in *if* function instead will avoid this issue, at
+the expense of more complicated calculation logic.
 
 
 ## Project-level configuration options
