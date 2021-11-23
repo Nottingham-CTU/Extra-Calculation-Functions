@@ -30,6 +30,10 @@ the expense of more complicated calculation logic.
 ## Project-level configuration options
 These settings are only available to administrators.
 
+### Automatically update calculated values
+If this setting is enabled, the data quality rule for *Incorrect values for calculated fields* will
+be automatically run to fix calculated values on 10% of page loads.
+
 ### Enable custom data lookup
 This setting enables the *datalookup* function and provides the options to configure data lookup
 settings. If custom data lookup is enabled, at least one custom data lookup must be defined.
@@ -43,10 +47,8 @@ Specifies which REDCap project the lookup is applied to. If this is not set, the
 used.
 
 ### Record filter logic
-Criteria to filter the records. The filter logic should be specific enough to return only a single
-record. If multiple records are returned, there is the possibility of an erroneous or inconsistent
-result from the lookup. Any `?` characters in the filter logic act as placeholders and will be
-replaced by the values specified as parameters in the *datalookup* function.
+Criteria to filter the records. Any `?` characters in the filter logic act as placeholders and will
+be replaced by the values specified as parameters in the *datalookup* function.
 
 The number of placeholders in the filter logic and the number of placeholder values supplied in the
 *datalookup* function should be equal. If there are more placeholders in the logic, the remaining
@@ -59,3 +61,10 @@ The value of this field (from the returned record) will be returned by the *data
 ### Return label instead of raw value
 If checked, the datalookup function will return the label instead of the value when looking up a
 multiple choice field.
+
+### Type of lookup
+If multiple records are returned by the filter logic, this option specifies how the result is to be
+returned.
+
+### List separator
+If a list of items is to be returned, specify the separator character/string here.

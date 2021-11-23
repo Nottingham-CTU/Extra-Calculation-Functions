@@ -21,6 +21,12 @@
 	},
 	"project-settings" : [
 		{
+			"key" : "calc-values-auto-update",
+			"name" : "Automatically update calculated values",
+			"type" : "checkbox",
+			"super-users-only" : true
+		},
+		{
 			"key" : "custom-data-lookup-enable",
 			"name" : "Enable custom data lookup",
 			"type" : "checkbox",
@@ -58,6 +64,22 @@
 					"key" : "custom-data-lookup-use-label",
 					"name" : "Return label instead of raw value",
 					"type" : "checkbox"
+				},
+				{
+					"key" : "custom-data-lookup-type",
+					"name" : "Type of lookup",
+					"type" : "radio",
+					"choices" : [
+						{ "value" : "", "name" : "First item only" },
+						{ "value" : "list", "name" : "List of items" },
+						{ "value" : "plus", "name" : "First item + number of other items" },
+						{ "value" : "count", "name" : "Number of items only" }
+					]
+				},
+				{
+					"key" : "custom-data-lookup-list-sep",
+					"name" : "List separator",
+					"type" : "text"
 				}
 			]
 		}
