@@ -23,8 +23,7 @@
 		{
 			"key" : "calc-values-auto-update",
 			"name" : "Automatically update calculated values",
-			"type" : "checkbox",
-			"super-users-only" : true
+			"type" : "checkbox"
 		},
 		{
 			"key" : "custom-data-lookup-enable",

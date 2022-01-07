@@ -5,11 +5,9 @@ namespace Nottingham\ExtraCalcFunctions;
 class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 {
 
-	// As the REDCap built-in module configuration only contains options for administrators, hide
-	// this configuration from all non-administrators.
-	function redcap_module_configure_button_display( $project_id )
+	public function redcap_module_project_disable( $version, $project_id )
 	{
-		return $this->framework->getUser()->isSuperUser() ? true : null;
+		$this->removeProjectSetting( 'calc-values-auto-update-ts' );
 	}
 
 
@@ -26,10 +24,14 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		self::$module = $this;
 		require 'functions.php';
 
-		// If auto-updating of calculated values is enabled, do this on 10% of page loads.
+		// If auto-updating of calculated values is enabled, do this if it has not been done in the
+		// last 15 minutes.
 		if ( $project_id !== null &&
-		     $this->getProjectSetting( 'calc-values-auto-update' ) && mt_rand( 0, 9 ) == 0 )
+		     $this->getProjectSetting( 'calc-values-auto-update' ) &&
+		     ( $this->getProjectSetting( 'calc-values-auto-update-ts' ) == null ||
+		       $this->getProjectSetting( 'calc-values-auto-update-ts' ) + 900 < time() ) )
 		{
+			$this->setProjectSetting( 'calc-values-auto-update-ts', time() );
 			$oldAction = null;
 			if ( isset( $_POST['action'] ) )
 			{
@@ -80,11 +82,31 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		{
 			$errMsg .= "\n- At least 1 custom data lookup must be defined";
 		}
+		else
+		{
+			for ( $i = 0; $i < count( $settings['custom-data-lookup'] ); $i++ )
+			{
+				if ( $settings['custom-data-lookup-name'][$i] == '' )
+				{
+					$errMsg .= "\n- Name for lookup " . ($i+1) . " is missing";
+				}
+				if ( $settings['custom-data-lookup-field'][$i] == '' )
+				{
+					$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
+				}
+			}
+		}
 
 		if ( $errMsg != '' )
 		{
 			return "Your configuration contains errors:$errMsg";
 		}
+
+		if ( ! $settings['calc-values-auto-update'] )
+		{
+			$this->removeProjectSetting( 'calc-values-auto-update-ts' );
+		}
+
 		return null;
 	}
 

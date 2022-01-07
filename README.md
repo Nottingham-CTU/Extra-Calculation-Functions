@@ -28,11 +28,13 @@ the expense of more complicated calculation logic.
 
 
 ## Project-level configuration options
-These settings are only available to administrators.
 
 ### Automatically update calculated values
 If this setting is enabled, the data quality rule for *Incorrect values for calculated fields* will
-be automatically run to fix calculated values on 10% of page loads.
+be automatically run to fix calculated values on page load if at least 15 minutes has passed since
+it was last run.
+
+***The following settings are only available to administrators.***
 
 ### Enable custom data lookup
 This setting enables the *datalookup* function and provides the options to configure data lookup

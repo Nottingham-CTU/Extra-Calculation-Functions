@@ -6,7 +6,7 @@
 
 
 // Override REDCap caching headers, to allow caching.
-// Return a 304 status if icon unchanged from cached version.
+// Return a 304 status if JavaScript unchanged from cached version.
 header( 'Pragma: ' );
 header( 'Expires: ' );
 header( 'Cache-Control: max-age=2419200' );
