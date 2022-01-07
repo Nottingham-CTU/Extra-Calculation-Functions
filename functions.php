@@ -21,6 +21,29 @@ function datalookup()
 
 
 
+// ifenum (if-enumerated): return the corresponding result for the first matching value
+
+function ifenum()
+{
+	$args = func_get_args();
+	if ( count( $args ) < 2 || count( $args ) % 2 != 0 )
+	{
+		return '';
+	}
+	$comparator = array_shift( $args );
+	$default = array_shift( $args );
+	for ( $i = 0; $i < count( $args ); $i += 2 )
+	{
+		if ( $comparator == $args[$i] )
+		{
+			return $args[$i+1];
+		}
+	}
+	return $default;
+}
+
+
+
 // ifnull: return the first argument to the function which is not null
 
 function ifnull()

@@ -6,7 +6,7 @@
 
 
 // Override REDCap caching headers, to allow caching.
-// Return a 304 status if icon unchanged from cached version.
+// Return a 304 status if JavaScript unchanged from cached version.
 header( 'Pragma: ' );
 header( 'Expires: ' );
 header( 'Cache-Control: max-age=2419200' );
@@ -40,33 +40,63 @@ __halt_compiler();
 
 // datalookup: retrieve data from any REDCap project
 
-function datalookup()
+datalookup = (function()
 {
-	if ( arguments.length < 1 )
+	var luCache = {}
+	return function ()
+	{
+		if ( arguments.length < 1 )
+		{
+			return ''
+		}
+		var luName = arguments[0]
+		var luArgs = []
+		for ( var i = 1; i < arguments.length; i++ )
+		{
+			luArgs.push( arguments[i] )
+		}
+		luArgs = JSON.stringify( luArgs )
+		if ( luCache[ luName ] == undefined )
+		{
+			luCache[ luName ] = {}
+		}
+		if ( luCache[ luName ][ luArgs ] == undefined )
+		{
+			$.ajax( { url : 'datalookup.php',
+			          method : 'POST', headers : { 'X-RC-ECF-Req' : '1' },
+			          dataType : 'json', data : { name : luName, args : luArgs },
+			          success : function ( result )
+			          {
+			            luCache[ luName ][ luArgs ] = result
+			            calculate()
+			          }
+			        } )
+			return ''
+		}
+		return luCache[ luName ][ luArgs ]
+	}
+})()
+
+
+
+// ifenum (if-enumerated): return the corresponding result for the first matching value
+
+function ifenum()
+{
+	if ( arguments.length < 2 || arguments.length % 2 != 0 )
 	{
 		return ''
 	}
-	var luName = arguments[0]
-	var luArgs = []
-	for ( var i = 1; i < arguments.length; i++ )
+	var comparator = arguments[0]
+	var defaultVal = arguments[1]
+	for ( var i = 2; i < arguments.length; i += 2 )
 	{
-		luArgs.push( arguments[i] )
+		if ( comparator == arguments[i] )
+		{
+			return arguments[i+1]
+		}
 	}
-	var luResult = ''
-	$.ajax( { url : 'datalookup.php',
-	          method : 'POST',
-	          data : { name : luName,
-	                   args : JSON.stringify(luArgs) },
-	          headers : { 'X-RC-ECF-Req' : '1' },
-	          dataType : 'json',
-	          success : function ( result )
-	          {
-	            luResult = result
-	          },
-	          async : false,
-	          timeout : 10000
-	        } )
-	return luResult
+	return defaultVal
 }
 
 
