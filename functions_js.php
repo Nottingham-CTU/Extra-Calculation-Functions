@@ -9,7 +9,7 @@
 // Return a 304 status if JavaScript unchanged from cached version.
 header( 'Pragma: ' );
 header( 'Expires: ' );
-header( 'Cache-Control: max-age=2419200' );
+header( 'Cache-Control: max-age=604800' );
 
 $etag = substr( sha1_file( __FILE__ ), 0, 12 );
 if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag )
@@ -62,6 +62,7 @@ datalookup = (function()
 		}
 		if ( luCache[ luName ][ luArgs ] == undefined )
 		{
+			luCache[ luName ][ luArgs ] = ''
 			$.ajax( { url : 'datalookup.php',
 			          method : 'POST', headers : { 'X-RC-ECF-Req' : '1' },
 			          dataType : 'json', data : { name : luName, args : luArgs },
