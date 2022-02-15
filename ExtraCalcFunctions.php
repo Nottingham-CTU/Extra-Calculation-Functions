@@ -77,22 +77,24 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 			return null;
 		}
 
-		if ( $settings['custom-data-lookup-enable'] &&
-		     count( $settings['custom-data-lookup'] ) == 0 )
+		if ( $settings['custom-data-lookup-enable'] )
 		{
-			$errMsg .= "\n- At least 1 custom data lookup must be defined";
-		}
-		else
-		{
-			for ( $i = 0; $i < count( $settings['custom-data-lookup'] ); $i++ )
+			if ( count( $settings['custom-data-lookup'] ) == 0 )
 			{
-				if ( $settings['custom-data-lookup-name'][$i] == '' )
+				$errMsg .= "\n- At least 1 custom data lookup must be defined";
+			}
+			else
+			{
+				for ( $i = 0; $i < count( $settings['custom-data-lookup'] ); $i++ )
 				{
-					$errMsg .= "\n- Name for lookup " . ($i+1) . " is missing";
-				}
-				if ( $settings['custom-data-lookup-field'][$i] == '' )
-				{
-					$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
+					if ( $settings['custom-data-lookup-name'][$i] == '' )
+					{
+						$errMsg .= "\n- Name for lookup " . ($i+1) . " is missing";
+					}
+					if ( $settings['custom-data-lookup-field'][$i] == '' )
+					{
+						$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
+					}
 				}
 			}
 		}
