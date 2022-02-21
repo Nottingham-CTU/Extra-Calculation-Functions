@@ -67,3 +67,26 @@ function randomnumber()
 	return random_int( 0, ( PHP_INT_MAX - 1 ) ) / PHP_INT_MAX;
 }
 
+
+
+// sysvar: return the value of the specified system variable
+
+function sysvar( $name )
+{
+	$module = \Nottingham\ExtraCalcFunctions\ExtraCalcFunctions::$module;
+	if ( $module->getSystemSetting( 'sysvar-enable' ) )
+	{
+		$numVars = count( $module->getSystemSetting( 'sysvar' ) );
+		$varNames = $module->getSystemSetting( 'sysvar-name' );
+		$varValues = $module->getSystemSetting( 'sysvar-value' );
+		for ( $i = 0; $i < $numVars; $i++ )
+		{
+			if ( $varNames[$i] == $name )
+			{
+				return $varValues[$i];
+			}
+		}
+	}
+	return '';
+}
+

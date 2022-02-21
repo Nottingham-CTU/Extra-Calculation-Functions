@@ -19,6 +19,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		\LogicParser::$allowedFunctions[ 'ifenum' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifnull' ] = true;
 		\LogicParser::$allowedFunctions[ 'randomnumber' ] = true;
+		\LogicParser::$allowedFunctions[ 'sysvar' ] = true;
 
 		// Define the PHP versions of the functions.
 		self::$module = $this;
@@ -59,8 +60,25 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		// Include the JavaScript versions of the functions on every page.
 
 ?>
-<script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php' ); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php' ), '&v=',
+            preg_replace( '/^.*?([0-9.]+)$/', '$1', $this->getModuleDirectoryName() ); ?>"></script>
 <?php
+
+		// Get the system variables for use by the sysvar function.
+		if ( $this->getSystemSetting( 'sysvar-enable' ) )
+		{
+			$numVars = count( $this->getSystemSetting( 'sysvar' ) );
+			$varNames = $this->getSystemSetting( 'sysvar-name' );
+			$varValues = $this->getSystemSetting( 'sysvar-value' );
+			$vars = [];
+			for ( $i = 0; $i < $numVars; $i++ )
+			{
+				$vars[] = [ 'n' => $varNames[$i], 'v' => $varValues[$i] ];
+			}
+			echo '<script type="text/javascript">(function(){var sv = sysvar;var vars = ';
+			echo json_encode( $vars );
+			echo ';sysvar = function(name){return sv(name,vars)}})()</script>', "\n";
+		}
 
 	}
 
@@ -74,26 +92,44 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 
 		if ( $this->getProjectID() === null )
 		{
-			return null;
-		}
-
-		if ( $settings['custom-data-lookup-enable'] )
-		{
-			if ( count( $settings['custom-data-lookup'] ) == 0 )
+			if ( $settings['sysvar-enable'] )
 			{
-				$errMsg .= "\n- At least 1 custom data lookup must be defined";
-			}
-			else
-			{
-				for ( $i = 0; $i < count( $settings['custom-data-lookup'] ); $i++ )
+				if ( count( $settings['sysvar'] ) == 0 )
 				{
-					if ( $settings['custom-data-lookup-name'][$i] == '' )
+					$errMsg .= "\n- At least 1 system variable must be defined";
+				}
+				else
+				{
+					for ( $i = 0; $i < count( $settings['sysvar'] ); $i++ )
 					{
-						$errMsg .= "\n- Name for lookup " . ($i+1) . " is missing";
+						if ( $settings['sysvar-name'][$i] == '' )
+						{
+							$errMsg .= "\n- Name for system variable " . ($i+1) . " is missing";
+						}
 					}
-					if ( $settings['custom-data-lookup-field'][$i] == '' )
+				}
+			}
+		}
+		else
+		{
+			if ( $settings['custom-data-lookup-enable'] )
+			{
+				if ( count( $settings['custom-data-lookup'] ) == 0 )
+				{
+					$errMsg .= "\n- At least 1 custom data lookup must be defined";
+				}
+				else
+				{
+					for ( $i = 0; $i < count( $settings['custom-data-lookup'] ); $i++ )
 					{
-						$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
+						if ( $settings['custom-data-lookup-name'][$i] == '' )
+						{
+							$errMsg .= "\n- Name for lookup " . ($i+1) . " is missing";
+						}
+						if ( $settings['custom-data-lookup-field'][$i] == '' )
+						{
+							$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
+						}
 					}
 				}
 			}
@@ -104,7 +140,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 			return "Your configuration contains errors:$errMsg";
 		}
 
-		if ( ! $settings['calc-values-auto-update'] )
+		if ( $this->getProjectID() !== null && ! $settings['calc-values-auto-update'] )
 		{
 			$this->removeProjectSetting( 'calc-values-auto-update-ts' );
 		}

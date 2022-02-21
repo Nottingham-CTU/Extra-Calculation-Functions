@@ -20,6 +20,8 @@ This REDCap module adds extra functions for use in calculated fields.
     preserve a generated random number, consider pairing this function with the *ifnull* function,
     so that the calculated field's current value (once set) is preferred over a new value.
     <br>e.g. `ifnull( [calc_field_name], randomnumber() )`
+* **sysvar( varname )**<br>
+ returns the value for the specified system variable as defined in the module system settings
 
 Note that where the arguments to *ifenum* and *ifnull* are themselves functions, they will all be
 evaluated prior to the *ifenum* or *ifnull* logic execution (eager evaluation), even if those
@@ -70,3 +72,16 @@ returned.
 
 ### List separator
 If a list of items is to be returned, specify the separator character/string here.
+
+
+## System-level configuration options
+
+### Enable system variables
+This setting enables the *sysvar* function and provides the options to set the variable names and
+values. If system variables are enabled, at least one must be defined.
+
+### Variable name
+The name of the system variable. This is used as the parameter to the *sysvar* function.
+
+### Variable value
+The value of the system variable. This is the value returned by the *sysvar* function.

@@ -131,3 +131,23 @@ function randomnumber()
 	}
 	return Math.random()
 }
+
+
+
+// sysvar: return the value of the specified system variable
+
+function sysvar( name )
+{
+	if ( arguments.length == 2 && Array.isArray( arguments[1] ) )
+	{
+		var vars = arguments[1]
+		for ( var i = 0; i < vars.length; i++ )
+		{
+			if ( vars[i].n == name )
+			{
+				return vars[i].v
+			}
+		}
+	}
+	return ''
+}
