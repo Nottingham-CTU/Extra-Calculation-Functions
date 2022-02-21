@@ -14,6 +14,9 @@ This REDCap module adds extra functions for use in calculated fields.
   returns the first argument supplied which is not null
   * e.g. `ifnull( [field1], [field2] )` will return the value of `field1` unless it is empty, in
     which case it will return the value of `field2`.
+* **makedate( format, year, month, day )**<br>
+  returns the date value for the supplied year, month and day components, according to the specified
+  format ('dmy', 'mdy', or 'ymd')
 * **randomnumber()**<br>
   returns a cryptographically secure random number between 0 and 1
   * Note that this function will return a different value each time the calculation is run. To

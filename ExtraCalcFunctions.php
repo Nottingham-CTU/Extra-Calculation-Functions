@@ -18,6 +18,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifenum' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifnull' ] = true;
+		\LogicParser::$allowedFunctions[ 'makedate' ] = true;
 		\LogicParser::$allowedFunctions[ 'randomnumber' ] = true;
 		\LogicParser::$allowedFunctions[ 'sysvar' ] = true;
 

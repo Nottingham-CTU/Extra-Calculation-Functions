@@ -119,6 +119,33 @@ function ifnull()
 
 
 
+// makedate: make a date value from year/month/day components
+
+function makedate( fmt = '', y = '', m = '', d = '' )
+{
+	if ( ! /^[0-9]+$/.test( y ) || ! /^((0?[1-9])|(1[012]))$/.test( m ) ||
+	     ! /^((0?[1-9])|([12][0-9])|(3[01]))$/.test( d ) ||
+	     ( d == 31 && [2,4,6,9,11].includes( Number( m ) ) ) || ( d == 30 && m == 2 ) ||
+	     ( d == 29 && m == 2 && ( y % 4 != 0 || ( y % 100 == 0 && y % 400 != 0 ) ) ) )
+	{
+		return ''
+	}
+	if ( fmt.toLowerCase() == 'dmy' )
+	{
+		return ( (''+d).length == 1 ? '0' : '' ) + d + '-' +
+		       ( (''+m).length == 1 ? '0' : '' ) + m + '-' + y
+	}
+	if ( fmt.toLowerCase() == 'mdy' )
+	{
+		return ( (''+m).length == 1 ? '0' : '' ) + m + '-' +
+		       ( (''+d).length == 1 ? '0' : '' ) + d + '-' + y
+	}
+	return '' + y + '-' +
+	       ( (''+m).length == 1 ? '0' : '' ) + m + '-' + ( (''+d).length == 1 ? '0' : '' ) + d
+}
+
+
+
 // randomnumber: generate a secure random number between 0 and 1
 
 function randomnumber()

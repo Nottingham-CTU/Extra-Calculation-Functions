@@ -60,6 +60,23 @@ function ifnull()
 
 
 
+// makedate: make a date value from year/month/day components
+
+function makedate( $fmt = '', $y = '', $m = '', $d = '' )
+{
+	if ( ! preg_match( '/^[0-9]+$/', $y ) || ! preg_match( '/^((0?[1-9])|(1[012]))$/', $m ) ||
+	     ! preg_match( '/^((0?[1-9])|([12][0-9])|(3[01]))$/', $d ) ||
+	     ( $d == 31 && in_array( $m, [ 2, 4, 6, 9, 11 ], false ) ) || ( $d == 30 && $m == 2 ) ||
+	     ( $d == 29 && $m == 2 && ( $y % 4 != 0 || ( $y % 100 == 0 && $y % 400 != 0 ) ) ) )
+	{
+		return '';
+	}
+	return $y . '-' .
+	       ( strlen( $m ) == 1 ? '0' : '' ) . $m . '-' . ( strlen( $d ) == 1 ? '0' : '' ) . $d;
+}
+
+
+
 // randomnumber: generate a secure random number between 0 and 1
 
 function randomnumber()
@@ -71,7 +88,7 @@ function randomnumber()
 
 // sysvar: return the value of the specified system variable
 
-function sysvar( $name )
+function sysvar( $name = '' )
 {
 	$module = \Nottingham\ExtraCalcFunctions\ExtraCalcFunctions::$module;
 	if ( $module->getSystemSetting( 'sysvar-enable' ) )
