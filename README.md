@@ -14,6 +14,16 @@ This REDCap module adds extra functions for use in calculated fields.
   returns the first argument supplied which is not null
   * e.g. `ifnull( [field1], [field2] )` will return the value of `field1` unless it is empty, in
     which case it will return the value of `field2`.
+* **loglookup(  )**<br>
+  lookup the first or last entry in the project log, filtered by field, record, event and instance,
+  and return a metadata value.
+  * Valid lookup types are: 'first-user', 'last-user', 'first-user-fullname', 'last-user-fullname',
+    'first-user-email', 'last-user-email', 'first-ip', 'last-ip', 'first-date', 'last-date',
+    'first-date-dmy', 'last-date-dmy', 'first-date-mdy', 'last-date-mdy', 'first-datetime',
+    'last-datetime', 'first-datetime-dmy', 'last-datetime-dmy', 'first-datetime-mdy',
+    'last-datetime-mdy', 'first-datetime-seconds', 'last-datetime-seconds',
+    'first-datetime-seconds-dmy', 'last-datetime-seconds-dmy', 'first-datetime-seconds-mdy',
+    'last-datetime-seconds-mdy'.
 * **makedate( format, year, month, day )**<br>
   returns the date value for the supplied year, month and day components, according to the specified
   format ('dmy', 'mdy', or 'ymd')

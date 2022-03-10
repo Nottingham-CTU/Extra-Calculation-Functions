@@ -24,9 +24,10 @@ header( 'ETag: ' . $etag );
 $file = fopen( __FILE__, 'r' );
 fseek( $file, __COMPILER_HALT_OFFSET__ );
 echo str_replace( 'datalookup.php', $module->getUrl( 'datalookup.php' ),
-                   preg_replace( "!\n{2,}!", "\n",
-                                 preg_replace( "!\n//[^\n]*\n!", "\n",
-                                               stream_get_contents( $file ) ) ) );
+             str_replace( 'loglookup.php', $module->getUrl( 'loglookup.php' ),
+                          preg_replace( "!\n{2,}!", "\n",
+                                        preg_replace( "!\n//[^\n]*\n!", "\n",
+                                                      stream_get_contents( $file ) ) ) ) );
 fclose( $file );
 
 // End PHP
@@ -116,6 +117,44 @@ function ifnull()
 	}
 	return ''
 }
+
+
+
+// loglookup: get data from the project log
+
+loglookup = (function()
+{
+	var luCache = {}
+	return function ( type = '', field = '', record = '', event = '', instance = '' )
+	{
+		if ( type == '' || field == '' )
+		{
+			return ''
+		}
+		var luArgs = []
+		for ( var i = 0; i < arguments.length; i++ )
+		{
+			luArgs.push( arguments[i] )
+		}
+		luArgs = JSON.stringify( luArgs )
+		if ( luCache[ luArgs ] == undefined )
+		{
+			luCache[ luArgs ] = ''
+			$.ajax( { url : 'loglookup.php',
+			          method : 'POST', headers : { 'X-RC-ECF-Req' : '1' },
+			          dataType : 'json', data : { type : type, field : field, record : record,
+			                                      event : event, instance : instance },
+			          success : function ( result )
+			          {
+			            luCache[ luArgs ] = result
+			            calculate()
+			          }
+			        } )
+			return ''
+		}
+		return luCache[ luArgs ]
+	}
+})()
 
 
 

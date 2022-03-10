@@ -60,6 +60,21 @@ function ifnull()
 
 
 
+// loglookup: get data from the project log
+
+function loglookup( $type = '', $field = '', $record = '', $event = '', $instance = '' )
+{
+	if ( $type == '' || $field == '' )
+	{
+		return '';
+	}
+	$doLogLookup = true;
+	$module = \Nottingham\ExtraCalcFunctions\ExtraCalcFunctions::$module;
+	return require 'loglookup.php';
+}
+
+
+
 // makedate: make a date value from year/month/day components
 
 function makedate( $fmt = '', $y = '', $m = '', $d = '' )
