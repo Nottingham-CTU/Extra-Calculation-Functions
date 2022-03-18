@@ -20,22 +20,26 @@ if ( ! $doLogLookup ) // AJAX request
 $result = '';
 $project = $module->getProjectId();
 
-if ( $project != '' )
+if ( $project != '' && $type != '' && $field != '' )
 {
+	// If event name is specified, convert to the event ID.
 	$eventID = $event == '' ? '' : $GLOBALS['Proj']->getEventIdUsingUniqueEventName( $event );
+
+	// Strip invalid characters from field names and escape underscores for SQL LIKE patterns.
 	$field = preg_replace( '/[^A-Za-z0-9,_]/', '', $field );
 	$listFieldPatterns = explode( ',', str_replace( '_', '\\_', $field ) );
 
-	$projQuery = $module->query( 'SELECT log_event_table FROM redcap_projects WHERE project_id = ?',
-	                             [ $project ] );
-	$logEventTable = $projQuery->fetch_assoc()['log_event_table'];
+	// Get the table used for logging by the project.
+	$logEventTable = REDCap::getLogEventTable( $project );
 
+	// Begin the query ...
 	$query = "SELECT l.ts, l.user, u.user_firstname, u.user_lastname, u.user_email, l.ip, " .
 	         "l.data_values FROM $logEventTable l JOIN redcap_user_information u " .
 	         "ON l.user = u.username WHERE l.project_id = ? AND (l.event = 'INSERT' " .
 	         "OR l.event = 'UPDATE') AND l.object_type = 'redcap_data'";
 	$params = [ $project ];
 	$query .= " AND (";
+	// ... look for the field names in data_values ...
 	$firstFieldPattern = true;
 	foreach ( $listFieldPatterns as $fieldPattern )
 	{
@@ -47,21 +51,27 @@ if ( $project != '' )
 		{
 			$query .= " OR ";
 		}
-		$query .= "l.data_values LIKE ? OR l.data_values LIKE ?";
+		$query .= "l.data_values LIKE ? OR l.data_values LIKE ? OR " .
+		          "l.data_values LIKE ? OR l.data_values LIKE ?";
 		$params[] = $fieldPattern . ' %';
-		$params[] = '%\n' . $fieldPattern . ' %';
+		$params[] = "%\n" . $fieldPattern . ' %';
+		$params[] = $fieldPattern . '(%';
+		$params[] = "%\n" . $fieldPattern . '(%';
 	}
 	$query .= ")";
+	// ... filter by the record if specified ...
 	if ( $record != '' )
 	{
 		$query .= " AND l.pk = ?";
 		$params[] = $record;
 	}
+	// ... filter by the event if specified ...
 	if ( $eventID != '' )
 	{
 		$query .= " AND l.event_id = ?";
 		$params[] = $eventID;
 	}
+	// ... filter by the instance if specified ...
 	if ( $instance != '' )
 	{
 		if ( $instance == 1 )
@@ -74,6 +84,7 @@ if ( $project != '' )
 			$params[] = '[instance = ' . $instance . ']%';
 		}
 	}
+	// ... and retrieve the first or last matching entry as appropriate.
 	if ( substr( $type, 0, 6 ) == 'first-' )
 	{
 		$query .= " ORDER BY l.log_event_id LIMIT 1";
@@ -84,6 +95,8 @@ if ( $project != '' )
 	}
 	$queryLog = $module->query( $query, $params );
 	$infoResult = $queryLog->fetch_assoc();
+
+	// Return the requested data item from the log entry.
 	if ( $infoResult === null )
 	{
 		$result = '';

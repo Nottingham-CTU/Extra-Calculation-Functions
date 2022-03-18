@@ -16,14 +16,36 @@ This REDCap module adds extra functions for use in calculated fields.
     which case it will return the value of `field2`.
 * **loglookup( type, field, record, event, instance )**<br>
   lookup the first or last entry in the project log, filtered by field, record, event and instance,
-  and return a metadata value.
-  * Valid lookup types are: 'first-user', 'last-user', 'first-user-fullname', 'last-user-fullname',
-    'first-user-email', 'last-user-email', 'first-ip', 'last-ip', 'first-date', 'last-date',
-    'first-date-dmy', 'last-date-dmy', 'first-date-mdy', 'last-date-mdy', 'first-datetime',
-    'last-datetime', 'first-datetime-dmy', 'last-datetime-dmy', 'first-datetime-mdy',
-    'last-datetime-mdy', 'first-datetime-seconds', 'last-datetime-seconds',
-    'first-datetime-seconds-dmy', 'last-datetime-seconds-dmy', 'first-datetime-seconds-mdy',
-    'last-datetime-seconds-mdy'.
+  and return a metadata value
+  * Valid lookup types are:
+    * **first-user** (username from first log entry)
+    * **last-user** (username from latest log entry)
+    * **first-user-fullname** (user's full name from first log entry)
+    * **last-user-fullname** (user's full name from latest log entry)
+    * **first-user-email** (user's primary email from first log entry)
+    * **last-user-email** (user's primary email from latest log entry)
+    * **first-ip** (user's IP address from first log entry)
+    * **last-ip** (user's IP address from latest log entry)
+    * **first-date** (date of first log entry - Y-M-D format)
+    * **last-date** (date of latest log entry - Y-M-D format)
+    * **first-date-dmy** (date of first log entry - D-M-Y format)
+    * **last-date-dmy** (date of latest log entry - D-M-Y format)
+    * **first-date-mdy** (date of first log entry - M-D-Y format)
+    * **last-date-mdy** (date of latest log entry - M-D-Y format)
+    * **first-datetime** (date/time of first log entry - Y-M-D format)
+    * **last-datetime** (date/time of latest log entry - Y-M-D format)
+    * **first-datetime-dmy** (date/time of first log entry - D-M-Y format)
+    * **last-datetime-dmy** (date/time of latest log entry - D-M-Y format)
+    * **first-datetime-mdy** (date/time of first log entry - M-D-Y format)
+    * **last-datetime-mdy** (date/time of latest log entry - M-D-Y format)
+    * **first-datetime-seconds** (date/time w/seconds of first log entry - Y-M-D format)
+    * **last-datetime-seconds** (date/time w/seconds of latest log entry - Y-M-D format)
+    * **first-datetime-seconds-dmy** (date/time w/seconds of first log entry - D-M-Y format)
+    * **last-datetime-seconds-dmy** (date/time w/seconds of latest log entry - D-M-Y format)
+    * **first-datetime-seconds-mdy** (date/time w/seconds of first log entry - M-D-Y format)
+    * **last-datetime-seconds-mdy** (date/time w/seconds of latest log entry - M-D-Y format)
+  * Example: get the date/time that the *initials* field was last updated
+    * loglookup( 'last-datetime', 'initials', [record-name] )
 * **makedate( format, year, month, day )**<br>
   returns the date value for the supplied year, month and day components, according to the specified
   format ('dmy', 'mdy', or 'ymd')
