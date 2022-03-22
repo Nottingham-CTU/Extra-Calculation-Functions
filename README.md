@@ -14,12 +14,49 @@ This REDCap module adds extra functions for use in calculated fields.
   returns the first argument supplied which is not null
   * e.g. `ifnull( [field1], [field2] )` will return the value of `field1` unless it is empty, in
     which case it will return the value of `field2`.
+* **loglookup( type, field, record, event, instance )**<br>
+  lookup the first or last entry in the project log, filtered by field, record, event and instance,
+  and return a metadata value
+  * Valid lookup types are:
+    * **first-user** (username from first log entry)
+    * **last-user** (username from latest log entry)
+    * **first-user-fullname** (user's full name from first log entry)
+    * **last-user-fullname** (user's full name from latest log entry)
+    * **first-user-email** (user's primary email from first log entry)
+    * **last-user-email** (user's primary email from latest log entry)
+    * **first-ip** (user's IP address from first log entry)
+    * **last-ip** (user's IP address from latest log entry)
+    * **first-date** (date of first log entry - Y-M-D format)
+    * **last-date** (date of latest log entry - Y-M-D format)
+    * **first-date-dmy** (date of first log entry - D-M-Y format)
+    * **last-date-dmy** (date of latest log entry - D-M-Y format)
+    * **first-date-mdy** (date of first log entry - M-D-Y format)
+    * **last-date-mdy** (date of latest log entry - M-D-Y format)
+    * **first-datetime** (date/time of first log entry - Y-M-D format)
+    * **last-datetime** (date/time of latest log entry - Y-M-D format)
+    * **first-datetime-dmy** (date/time of first log entry - D-M-Y format)
+    * **last-datetime-dmy** (date/time of latest log entry - D-M-Y format)
+    * **first-datetime-mdy** (date/time of first log entry - M-D-Y format)
+    * **last-datetime-mdy** (date/time of latest log entry - M-D-Y format)
+    * **first-datetime-seconds** (date/time w/seconds of first log entry - Y-M-D format)
+    * **last-datetime-seconds** (date/time w/seconds of latest log entry - Y-M-D format)
+    * **first-datetime-seconds-dmy** (date/time w/seconds of first log entry - D-M-Y format)
+    * **last-datetime-seconds-dmy** (date/time w/seconds of latest log entry - D-M-Y format)
+    * **first-datetime-seconds-mdy** (date/time w/seconds of first log entry - M-D-Y format)
+    * **last-datetime-seconds-mdy** (date/time w/seconds of latest log entry - M-D-Y format)
+  * Example: get the date/time that the *initials* field was last updated
+    * loglookup( 'last-datetime', 'initials', [record-name] )
+* **makedate( format, year, month, day )**<br>
+  returns the date value for the supplied year, month and day components, according to the specified
+  format ('dmy', 'mdy', or 'ymd')
 * **randomnumber()**<br>
   returns a cryptographically secure random number between 0 and 1
   * Note that this function will return a different value each time the calculation is run. To
     preserve a generated random number, consider pairing this function with the *ifnull* function,
     so that the calculated field's current value (once set) is preferred over a new value.
     <br>e.g. `ifnull( [calc_field_name], randomnumber() )`
+* **sysvar( varname )**<br>
+ returns the value for the specified system variable as defined in the module system settings
 
 Note that where the arguments to *ifenum* and *ifnull* are themselves functions, they will all be
 evaluated prior to the *ifenum* or *ifnull* logic execution (eager evaluation), even if those
@@ -70,3 +107,16 @@ returned.
 
 ### List separator
 If a list of items is to be returned, specify the separator character/string here.
+
+
+## System-level configuration options
+
+### Enable system variables
+This setting enables the *sysvar* function and provides the options to set the variable names and
+values. If system variables are enabled, at least one must be defined.
+
+### Variable name
+The name of the system variable. This is used as the parameter to the *sysvar* function.
+
+### Variable value
+The value of the system variable. This is the value returned by the *sysvar* function.

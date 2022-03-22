@@ -19,6 +19,32 @@
 	"compatibility": {
 		"redcap-version-min": "9.6.5"
 	},
+	"system-settings" : [
+		{
+			"key" : "sysvar-enable",
+			"name" : "Enable system variables",
+			"type" : "checkbox"
+		},
+		{
+			"key" : "sysvar",
+			"name" : "System variable",
+			"type" : "sub_settings",
+			"repeatable" : true,
+			"branchingLogic" : { "field" : "sysvar-enable", "value" : true },
+			"sub_settings" : [
+				{
+					"key" : "sysvar-name",
+					"name" : "Variable name",
+					"type" : "text"
+				},
+				{
+					"key" : "sysvar-value",
+					"name" : "Variable value",
+					"type" : "text"
+				}
+			]
+		}
+	],
 	"project-settings" : [
 		{
 			"key" : "calc-values-auto-update",

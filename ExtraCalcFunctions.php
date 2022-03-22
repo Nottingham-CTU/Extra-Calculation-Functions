@@ -18,7 +18,10 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifenum' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifnull' ] = true;
+		\LogicParser::$allowedFunctions[ 'loglookup' ] = true;
+		\LogicParser::$allowedFunctions[ 'makedate' ] = true;
 		\LogicParser::$allowedFunctions[ 'randomnumber' ] = true;
+		\LogicParser::$allowedFunctions[ 'sysvar' ] = true;
 
 		// Define the PHP versions of the functions.
 		self::$module = $this;
@@ -59,7 +62,144 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		// Include the JavaScript versions of the functions on every page.
 
 ?>
-<script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php' ); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php' ), '&v=',
+            preg_replace( '/^.*?([0-9.]+)$/', '$1', $this->getModuleDirectoryName() ); ?>"></script>
+<?php
+
+		// Get the system variables for use by the sysvar function.
+		if ( $this->getSystemSetting( 'sysvar-enable' ) )
+		{
+			$numVars = count( $this->getSystemSetting( 'sysvar' ) );
+			$varNames = $this->getSystemSetting( 'sysvar-name' );
+			$varValues = $this->getSystemSetting( 'sysvar-value' );
+			$vars = [];
+			for ( $i = 0; $i < $numVars; $i++ )
+			{
+				$vars[] = [ 'n' => $varNames[$i], 'v' => $varValues[$i] ];
+			}
+			echo '<script type="text/javascript">(function(){var sv = sysvar;var vars = ';
+			echo json_encode( $vars );
+			echo ';sysvar = function(name){return sv(name,vars)}})()</script>', "\n";
+		}
+
+
+		// Amend the list of special functions (accessible from the add/edit field window in the
+		// instrument designer) to include the extra functions provided by this module.
+		if ( substr( PAGE_FULL, strlen( APP_PATH_WEBROOT ), 26 ) == 'Design/online_designer.php' ||
+		     substr( PAGE_FULL, strlen( APP_PATH_WEBROOT ), 22 ) == 'ProjectSetup/index.php' )
+		{
+			$listSpecialFunctions =
+				[
+					[
+						'ifenum (comparator, default, value1, result1, value2, result2, ... )',
+						'If-enumerated or switch/case function',
+						'Compares the comparator with each value and returns the corresponding ' .
+						'result for the first matching value. If no values match the default '.
+						'result is returned.'
+					],
+					[
+						'ifnull (value1, value2, ...)',
+						'Null coalescing function',
+						'Returns the first parameter supplied which is not null.'
+					],
+					[
+						'loglookup (type, field, record, event, instance)',
+						'Look up metadata from the project log',
+						"The loglookup function can lookup the first or last entry in the project " .
+						"log, filtered by field, record, event and instance, and return a " .
+						"metadata value. Valid lookup types are: 'first-user', 'last-user', " .
+						"'first-user-fullname', 'last-user-fullname', 'first-user-email', " .
+						"'last-user-email', 'first-ip', 'last-ip', 'first-date', 'last-date', " .
+						"'first-date-dmy', 'last-date-dmy', 'first-date-mdy', 'last-date-mdy', " .
+						"'first-datetime', 'last-datetime', 'first-datetime-dmy', " .
+						"'last-datetime-dmy', 'first-datetime-mdy', 'last-datetime-mdy', " .
+						"'first-datetime-seconds', 'last-datetime-seconds', " .
+						"'first-datetime-seconds-dmy', 'last-datetime-seconds-dmy', " .
+						"'first-datetime-seconds-mdy', 'last-datetime-seconds-mdy'."
+					],
+					[
+						'makedate (format, year, month, day)',
+						'Construct date value',
+						"Returns the date value for the supplied year, month and day components, " .
+						"according to the specified format ('dmy', 'mdy' or 'ymd')."
+					],
+					[
+						'randomnumber()',
+						'Random number value',
+						'Returns a cryptographically secure random number between 0 and 1.'
+					]
+				];
+			if ( $this->getSystemSetting( 'sysvar-enable' ) )
+			{
+				$listSpecialFunctions[] =
+					[
+						'sysvar (varname)',
+						'Get a defined system variable',
+						'Returns the value for the specified system variable as defined by an ' .
+						'administrator in the module system settings.'
+					];
+			}
+			if ( $this->getProjectSetting( 'custom-data-lookup-enable' ) )
+			{
+				$listSpecialFunctions[] =
+					[
+						'datalookup (name, param1, param2, ...)',
+						'Get arbitrary project data',
+						'Supply a lookup name followed by parameters to invoke a data lookup ' .
+						'defined by an administrator in the module project settings. The valid '.
+						'lookup names and the parameters required will depend on the defined ' .
+						'lookups that have been defined.'
+					];
+			}
+			$this->provideSpecialFunctionExplain( $listSpecialFunctions );
+		}
+
+	}
+
+
+
+	// Output JavaScript to amend the special functions guide.
+
+	function provideSpecialFunctionExplain( $listSpecialFunctions )
+	{
+		if ( empty( $listSpecialFunctions ) )
+		{
+			return;
+		}
+		$listSpecialFunctionsJS = json_encode( $listSpecialFunctions );
+
+?>
+<script type="text/javascript">
+$(function()
+{
+  var vSpecialFunctionExplain = specialFunctionsExplanation
+  var vMakeRow = function(vFuncDef, vFuncType, vFuncNotes, vInsertBefore)
+  {
+    var vRow = $( '<tr>' + vInsertBefore.prev('tr').html() + '</tr>' )
+    vRow.find('td:eq(0)').text(vFuncDef)
+    vRow.find('td:eq(1)').text(vFuncType)
+    vRow.find('td:eq(2)').text(vFuncNotes)
+    vInsertBefore.before(vRow)
+  }
+  specialFunctionsExplanation = function()
+  {
+    vSpecialFunctionExplain()
+    var vCheckFunctionsPopup = setInterval( function()
+    {
+      if ( $('div[aria-describedby="special_functions_explain_popup"]').length == 0 )
+      {
+        return
+      }
+      clearInterval( vCheckFunctionsPopup )
+      var vFunctionsTablePos = $('#special_functions_explain_popup table tr:has(td[colspan]):eq(0)');
+      <?php echo $listSpecialFunctionsJS; ?>.forEach(function(vItem)
+      {
+        vMakeRow(vItem[0],vItem[1],vItem[2],vFunctionsTablePos)
+      })
+    }, 200 )
+  }
+})
+</script>
 <?php
 
 	}
@@ -74,26 +214,44 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 
 		if ( $this->getProjectID() === null )
 		{
-			return null;
-		}
-
-		if ( $settings['custom-data-lookup-enable'] )
-		{
-			if ( count( $settings['custom-data-lookup'] ) == 0 )
+			if ( $settings['sysvar-enable'] )
 			{
-				$errMsg .= "\n- At least 1 custom data lookup must be defined";
-			}
-			else
-			{
-				for ( $i = 0; $i < count( $settings['custom-data-lookup'] ); $i++ )
+				if ( count( $settings['sysvar'] ) == 0 )
 				{
-					if ( $settings['custom-data-lookup-name'][$i] == '' )
+					$errMsg .= "\n- At least 1 system variable must be defined";
+				}
+				else
+				{
+					for ( $i = 0; $i < count( $settings['sysvar'] ); $i++ )
 					{
-						$errMsg .= "\n- Name for lookup " . ($i+1) . " is missing";
+						if ( $settings['sysvar-name'][$i] == '' )
+						{
+							$errMsg .= "\n- Name for system variable " . ($i+1) . " is missing";
+						}
 					}
-					if ( $settings['custom-data-lookup-field'][$i] == '' )
+				}
+			}
+		}
+		else
+		{
+			if ( $settings['custom-data-lookup-enable'] )
+			{
+				if ( count( $settings['custom-data-lookup'] ) == 0 )
+				{
+					$errMsg .= "\n- At least 1 custom data lookup must be defined";
+				}
+				else
+				{
+					for ( $i = 0; $i < count( $settings['custom-data-lookup'] ); $i++ )
 					{
-						$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
+						if ( $settings['custom-data-lookup-name'][$i] == '' )
+						{
+							$errMsg .= "\n- Name for lookup " . ($i+1) . " is missing";
+						}
+						if ( $settings['custom-data-lookup-field'][$i] == '' )
+						{
+							$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
+						}
 					}
 				}
 			}
@@ -104,7 +262,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 			return "Your configuration contains errors:$errMsg";
 		}
 
-		if ( ! $settings['calc-values-auto-update'] )
+		if ( $this->getProjectID() !== null && ! $settings['calc-values-auto-update'] )
 		{
 			$this->removeProjectSetting( 'calc-values-auto-update-ts' );
 		}
