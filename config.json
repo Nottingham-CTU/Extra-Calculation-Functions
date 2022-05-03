@@ -52,6 +52,13 @@
 			"type" : "checkbox"
 		},
 		{
+			"key" : "calc-values-auto-update-ts",
+			"name" : "",
+			"type" : "text",
+			"hidden" : true,
+			"super-users-only" : true
+		},
+		{
 			"key" : "custom-data-lookup-enable",
 			"name" : "Enable custom data lookup",
 			"type" : "checkbox",
@@ -68,27 +75,32 @@
 				{
 					"key" : "custom-data-lookup-name",
 					"name" : "Lookup name",
-					"type" : "text"
+					"type" : "text",
+					"super-users-only" : true
 				},
 				{
 					"key" : "custom-data-lookup-project",
 					"name" : "Project in which to perform lookup",
-					"type" : "project-id"
+					"type" : "project-id",
+					"super-users-only" : true
 				},
 				{
 					"key" : "custom-data-lookup-filter",
 					"name" : "Record filter logic (use ? as placeholder value)",
-					"type" : "textarea"
+					"type" : "textarea",
+					"super-users-only" : true
 				},
 				{
 					"key" : "custom-data-lookup-field",
 					"name" : "Lookup field",
-					"type" : "text"
+					"type" : "text",
+					"super-users-only" : true
 				},
 				{
 					"key" : "custom-data-lookup-use-label",
 					"name" : "Return label instead of raw value",
-					"type" : "checkbox"
+					"type" : "checkbox",
+					"super-users-only" : true
 				},
 				{
 					"key" : "custom-data-lookup-type",
@@ -99,12 +111,14 @@
 						{ "value" : "list", "name" : "List of items" },
 						{ "value" : "plus", "name" : "First item + number of other items" },
 						{ "value" : "count", "name" : "Number of items only" }
-					]
+					],
+					"super-users-only" : true
 				},
 				{
 					"key" : "custom-data-lookup-list-sep",
 					"name" : "List separator",
-					"type" : "text"
+					"type" : "text",
+					"super-users-only" : true
 				}
 			]
 		}
