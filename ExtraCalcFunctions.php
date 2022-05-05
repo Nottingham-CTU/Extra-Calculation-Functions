@@ -29,7 +29,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 
 		// If auto-updating of calculated values is enabled, do this if it has not been done in the
 		// last 15 minutes.
-		if ( $project_id !== null &&
+		if ( $project_id !== null && defined( 'USERID' ) &&
 		     $this->getProjectSetting( 'calc-values-auto-update' ) &&
 		     ( $this->getProjectSetting( 'calc-values-auto-update-ts' ) == null ||
 		       $this->getProjectSetting( 'calc-values-auto-update-ts' ) + 900 < time() ) )
