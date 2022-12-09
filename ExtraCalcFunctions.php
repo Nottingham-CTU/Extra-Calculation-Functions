@@ -261,6 +261,13 @@ $(function()
 						{
 							$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
 						}
+						if ( $settings['custom-data-lookup-filter'][$i] != '' &&
+						     ! \LogicTester::isValid(
+						                    str_replace( '?', "''",
+						                            $settings['custom-data-lookup-filter'][$i] ) ) )
+						{
+							$errMsg .= "\n- Filter logic for lookup " . ($i+1) . " is invalid";
+						}
 					}
 				}
 			}
