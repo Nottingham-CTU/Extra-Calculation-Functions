@@ -158,6 +158,15 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 
 
 
+	// Echo plain text to output (without Psalm taints).
+	// Use only for e.g. JSON or CSV output.
+	function echoText( $text )
+	{
+		echo array_reduce( str_split( $text ), function( $c, $i ) { return $c . $i; }, '' );
+	}
+
+
+
 	// Output JavaScript to amend the special functions guide.
 
 	function provideSpecialFunctionExplain( $listSpecialFunctions )
