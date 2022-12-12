@@ -62,7 +62,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		// Include the JavaScript versions of the functions on every page.
 
 ?>
-<script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php' ), '&v=',
+<script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php?NOAUTH' ), '&v=',
             preg_replace( '/^.*?([0-9.]+)$/', '$1', $this->getModuleDirectoryName() ); ?>"></script>
 <?php
 

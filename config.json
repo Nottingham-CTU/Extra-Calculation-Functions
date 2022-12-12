@@ -122,5 +122,6 @@
 				}
 			]
 		}
-	]
+	],
+	"no-auth-pages" : [ "functions_js" ]
 }
