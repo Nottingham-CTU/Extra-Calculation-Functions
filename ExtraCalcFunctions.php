@@ -62,7 +62,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		// Include the JavaScript versions of the functions on every page.
 
 ?>
-<script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php' ), '&v=',
+<script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php?NOAUTH' ), '&v=',
             preg_replace( '/^.*?([0-9.]+)$/', '$1', $this->getModuleDirectoryName() ); ?>"></script>
 <?php
 
@@ -154,6 +154,15 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 			$this->provideSpecialFunctionExplain( $listSpecialFunctions );
 		}
 
+	}
+
+
+
+	// Echo plain text to output (without Psalm taints).
+	// Use only for e.g. JSON or CSV output.
+	function echoText( $text )
+	{
+		echo array_reduce( str_split( $text ), function( $c, $i ) { return $c . $i; }, '' );
 	}
 
 
@@ -251,6 +260,13 @@ $(function()
 						if ( $settings['custom-data-lookup-field'][$i] == '' )
 						{
 							$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
+						}
+						if ( $settings['custom-data-lookup-filter'][$i] != '' &&
+						     ! \LogicTester::isValid(
+						                    str_replace( '?', "''",
+						                            $settings['custom-data-lookup-filter'][$i] ) ) )
+						{
+							$errMsg .= "\n- Filter logic for lookup " . ($i+1) . " is invalid";
 						}
 					}
 				}

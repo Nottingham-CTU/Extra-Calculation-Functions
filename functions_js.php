@@ -10,6 +10,7 @@
 header( 'Pragma: ' );
 header( 'Expires: ' );
 header( 'Cache-Control: max-age=604800' );
+header( 'Content-Type: application/javascript' );
 
 $etag = substr( sha1_file( __FILE__ ), 0, 12 );
 if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag )
@@ -19,7 +20,6 @@ if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && $_SERVER['HTTP_IF_NONE_MATCH'] =
 }
 
 // Output JavaScript.
-header( 'Content-Type: application/javascript' );
 header( 'ETag: ' . $etag );
 $file = fopen( __FILE__, 'r' );
 fseek( $file, __COMPILER_HALT_OFFSET__ );

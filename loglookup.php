@@ -166,5 +166,5 @@ if ( $doLogLookup )
 }
 else
 {
-	echo json_encode( $result );
+	$module->echoText( json_encode( $result ) );
 }

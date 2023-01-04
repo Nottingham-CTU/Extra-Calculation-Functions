@@ -15,9 +15,9 @@
 			"institution": "University of Nottingham"
 		}
 	],
-	"framework-version" : 3,
+	"framework-version" : 6,
 	"compatibility": {
-		"redcap-version-min": "9.6.5"
+		"redcap-version-min": "10.6.0"
 	},
 	"system-settings" : [
 		{
@@ -122,5 +122,6 @@
 				}
 			]
 		}
-	]
+	],
+	"no-auth-pages" : [ "functions_js" ]
 }
