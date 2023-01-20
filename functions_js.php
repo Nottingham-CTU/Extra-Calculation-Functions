@@ -71,6 +71,7 @@ datalookup = (function()
 			          {
 			            luCache[ luName ][ luArgs ] = result
 			            calculate()
+			            doBranching()
 			          }
 			        } )
 			return ''
@@ -148,6 +149,7 @@ loglookup = (function()
 			          {
 			            luCache[ luArgs ] = result
 			            calculate()
+			            doBranching()
 			          }
 			        } )
 			return ''
