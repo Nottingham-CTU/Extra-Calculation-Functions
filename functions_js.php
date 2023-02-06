@@ -71,6 +71,7 @@ datalookup = (function()
 			          {
 			            luCache[ luName ][ luArgs ] = result
 			            calculate()
+			            doBranching()
 			          }
 			        } )
 			return ''
@@ -110,7 +111,7 @@ function ifnull()
 	for ( var i = 0; i < arguments.length; i++ )
 	{
 		if ( arguments[i] != null && arguments[i] != undefined &&
-		     arguments[i] != '' && arguments[i] != 'NaN' )
+		     arguments[i] !== '' && arguments[i] != 'NaN' )
 		{
 			return arguments[i]
 		}
@@ -148,6 +149,7 @@ loglookup = (function()
 			          {
 			            luCache[ luArgs ] = result
 			            calculate()
+			            doBranching()
 			          }
 			        } )
 			return ''

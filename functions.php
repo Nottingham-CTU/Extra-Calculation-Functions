@@ -50,7 +50,7 @@ function ifnull()
 {
 	foreach ( func_get_args() as $arg )
 	{
-		if ( $arg != null && $arg != '' && $arg != 'NaN' )
+		if ( $arg !== null && $arg !== '' && $arg != 'NaN' )
 		{
 			return $arg;
 		}
