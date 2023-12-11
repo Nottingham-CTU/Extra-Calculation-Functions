@@ -40,6 +40,7 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 		$lookupUseLabel = $module->getProjectSetting( 'custom-data-lookup-use-label' )[ $lookupIndex ];
 		$lookupType = $module->getProjectSetting( 'custom-data-lookup-type' )[ $lookupIndex ];
 		$lookupListSep = $module->getProjectSetting( 'custom-data-lookup-list-sep' )[ $lookupIndex ];
+		$lookupCheckboxSplit = $module->getProjectSetting( 'custom-data-lookup-split-checkbox_results' )[ $lookupIndex ];
 
 		// Allow a newline to be specified as the list separator using '\n'.
 		if ( $lookupListSep == "\\n" )
@@ -73,6 +74,7 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 			                                                'filterLogic' => $lookupFilter,
 			                                                'exportDataAccessGroups' => true,
 			                                                'exportSurveyFields' => true,
+									'combine_checkbox_values' => true,  // excludes unchecked items
 			                                                'exportAsLabels' => $lookupUseLabel ] ),
 			                             true );
 			// Remove any returned records where the lookup field is empty.
@@ -95,18 +97,52 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 					// List each item, separated by the defined separator.
 					foreach ( $lookupResult as $lookupResultItem )
 					{
-						if ( $result != '' )
+						if(REDCap::getFieldType($lookupField) === 'checkbox' && $lookupCheckboxSplit === true)
 						{
-							$result .= $lookupListSep;
+							$cbResult =  explode(',', $lookupResultItem[$lookupField]);
+							foreach($cbResult as $cbItem)
+							{
+								if ( $result != '' )
+								{
+									$result .= $lookupListSep;
+								}
+								$result .= $cbItem;
+							}
 						}
-						$result .= $lookupResultItem[$lookupField];
+						else
+						{
+							if ( $result != '' )
+							{
+								$result .= $lookupListSep;
+							}
+							$result .= $lookupResultItem[$lookupField];
+						}
 					}
 				}
 				elseif ( $lookupType == 'plus' )
 				{
 					// Return the first item, with an indication of how many more items there are
 					// (if the total is greater than 1).
-					$result = $lookupResult[0][$lookupField];
+					$cbCount = 0;
+					if(REDCap::getFieldType($lookupField) === 'checkbox' && $lookupCheckboxSplit === true)
+					{
+						foreach ( $lookupResult as $lookupResultItem )
+						{
+							$cbResult =  explode(',', $lookupResultItem[$lookupField]);
+							if($cbCount == 0)
+							{
+								$result = $cbResult[0];
+							}
+							$cbCount += count($cbResult);
+						}
+						$lookupCount = $cbCount;
+
+					}
+					else
+					{
+						$result = $lookupResult[0][$lookupField];
+					}
+					
 					if ( $lookupCount > 1 )
 					{
 						$result .= ' (+' . ( $lookupCount - 1 ) . ')';
@@ -115,12 +151,32 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 				elseif ( $lookupType == 'count' )
 				{
 					// Return only the total.
-					$result = $lookupCount;
+					$cbCount = 0;
+					if(REDCap::getFieldType($lookupField) === 'checkbox' && $lookupCheckboxSplit === true)
+					{
+						foreach ( $lookupResult as $lookupResultItem )
+						{
+							$cbResult =  explode(',', $lookupResultItem[$lookupField]);
+							$cbCount += count($cbResult);
+						}
+						$lookupCount = $cbCount;
+
+					}
+					
+					$result = $lookupCount;					
 				}
 				else
 				{
 					// Return only the first item.
-					$result = $lookupResult[0][$lookupField];
+					if(REDCap::getFieldType($lookupField) === 'checkbox' && $lookupCheckboxSplit === true)
+					{
+						$cbResult =  explode(',', $lookupResult[0][$lookupField]);
+						$result = $cbResult[0];
+					}
+					else
+					{
+						$result = $lookupResult[0][$lookupField];
+					}
 				}
 			}
 		}
@@ -137,6 +193,6 @@ if ( $doDataLookup )
 	return $result;
 }
 else
-{
+{              
 	$module->echoText( json_encode( $result ) );
 }
