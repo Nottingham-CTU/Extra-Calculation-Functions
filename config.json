@@ -103,7 +103,7 @@
 					"super-users-only" : true
 				},
 				{
-					"key" : "custom-data-lookup-split-checkbox_results",
+					"key" : "custom-data-lookup-split-checkbox",
 					"name" : "Splits combined checkbox results",
 					"type" : "checkbox",
 					"super-users-only" : true

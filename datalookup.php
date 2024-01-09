@@ -40,7 +40,7 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 		$lookupUseLabel = $module->getProjectSetting( 'custom-data-lookup-use-label' )[ $lookupIndex ];
 		$lookupType = $module->getProjectSetting( 'custom-data-lookup-type' )[ $lookupIndex ];
 		$lookupListSep = $module->getProjectSetting( 'custom-data-lookup-list-sep' )[ $lookupIndex ];
-		$lookupCheckboxSplit = $module->getProjectSetting( 'custom-data-lookup-split-checkbox_results' )[ $lookupIndex ];
+		$lookupCheckboxSplit = $module->getProjectSetting( 'custom-data-lookup-split-checkbox' )[ $lookupIndex ];
 
 		// Allow a newline to be specified as the list separator using '\n'.
 		if ( $lookupListSep == "\\n" )
