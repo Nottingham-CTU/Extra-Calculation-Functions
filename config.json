@@ -80,7 +80,7 @@
 				},
 				{
 					"key" : "custom-data-lookup-project",
-					"name" : "Project in which to perform lookup",
+					"name" : "Project in which to perform lookup ('none' = current project)",
 					"type" : "project-id",
 					"super-users-only" : true
 				},
