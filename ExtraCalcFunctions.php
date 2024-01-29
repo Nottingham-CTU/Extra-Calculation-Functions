@@ -8,6 +8,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 	public function redcap_module_project_disable( $version, $project_id )
 	{
 		$this->removeProjectSetting( 'calc-values-auto-update-ts' );
+		$this->removeProjectSetting( 'calc-values-auto-update-dur' );
 	}
 
 
@@ -28,18 +29,22 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		require 'functions.php';
 
 		// If auto-updating of calculated values is enabled, do this if it has not been done in the
-		// last 15 minutes.
+		// last 15 minutes (frequency is reduced if recalculations take a long time).
 		$this->needsAutoCalc = false;
+		$lastDuration = $project_id === null
+		                ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-dur' ) ?? 0 );
+		$autoCalcWait = $lastDuration < 90 ? 900 : ( $lastDuration * 10 );
 		if ( $project_id !== null && defined( 'USERID' ) &&
 		     $this->getProjectSetting( 'calc-values-auto-update' ) &&
 		     ( ( defined( 'SUPER_USER' ) && SUPER_USER == 1 &&
 		         isset( $_SERVER['HTTP_X_RC_ECF_AUTO_RECALC'] ) ) ||
 		       $this->getProjectSetting( 'calc-values-auto-update-ts' ) == null ||
-		       $this->getProjectSetting( 'calc-values-auto-update-ts' ) + 900 < time() ) )
+		       $this->getProjectSetting( 'calc-values-auto-update-ts' ) + $autoCalcWait < time() ) )
 		{
 			if ( isset( $_SERVER['HTTP_X_RC_ECF_AUTO_RECALC'] ) )
 			{
-				$this->setProjectSetting( 'calc-values-auto-update-ts', time() );
+				$autoCalcStart = time();
+				$this->setProjectSetting( 'calc-values-auto-update-ts', $autoCalcStart );
 				$oldAction = null;
 				$oldGroupID = null;
 				if ( isset( $_POST['action'] ) )
@@ -73,6 +78,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				header( 'Content-Type: application/json' );
 				echo ( defined( 'SUPER_USER' ) && SUPER_USER == 1 )
 				     ? json_encode( $dq->errorMsg ) : 'null';
+				$this->setProjectSetting( 'calc-values-auto-update-dur', time() - $autoCalcStart );
 				$this->exitAfterHook();
 			}
 			else
@@ -319,6 +325,7 @@ $(function()
 		if ( $this->getProjectID() !== null && ! $settings['calc-values-auto-update'] )
 		{
 			$this->removeProjectSetting( 'calc-values-auto-update-ts' );
+			$this->removeProjectSetting( 'calc-values-auto-update-dur' );
 		}
 
 		return null;
