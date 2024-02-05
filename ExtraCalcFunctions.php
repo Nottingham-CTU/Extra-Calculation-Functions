@@ -8,6 +8,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 	public function redcap_module_project_disable( $version, $project_id )
 	{
 		$this->removeProjectSetting( 'calc-values-auto-update-ts' );
+		$this->removeProjectSetting( 'calc-values-auto-update-dur' );
 	}
 
 
@@ -28,28 +29,61 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		require 'functions.php';
 
 		// If auto-updating of calculated values is enabled, do this if it has not been done in the
-		// last 15 minutes.
+		// last 15 minutes (frequency is reduced if recalculations take a long time).
+		$this->needsAutoCalc = false;
+		$lastDuration = $project_id === null
+		                ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-dur' ) ?? 0 );
+		$autoCalcWait = $lastDuration < 90 ? 900 : ( $lastDuration * 10 );
 		if ( $project_id !== null && defined( 'USERID' ) &&
 		     $this->getProjectSetting( 'calc-values-auto-update' ) &&
-		     ( $this->getProjectSetting( 'calc-values-auto-update-ts' ) == null ||
-		       $this->getProjectSetting( 'calc-values-auto-update-ts' ) + 900 < time() ) )
+		     ( ( defined( 'SUPER_USER' ) && SUPER_USER == 1 &&
+		         isset( $_SERVER['HTTP_X_RC_ECF_AUTO_RECALC'] ) ) ||
+		       $this->getProjectSetting( 'calc-values-auto-update-ts' ) == null ||
+		       $this->getProjectSetting( 'calc-values-auto-update-ts' ) + $autoCalcWait < time() ) )
 		{
-			$this->setProjectSetting( 'calc-values-auto-update-ts', time() );
-			$oldAction = null;
-			if ( isset( $_POST['action'] ) )
+			if ( isset( $_SERVER['HTTP_X_RC_ECF_AUTO_RECALC'] ) )
 			{
-				$oldAction = $_POST['action'];
-			}
-			$_POST['action'] = 'fixCalcs';
-			$dq = new \DataQuality();
-			$dq->executeRule( 'pd-10', '' );
-			if ( $oldAction === null )
-			{
-				unset( $_POST['action'] );
+				$autoCalcStart = time();
+				$this->setProjectSetting( 'calc-values-auto-update-ts', $autoCalcStart );
+				$oldAction = null;
+				$oldGroupID = null;
+				if ( isset( $_POST['action'] ) )
+				{
+					$oldAction = $_POST['action'];
+				}
+				if ( isset( $user_rights['group_id'] ) )
+				{
+					$oldGroupID = $user_rights['group_id'];
+				}
+				$_POST['action'] = 'fixCalcs';
+				$user_rights['group_id'] = null;
+				$dq = new \DataQuality();
+				$dq->executeRule( 'pd-10', '' );
+				if ( $oldAction === null )
+				{
+					unset( $_POST['action'] );
+				}
+				else
+				{
+					$_POST['action'] = $oldAction;
+				}
+				if ( $oldGroupID === null )
+				{
+					unset( $user_rights['group_id'] );
+				}
+				else
+				{
+					$user_rights['group_id'] = $oldGroupID;
+				}
+				header( 'Content-Type: application/json' );
+				echo ( defined( 'SUPER_USER' ) && SUPER_USER == 1 )
+				     ? json_encode( $dq->errorMsg ) : 'null';
+				$this->setProjectSetting( 'calc-values-auto-update-dur', time() - $autoCalcStart );
+				$this->exitAfterHook();
 			}
 			else
 			{
-				$_POST['action'] = $oldAction;
+				$this->needsAutoCalc = true;
 			}
 		}
 	}
@@ -58,6 +92,16 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 
 	public function redcap_every_page_top()
 	{
+
+		// Add the AJAX request to trigger the auto-recalculations if required.
+		if ( $this->needsAutoCalc )
+		{
+?>
+<script type="text/javascript">
+$.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } } )
+</script>
+<?php
+		}
 
 		// Include the JavaScript versions of the functions on every page.
 
@@ -281,6 +325,7 @@ $(function()
 		if ( $this->getProjectID() !== null && ! $settings['calc-values-auto-update'] )
 		{
 			$this->removeProjectSetting( 'calc-values-auto-update-ts' );
+			$this->removeProjectSetting( 'calc-values-auto-update-dur' );
 		}
 
 		return null;
@@ -289,5 +334,6 @@ $(function()
 
 
 	public static $module = null;
+	private $needsAutoCalc;
 
 }

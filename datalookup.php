@@ -40,7 +40,9 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 		$lookupUseLabel = $module->getProjectSetting( 'custom-data-lookup-use-label' )[ $lookupIndex ];
 		$lookupType = $module->getProjectSetting( 'custom-data-lookup-type' )[ $lookupIndex ];
 		$lookupListSep = $module->getProjectSetting( 'custom-data-lookup-list-sep' )[ $lookupIndex ];
-		$lookupCheckboxSplit = $module->getProjectSetting( 'custom-data-lookup-split-checkbox' )[ $lookupIndex ];
+		$lookupCheckboxSplit =
+			( $module->getProjectSetting( 'custom-data-lookup-split-checkbox' )[ $lookupIndex ] === true
+			  && REDCap::getFieldType( $lookupField ) === 'checkbox' );
 
 		// Allow a newline to be specified as the list separator using '\n'.
 		if ( $lookupListSep == "\\n" )
@@ -69,14 +71,15 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 		// Attempt to perform the lookup.
 		try
 		{
-			$lookupResult = json_decode( REDCap::getData( [ 'project_id' => $lookupProject,
-			                                                'return_format' => 'json',
-			                                                'filterLogic' => $lookupFilter,
-			                                                'exportDataAccessGroups' => true,
-			                                                'exportSurveyFields' => true,
-									'combine_checkbox_values' => true,  // excludes unchecked items
-			                                                'exportAsLabels' => $lookupUseLabel ] ),
-			                             true );
+			$lookupResult =
+				json_decode( REDCap::getData( [ 'project_id' => $lookupProject,
+				                                'return_format' => 'json',
+				                                'filterLogic' => $lookupFilter,
+				                                'exportDataAccessGroups' => true,
+				                                'exportSurveyFields' => true,
+				                                'combine_checkbox_values' => true, // excl unchkd items
+				                                'exportAsLabels' => $lookupUseLabel ] ),
+				             true );
 			// Remove any returned records where the lookup field is empty.
 			if ( count( $lookupResult ) > 0 )
 			{
@@ -97,7 +100,7 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 					// List each item, separated by the defined separator.
 					foreach ( $lookupResult as $lookupResultItem )
 					{
-						if(REDCap::getFieldType($lookupField) === 'checkbox' && $lookupCheckboxSplit === true)
+						if( $lookupCheckboxSplit )
 						{
 							$cbResult =  explode(',', $lookupResultItem[$lookupField]);
 							foreach($cbResult as $cbItem)
@@ -124,7 +127,7 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 					// Return the first item, with an indication of how many more items there are
 					// (if the total is greater than 1).
 					$cbCount = 0;
-					if(REDCap::getFieldType($lookupField) === 'checkbox' && $lookupCheckboxSplit === true)
+					if( $lookupCheckboxSplit )
 					{
 						foreach ( $lookupResult as $lookupResultItem )
 						{
@@ -136,7 +139,6 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 							$cbCount += count($cbResult);
 						}
 						$lookupCount = $cbCount;
-
 					}
 					else
 					{
@@ -152,7 +154,7 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 				{
 					// Return only the total.
 					$cbCount = 0;
-					if(REDCap::getFieldType($lookupField) === 'checkbox' && $lookupCheckboxSplit === true)
+					if( $lookupCheckboxSplit )
 					{
 						foreach ( $lookupResult as $lookupResultItem )
 						{
@@ -162,13 +164,12 @@ if ( $module->getProjectSetting( 'custom-data-lookup-enable' ) )
 						$lookupCount = $cbCount;
 
 					}
-					
-					$result = $lookupCount;					
+					$result = $lookupCount;
 				}
 				else
 				{
 					// Return only the first item.
-					if(REDCap::getFieldType($lookupField) === 'checkbox' && $lookupCheckboxSplit === true)
+					if( $lookupCheckboxSplit )
 					{
 						$cbResult =  explode(',', $lookupResult[0][$lookupField]);
 						$result = $cbResult[0];
@@ -193,6 +194,6 @@ if ( $doDataLookup )
 	return $result;
 }
 else
-{              
+{
 	$module->echoText( json_encode( $result ) );
 }
