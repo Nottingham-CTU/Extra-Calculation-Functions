@@ -34,7 +34,7 @@ if ( $project != '' && $type != '' && $field != '' )
 
 	// Begin the query ...
 	$query = "SELECT l.ts, l.user, u.user_firstname, u.user_lastname, u.user_email, l.ip, " .
-	         "l.data_values FROM $logEventTable l JOIN redcap_user_information u " .
+	         "l.data_values FROM $logEventTable l LEFT JOIN redcap_user_information u " .
 	         "ON l.user = u.username WHERE l.project_id = ? AND (l.event = 'INSERT' " .
 	         "OR l.event = 'UPDATE') AND l.object_type = 'redcap_data'";
 	$params = [ $project ];
@@ -109,15 +109,22 @@ if ( $project != '' && $type != '' && $field != '' )
 		}
 		elseif ( $type == 'first-user-fullname' || $type == 'last-user-fullname' )
 		{
-			$result = $infoResult['user_firstname'] . ' ' . $infoResult['user_lastname'];
+			if ( $infoResult['user'] == '[survey respondent]' )
+			{
+				$result = '[survey respondent]';
+			}
+			else
+			{
+				$result = $infoResult['user_firstname'] . ' ' . $infoResult['user_lastname'];
+			}
 		}
 		elseif ( $type == 'first-user-email' || $type == 'last-user-email' )
 		{
-			$result = $infoResult['user_email'];
+			$result = $infoResult['user_email'] ?? '';
 		}
 		elseif ( $type == 'first-ip' || $type == 'last-ip' )
 		{
-			$result = $infoResult['ip'];
+			$result = $infoResult['ip'] ?? '';
 		}
 		elseif ( in_array( $type, [ 'first-date', 'last-date', 'first-date-dmy', 'last-date-dmy',
 		                            'first-date-mdy', 'last-date-mdy',
