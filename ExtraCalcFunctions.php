@@ -305,6 +305,11 @@ $(function()
 						{
 							$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is missing";
 						}
+						elseif ( preg_match( '/[^A-Za-z0-9_]/',
+						                     $settings['custom-data-lookup-field'][$i] ) )
+						{
+							$errMsg .= "\n- Lookup field for lookup " . ($i+1) . " is invalid";
+						}
 						if ( $settings['custom-data-lookup-filter'][$i] != '' &&
 						     ! \LogicTester::isValid(
 						                    str_replace( '?', "''",
