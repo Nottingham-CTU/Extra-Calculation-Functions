@@ -34,6 +34,15 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		$lastDuration = $project_id === null
 		                ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-dur' ) ?? 0 );
 		$autoCalcWait = $lastDuration < 90 ? 900 : ( $lastDuration * 10 );
+		$thisIteration = $project_id === null
+		                 ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-itr' ) ?? 1 );
+		$splitRuns = $project_id === null
+		             ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-spl' ) ?? 1 );
+		if ( $lastDuration > 600 || $lastDuration === -1 )
+		{
+			$splitRuns++;
+			$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
+		}
 		if ( $project_id !== null && defined( 'USERID' ) &&
 		     $this->getProjectSetting( 'calc-values-auto-update' ) &&
 		     ( ( defined( 'SUPER_USER' ) && SUPER_USER == 1 &&
@@ -45,6 +54,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 			{
 				$autoCalcStart = time();
 				$this->setProjectSetting( 'calc-values-auto-update-ts', $autoCalcStart );
+				$this->setProjectSetting( 'calc-values-auto-update-dur', -1 );
 				$oldAction = null;
 				$oldGroupID = null;
 				if ( isset( $_POST['action'] ) )
@@ -58,7 +68,19 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				$_POST['action'] = 'fixCalcs';
 				$user_rights['group_id'] = null;
 				$dq = new \DataQuality();
-				$dq->executeRule( 'pd-10', '' );
+				$queryRecords = $this->query( 'SELECT DISTINCT record FROM redcap_record_list ' .
+				                              'WHERE project_id = ? ORDER BY record',
+				                              [ $this->getProjectId() ] );
+				$listRecords = [];
+				while ( $infoRecord = $queryRecords->fetch_assoc() )
+				{
+					$listRecords[] = $infoRecord['record'];
+				}
+				for ( $i = floor( ( ($thisIteration - 1) / $splitRuns ) * count( $listRecords ) );
+				      $i < floor( ( $thisIteration / $splitRuns ) * count( $listRecords ) ); $i++ )
+				{
+					$dq->executeRule( 'pd-10', $listRecords[$i] );
+				}
 				if ( $oldAction === null )
 				{
 					unset( $_POST['action'] );
@@ -79,6 +101,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				echo ( defined( 'SUPER_USER' ) && SUPER_USER == 1 )
 				     ? json_encode( $dq->errorMsg ) : 'null';
 				$this->setProjectSetting( 'calc-values-auto-update-dur', time() - $autoCalcStart );
+				$thisIteration = ( $thisIteration == $splitRuns ) ? 1 : ( $thisIteration + 1 );
+				$this->setProjectSetting( 'calc-values-auto-update-itr', $thisIteration );
 				$this->exitAfterHook();
 			}
 			else
@@ -331,6 +355,8 @@ $(function()
 		{
 			$this->removeProjectSetting( 'calc-values-auto-update-ts' );
 			$this->removeProjectSetting( 'calc-values-auto-update-dur' );
+			$this->removeProjectSetting( 'calc-values-auto-update-itr' );
+			$this->removeProjectSetting( 'calc-values-auto-update-spl' );
 		}
 
 		return null;
