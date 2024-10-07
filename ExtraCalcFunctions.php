@@ -235,6 +235,43 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 
 
 
+	// Provide the exportable settings.
+	function exportProjectSettings()
+	{
+		$directory = $this->getModuleDirectoryName();
+		$directory = preg_replace( '/_v[0-9.]+$', '', $directory );
+		$listProjects = [];
+		$queryProjects = $this->query( 'SELECT project_id, app_title FROM redcap_projects' );
+		while ( $infoProject = $queryProjects->fetch_assoc() )
+		{
+			$listProjects[ $infoProject['project_id'] ] = $infoProject['app_title'];
+		}
+		$listResult = [];
+		$querySettings = $this->query( 'SELECT ems.`key`, ems.`type`, ems.`value` ' .
+		                               'FROM redcap_external_module_settings ems ' .
+		                               'JOIN redcap_external_modules em ' .
+		                               'ON ems.external_module_id = em.external_module_id ' .
+		                               'WHERE em.directory_prefix = ? AND ems.project_id = ? ' .
+		                               'AND ems.`key` NOT LIKE \'calc-values-auto-update-%\'',
+		                               [ $directory, $this->getProjectId() ] );
+		while ( $infoSettings = $querySettings->fetch_assoc() )
+		{
+			if ( $infoSettings['key'] == 'custom-data-lookup-project' )
+			{
+				$infoSettings['value'] = json_decode( $infoSettings['value'], true );
+				for ( $i = 0; $i < count( $infoSettings['value'] ); $i++ )
+				{
+					$infoSettings['value'][ $i ] = $listProjects[ $infoSettings['value'][ $i ] ];
+				}
+				$infoSettings['value'] = json_encode( $infoSettings['value'] );
+			}
+			$listResult[] = $infoSettings;
+		}
+		return $listResult;
+	}
+
+
+
 	// Output JavaScript to amend the special functions guide.
 
 	function provideSpecialFunctionExplain( $listSpecialFunctions )
