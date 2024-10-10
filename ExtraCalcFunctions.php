@@ -34,6 +34,15 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		$lastDuration = $project_id === null
 		                ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-dur' ) ?? 0 );
 		$autoCalcWait = $lastDuration < 90 ? 900 : ( $lastDuration * 10 );
+		$thisIteration = $project_id === null
+		                 ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-itr' ) ?? 1 );
+		$splitRuns = $project_id === null
+		             ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-spl' ) ?? 1 );
+		if ( $lastDuration > 600 || $lastDuration === -1 )
+		{
+			$splitRuns++;
+			$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
+		}
 		if ( $project_id !== null && defined( 'USERID' ) &&
 		     $this->getProjectSetting( 'calc-values-auto-update' ) &&
 		     ( ( defined( 'SUPER_USER' ) && SUPER_USER == 1 &&
@@ -45,6 +54,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 			{
 				$autoCalcStart = time();
 				$this->setProjectSetting( 'calc-values-auto-update-ts', $autoCalcStart );
+				$this->setProjectSetting( 'calc-values-auto-update-dur', -1 );
 				$oldAction = null;
 				$oldGroupID = null;
 				if ( isset( $_POST['action'] ) )
@@ -58,7 +68,19 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				$_POST['action'] = 'fixCalcs';
 				$user_rights['group_id'] = null;
 				$dq = new \DataQuality();
-				$dq->executeRule( 'pd-10', '' );
+				$queryRecords = $this->query( 'SELECT DISTINCT record FROM redcap_record_list ' .
+				                              'WHERE project_id = ? ORDER BY record',
+				                              [ $this->getProjectId() ] );
+				$listRecords = [];
+				while ( $infoRecord = $queryRecords->fetch_assoc() )
+				{
+					$listRecords[] = $infoRecord['record'];
+				}
+				for ( $i = floor( ( ($thisIteration - 1) / $splitRuns ) * count( $listRecords ) );
+				      $i < floor( ( $thisIteration / $splitRuns ) * count( $listRecords ) ); $i++ )
+				{
+					$dq->executeRule( 'pd-10', $listRecords[$i] );
+				}
 				if ( $oldAction === null )
 				{
 					unset( $_POST['action'] );
@@ -79,6 +101,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				echo ( defined( 'SUPER_USER' ) && SUPER_USER == 1 )
 				     ? json_encode( $dq->errorMsg ) : 'null';
 				$this->setProjectSetting( 'calc-values-auto-update-dur', time() - $autoCalcStart );
+				$thisIteration = ( $thisIteration == $splitRuns ) ? 1 : ( $thisIteration + 1 );
+				$this->setProjectSetting( 'calc-values-auto-update-itr', $thisIteration );
 				$this->exitAfterHook();
 			}
 			else
@@ -211,6 +235,43 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 
 
 
+	// Provide the exportable settings.
+	function exportProjectSettings()
+	{
+		$directory = $this->getModuleDirectoryName();
+		$directory = preg_replace( '/_v[0-9.]+$', '', $directory );
+		$listProjects = [];
+		$queryProjects = $this->query( 'SELECT project_id, app_title FROM redcap_projects' );
+		while ( $infoProject = $queryProjects->fetch_assoc() )
+		{
+			$listProjects[ $infoProject['project_id'] ] = $infoProject['app_title'];
+		}
+		$listResult = [];
+		$querySettings = $this->query( 'SELECT ems.`key`, ems.`type`, ems.`value` ' .
+		                               'FROM redcap_external_module_settings ems ' .
+		                               'JOIN redcap_external_modules em ' .
+		                               'ON ems.external_module_id = em.external_module_id ' .
+		                               'WHERE em.directory_prefix = ? AND ems.project_id = ? ' .
+		                               'AND ems.`key` NOT LIKE \'calc-values-auto-update-%\'',
+		                               [ $directory, $this->getProjectId() ] );
+		while ( $infoSettings = $querySettings->fetch_assoc() )
+		{
+			if ( $infoSettings['key'] == 'custom-data-lookup-project' )
+			{
+				$infoSettings['value'] = json_decode( $infoSettings['value'], true );
+				for ( $i = 0; $i < count( $infoSettings['value'] ); $i++ )
+				{
+					$infoSettings['value'][ $i ] = $listProjects[ $infoSettings['value'][ $i ] ];
+				}
+				$infoSettings['value'] = json_encode( $infoSettings['value'] );
+			}
+			$listResult[] = $infoSettings;
+		}
+		return $listResult;
+	}
+
+
+
 	// Output JavaScript to amend the special functions guide.
 
 	function provideSpecialFunctionExplain( $listSpecialFunctions )
@@ -331,6 +392,8 @@ $(function()
 		{
 			$this->removeProjectSetting( 'calc-values-auto-update-ts' );
 			$this->removeProjectSetting( 'calc-values-auto-update-dur' );
+			$this->removeProjectSetting( 'calc-values-auto-update-itr' );
+			$this->removeProjectSetting( 'calc-values-auto-update-spl' );
 		}
 
 		return null;
