@@ -68,8 +68,12 @@ the expense of more complicated calculation logic.
 
 ### Automatically update calculated values
 If this setting is enabled, the data quality rule for *Incorrect values for calculated fields* will
-be automatically run to fix calculated values on page load if at least 15 minutes has passed since
+be automatically run to fix calculated values on page load if at least 10 minutes has passed since
 it was last run.
+
+Note that if there is a lot of data in the project and updating calculated values takes a long time,
+this feature may apply to only a subset of data at a time. In this case, several runs will need to
+complete in order for all calculated values to be fixed.
 
 ***The following settings are only available to administrators.***
 
