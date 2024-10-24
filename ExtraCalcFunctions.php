@@ -16,6 +16,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 	public function redcap_every_page_before_render( $project_id )
 	{
 		// Instruct the logic parser to allow the extra functions.
+		\LogicParser::$allowedFunctions[ 'checkvalueoncurrentinstance' ] = true;
 		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifenum' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifnull' ] = true;
@@ -164,6 +165,17 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 		{
 			$listSpecialFunctions =
 				[
+					[
+						'checkvalueoncurrentinstance (field, value, allowNewInstance, ' .
+						'maxInstances, unique)',
+						'Checks the value of a field on the current instance',
+						'This function is intended for use in form display logic, to control ' .
+						'access to specific instances of the form based on the value of a field. ' .
+						'This function may return unexpected values in other contexts. The ' .
+						'function will return true if the field matches the value; or if this is ' .
+						'a new instance and new instances are allowed, within the maximum, and '.
+						'if unique=true the field in existing instances does not match the value.'
+					],
 					[
 						'ifenum (comparator, default, value1, result1, value2, result2, ... )',
 						'If-enumerated or switch/case function',

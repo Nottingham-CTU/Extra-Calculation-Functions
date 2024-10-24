@@ -4,6 +4,65 @@
 
 
 
+// checkvalueoncurrentinstance: check if the value of the specified field matches the supplied value
+// on the current instance of the form - if a form instance is not loaded always return true
+
+function checkvalueoncurrentinstance( $fieldName, $value, $allowNewInstance = true,
+                                      $maxInstances = 0, $enforceUnique = false )
+{
+	if ( substr( PAGE_FULL, strlen( APP_PATH_WEBROOT ), 19 ) != 'DataEntry/index.php' ||
+	     ! isset( $_GET['id'] ) || ! isset( $_GET['page'] ) )
+	{
+		return true;
+	}
+	$recordID = $_GET['id'];
+	$eventID = isset( $_GET['event_id'] ) ? intval( $_GET['event_id'] ) : false;
+	$instanceNum = isset( $_GET['instance'] ) ? intval( $_GET['instance'] ) : 1;
+	$infoRecord = \REDCap::getData( 'array', $recordID, $fieldName )[ $recordID ];
+	if ( $eventID === false )
+	{
+		$eventID = array_keys( $infoRecord )[0];
+		if ( $eventID == 'repeat_instances' )
+		{
+			$eventID = array_keys( $infoRecord['repeat_instances'] )[0];
+		}
+	}
+	if ( isset( $infoRecord['repeat_instances'] ) )
+	{
+		$instrument = array_keys( $infoRecord['repeat_instances'][$eventID] )[0];
+		if ( $enforceUnique )
+		{
+			foreach ( $infoRecord['repeat_instances'][$eventID][$instrument] as $i => $item )
+			{
+				if ( $i != $instanceNum && $item[$fieldName] == $value )
+				{
+					return false;
+				}
+			}
+		}
+		if ( ! in_array( $instanceNum,
+		                 array_keys( $infoRecord['repeat_instances'][$eventID][$instrument] ) ) )
+		{
+			if ( $maxInstances > 0 && $instanceNum > $maxInstances )
+			{
+				return false;
+			}
+			return $allowNewInstance;
+		}
+		return $value == $infoRecord['repeat_instances'][$eventID][$instrument][$instanceNum][$fieldName];
+	}
+	else
+	{
+		if ( $infoRecord[$eventID][$fieldName] == '' )
+		{
+			return $allowNewInstance;
+		}
+		return $value == $infoRecord[$eventID][$fieldName];
+	}
+}
+
+
+
 // datalookup: retrieve data from any REDCap project
 
 function datalookup()
