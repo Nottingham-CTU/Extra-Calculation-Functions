@@ -68,6 +68,6 @@ class TestInit():
     self.driver.find_element(By.CSS_SELECTOR, "input[name=\"height\"]").send_keys("165")
     dropdown = self.driver.find_element(By.NAME, "demographics_complete")
     dropdown.find_element(By.CSS_SELECTOR, "*[value='0']").click()
-    self.driver.find_element(By.ID, "submit-btn-saverecord").click()
+    self.driver.execute_script("$(\'#submit-btn-saverecord\').click()")
     time.sleep(3)
 
