@@ -1,0 +1,44 @@
+[
+	{
+		"file" : "test_t01datalookupfunction.py",
+		"name" : "datalookup function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Set up a custom data lookup and use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t02ifenumfunction.py",
+		"name" : "ifenum function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t03ifnullfunction.py",
+		"name" : "ifnull function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t04loglookupfunction.py",
+		"name" : "loglookup function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t05makedatefunction.py",
+		"name" : "makedate function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t06randomnumberfunction.py",
+		"name" : "randomnumber function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t07sysvarfunction.py",
+		"name" : "sysvar function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	}
+]
