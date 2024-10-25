@@ -31,7 +31,11 @@ class TestInit():
       self.driver.find_element(By.NAME, "sysvar-name____0").send_keys("examplesysvar")
     if self.driver.execute_script("return ($(\'input[type=\"text\"][name=\"sysvar-value____0\"]\').val() == \'\')"):
       self.driver.find_element(By.NAME, "sysvar-value____0").send_keys("examplesysvarvalue")
-    elements = self.driver.find_elements(By.CSS_SELECTOR, "input[type=\"checkbox\"][name=\"sysvar-enable\"][checked]")
+    self.driver.find_element(By.CSS_SELECTOR, "#external-modules-configure-modal .modal-footer .save").click()
+    time.sleep(2)
+    self.driver.find_element(By.CSS_SELECTOR, "tr[data-module=\"extra_calculation_functions\"] .external-modules-configure-button").click()
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.NAME, "sysvar-enable")))
+    elements = self.driver.find_elements(By.CSS_SELECTOR, "input[type=\"checkbox\"][name=\"sysvar-enable\"]:checked")
     assert len(elements) > 0
     elements = self.driver.find_elements(By.CSS_SELECTOR, "input[type=\"text\"][name=\"sysvar-name____0\"]:not([value=\"\"])")
     assert len(elements) > 0
