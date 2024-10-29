@@ -37,19 +37,24 @@ class TestT02ifenumfunction():
     time.sleep(2)
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])").click()
-    self.driver.find_element(By.NAME, "weight").send_keys("55")
+    self.driver.execute_script("$(\'[name=\"weight\"]\').val(\'55\');calculate();$(\'body\').attr(\'data-donecalc\',\'1\')")
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "body[data-donecalc=\"1\"]")))
     value = self.driver.find_element(By.NAME, "test_ifenum").get_attribute("value")
     assert value == "0"
-    self.driver.find_element(By.NAME, "weight").send_keys("60")
+    self.driver.execute_script("$(\'[name=\"weight\"]\').val(\'60\');calculate();$(\'body\').attr(\'data-donecalc\',\'2\')")
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "body[data-donecalc=\"2\"]")))
     value = self.driver.find_element(By.NAME, "test_ifenum").get_attribute("value")
     assert value == "1"
-    self.driver.find_element(By.NAME, "weight").send_keys("65")
+    self.driver.execute_script("$(\'[name=\"weight\"]\').val(\'65\');calculate();$(\'body\').attr(\'data-donecalc\',\'3\')")
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "body[data-donecalc=\"3\"]")))
     value = self.driver.find_element(By.NAME, "test_ifenum").get_attribute("value")
     assert value == "2"
-    self.driver.find_element(By.NAME, "weight").send_keys("70")
+    self.driver.execute_script("$(\'[name=\"weight\"]\').val(\'70\');calculate();$(\'body\').attr(\'data-donecalc\',\'4\')")
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "body[data-donecalc=\"4\"]")))
     value = self.driver.find_element(By.NAME, "test_ifenum").get_attribute("value")
     assert value == "3"
-    self.driver.find_element(By.NAME, "weight").send_keys("75")
+    self.driver.execute_script("$(\'[name=\"weight\"]\').val(\'75\');calculate();$(\'body\').attr(\'data-donecalc\',\'5\')")
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "body[data-donecalc=\"5\"]")))
     value = self.driver.find_element(By.NAME, "test_ifenum").get_attribute("value")
     assert value == "4"
 

@@ -39,11 +39,13 @@ class TestT05makedatefunction():
     time.sleep(2)
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])").click()
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.NAME, "test_makedate")))
     value = self.driver.find_element(By.NAME, "test_makedate").get_attribute("value")
     assert value == "01-01-2000"
     elements = self.driver.find_elements(By.CSS_SELECTOR, "input[name=\"test_makedate\"][class*=\"calcChanged\"]")
     assert len(elements) > 0
-    self.driver.find_element(By.ID, "submit-btn-savecontinue").click()
+    self.driver.execute_script("$(\'#south\').remove();dataEntrySubmit(\'submit-btn-savecontinue\')")
+    WebDriverWait(self.driver, 60).until(expected_conditions.presence_of_element_located((By.ID, "south")))
     value = self.driver.find_element(By.NAME, "test_makedate").get_attribute("value")
     assert value == "01-01-2000"
     elements = self.driver.find_elements(By.CSS_SELECTOR, "input[name=\"test_makedate\"][class*=\"calcChanged\"]")

@@ -37,10 +37,13 @@ class TestT03ifnullfunction():
     time.sleep(2)
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])").click()
-    self.driver.execute_script("$(\'[name=\"weight\"]\').val(\'\')")
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.NAME, "weight")))
+    self.driver.execute_script("$(\'[name=\"weight\"]\').val(\'\');$(\'[name=\"height\"]\').val(\'165\');calculate();$(\'body\').attr(\'data-donecalc\',\'1\')")
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "body[data-donecalc=\"1\"]")))
     value = self.driver.find_element(By.NAME, "test_ifnull").get_attribute("value")
     assert value == "165"
-    self.driver.find_element(By.NAME, "weight").send_keys("60")
+    self.driver.execute_script("$(\'[name=\"weight\"]\').val(\'60\');calculate();$(\'body\').attr(\'data-donecalc\',\'2\')")
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "body[data-donecalc=\"2\"]")))
     value = self.driver.find_element(By.NAME, "test_ifnull").get_attribute("value")
     assert value == "60"
 

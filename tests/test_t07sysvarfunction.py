@@ -42,6 +42,7 @@ class TestT07sysvarfunction():
     time.sleep(2)
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])").click()
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.NAME, "test_sysvar")))
     value = self.driver.find_element(By.CSS_SELECTOR, "input[name=\"test_sysvar\"]").get_attribute("value")
     assert value == self.vars["sysvarValue"]
 

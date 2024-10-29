@@ -14,10 +14,10 @@ class TestT04loglookupfunction():
   def setup_method(self, method):
     self.driver = self.selectedBrowser
     self.vars = {}
-  
+
   def teardown_method(self, method):
     self.driver.quit()
-  
+
   def test_t04loglookupfunction(self):
     self.driver.get("http://127.0.0.1/")
     self.driver.find_element(By.LINK_TEXT, "My Projects").click()
@@ -45,10 +45,11 @@ class TestT04loglookupfunction():
     time.sleep(2)
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])").click()
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.NAME, "first_name")))
     self.vars["username"] = self.driver.find_element(By.ID, "username-reference").text
     self.vars["yearMonth"] = self.driver.execute_script("return new Date().toISOString().substring(0,7)")
     value = self.driver.find_element(By.NAME, "test_loglookup1").get_attribute("value")
     assert value == self.vars["username"]
     value = self.driver.find_element(By.NAME, "test_loglookup2").get_attribute("value")
     assert value == self.vars["yearMonth"]
-  
+

@@ -63,11 +63,13 @@ class TestInit():
     elements = self.driver.find_elements(By.CSS_SELECTOR, "#external-modules-enabled tr[data-module=\"extra_calculation_functions\"]")
     assert len(elements) > 0
     self.driver.find_element(By.LINK_TEXT, "Add / Edit Records").click()
-    self.driver.find_element(By.CSS_SELECTOR, "button.btn-rcgreen").click()
-    self.driver.execute_script("autoFill()")
+    self.driver.find_element(By.CSS_SELECTOR, "button.btn-rcgreen:not(.btn-rcgreen-light)").click()
+    self.driver.execute_script("autoFill();$(\'[name=\"height\"]\').val(\'\')")
     self.driver.find_element(By.CSS_SELECTOR, "input[name=\"height\"]").send_keys("165")
     dropdown = self.driver.find_element(By.NAME, "demographics_complete")
     dropdown.find_element(By.CSS_SELECTOR, "*[value='0']").click()
-    self.driver.execute_script("$(\'#submit-btn-saverecord\').click()")
-    time.sleep(3)
+    self.driver.execute_script("dataEntrySubmit(\'submit-btn-saverecord\')")
+    WebDriverWait(self.driver, 60).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"]):not([href*=\"&auto=1\"])")))
+    elements = self.driver.find_elements(By.CSS_SELECTOR, "a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"]):not([href*=\"&auto=1\"])")
+    assert len(elements) > 0
 

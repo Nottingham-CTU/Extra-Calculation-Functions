@@ -14,10 +14,10 @@ class TestT06randomnumberfunction():
   def setup_method(self, method):
     self.driver = self.selectedBrowser
     self.vars = {}
-  
+
   def teardown_method(self, method):
     self.driver.quit()
-  
+
   def test_t06randomnumberfunction(self):
     self.driver.get("http://127.0.0.1/")
     self.driver.find_element(By.LINK_TEXT, "My Projects").click()
@@ -37,9 +37,12 @@ class TestT06randomnumberfunction():
     time.sleep(2)
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])").click()
-    self.vars["randomNumber"] = self.driver.execute_script("return $(\'input[name=\'test_randomnumber\']\').val()")
-    self.driver.execute_script("dataEntryFormValuesChanged = false")
-    self.driver.find_element(By.LINK_TEXT, "Basic Demography Form").click()
-    self.vars["sameNumber"] = self.driver.execute_script("return ( arguments[0] == $(\'input[name=\'test_randomnumber\']\').val() ) ? 1 : 0", self.vars["randomNumber"])
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "[name=\"test_randomnumber\"].calcChanged")))
+    self.vars["randomNumber"] = self.driver.execute_script("return $(\'input[name=\"test_randomnumber\"]\').val()")
+    self.driver.execute_script("setTimeout(function(){$(\'[name=\"test_randomnumber\"]\').removeClass(\'calcChanged\')},1000)")
+    WebDriverWait(self.driver, 30).until(expected_conditions.invisibility_of_element_located((By.CSS_SELECTOR, "[name=\"test_randomnumber\"].calcChanged")))
+    self.driver.execute_script("calculate()")
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "[name=\"test_randomnumber\"].calcChanged")))
+    self.vars["sameNumber"] = self.driver.execute_script("return ( arguments[0] == $(\'input[name=\"test_randomnumber\"]\').val() ) ? 1 : 0", self.vars["randomNumber"])
     assert(self.vars["sameNumber"] == 0)
-  
+
