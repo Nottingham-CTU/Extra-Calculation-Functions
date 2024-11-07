@@ -1,0 +1,50 @@
+[
+	{
+		"file" : "test_t01datalookupfunction.py",
+		"name" : "datalookup function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Set up a custom data lookup and use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t02ifenumfunction.py",
+		"name" : "ifenum function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t03ifnullfunction.py",
+		"name" : "ifnull function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t04loglookupfunction.py",
+		"name" : "loglookup function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t05makedatefunction.py",
+		"name" : "makedate function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t06randomnumberfunction.py",
+		"name" : "randomnumber function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t07sysvarfunction.py",
+		"name" : "sysvar function",
+		"expected" : "Function provides the expected result",
+		"scenario" : "Use the function in a calculation or branching logic and check the result."
+	},
+	{
+		"file" : "test_t08checkvalueoncurrentinstancefn.py",
+		"name" : "checkvalueoncurrentinstance function",
+		"expected" : "When used in form display logic, function correctly controls access to each instance of the form",
+		"scenario" : "Enable repeating instances, set the form display logic and test for new and existing instances."
+	}
+]

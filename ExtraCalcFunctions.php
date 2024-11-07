@@ -16,6 +16,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 	public function redcap_every_page_before_render( $project_id )
 	{
 		// Instruct the logic parser to allow the extra functions.
+		\LogicParser::$allowedFunctions[ 'checkvalueoncurrentinstance' ] = true;
 		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifenum' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifnull' ] = true;
@@ -29,20 +30,11 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		require 'functions.php';
 
 		// If auto-updating of calculated values is enabled, do this if it has not been done in the
-		// last 15 minutes (frequency is reduced if recalculations take a long time).
+		// last 10 minutes (frequency is reduced if recalculations take a long time).
 		$this->needsAutoCalc = false;
 		$lastDuration = $project_id === null
 		                ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-dur' ) ?? 0 );
-		$autoCalcWait = $lastDuration < 90 ? 900 : ( $lastDuration * 10 );
-		$thisIteration = $project_id === null
-		                 ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-itr' ) ?? 1 );
-		$splitRuns = $project_id === null
-		             ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-spl' ) ?? 1 );
-		if ( $lastDuration > 600 || $lastDuration === -1 )
-		{
-			$splitRuns++;
-			$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
-		}
+		$autoCalcWait = $lastDuration < 60 ? 600 : ( $lastDuration * 10 );
 		if ( $project_id !== null && defined( 'USERID' ) &&
 		     $this->getProjectSetting( 'calc-values-auto-update' ) &&
 		     ( ( defined( 'SUPER_USER' ) && SUPER_USER == 1 &&
@@ -52,6 +44,15 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		{
 			if ( isset( $_SERVER['HTTP_X_RC_ECF_AUTO_RECALC'] ) )
 			{
+				$thisIteration = $project_id === null ? 0 :
+				                 ( $this->getProjectSetting( 'calc-values-auto-update-itr' ) ?? 1 );
+				$splitRuns = $project_id === null ? 0 :
+				              ( $this->getProjectSetting( 'calc-values-auto-update-spl' ) ?? 1 );
+				if ( $lastDuration > 480 || $lastDuration === -1 )
+				{
+					$splitRuns++;
+					$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
+				}
 				$autoCalcStart = time();
 				$this->setProjectSetting( 'calc-values-auto-update-ts', $autoCalcStart );
 				$this->setProjectSetting( 'calc-values-auto-update-dur', -1 );
@@ -100,8 +101,14 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				header( 'Content-Type: application/json' );
 				echo ( defined( 'SUPER_USER' ) && SUPER_USER == 1 )
 				     ? json_encode( $dq->errorMsg ) : 'null';
+				if ( $splitRuns > 1 && ( time() - $autoCalcStart ) < 90 &&
+				     $lastDuration < 90 && $lastDuration !== -1 && random_int(0,1) == 1 )
+				{
+					$splitRuns--;
+					$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
+				}
 				$this->setProjectSetting( 'calc-values-auto-update-dur', time() - $autoCalcStart );
-				$thisIteration = ( $thisIteration == $splitRuns ) ? 1 : ( $thisIteration + 1 );
+				$thisIteration = ( $thisIteration >= $splitRuns ) ? 1 : ( $thisIteration + 1 );
 				$this->setProjectSetting( 'calc-values-auto-update-itr', $thisIteration );
 				$this->exitAfterHook();
 			}
@@ -158,6 +165,17 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 		{
 			$listSpecialFunctions =
 				[
+					[
+						'checkvalueoncurrentinstance (field, value, allowNewInstance, ' .
+						'maxInstances, unique)',
+						'Checks the value of a field on the current instance',
+						'This function is intended for use in form display logic, to control ' .
+						'access to specific instances of the form based on the value of a field. ' .
+						'This function may return unexpected values in other contexts. The ' .
+						'function will return true if the field matches the value; or if this is ' .
+						'a new instance and new instances are allowed, within the maximum, and '.
+						'if unique=true the field in existing instances does not match the value.'
+					],
 					[
 						'ifenum (comparator, default, value1, result1, value2, result2, ... )',
 						'If-enumerated or switch/case function',
@@ -241,7 +259,7 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 		$directory = $this->getModuleDirectoryName();
 		$directory = preg_replace( '/_v[0-9.]+$', '', $directory );
 		$listProjects = [];
-		$queryProjects = $this->query( 'SELECT project_id, app_title FROM redcap_projects' );
+		$queryProjects = $this->query( 'SELECT project_id, app_title FROM redcap_projects', [] );
 		while ( $infoProject = $queryProjects->fetch_assoc() )
 		{
 			$listProjects[ $infoProject['project_id'] ] = $infoProject['app_title'];

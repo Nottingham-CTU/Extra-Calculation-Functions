@@ -39,6 +39,15 @@ __halt_compiler();
 
 
 
+// checkvalueoncurrentinstance
+
+function checkvalueoncurrentinstance()
+{
+	return true
+}
+
+
+
 // datalookup: retrieve data from any REDCap project
 
 datalookup = (function()

@@ -2,6 +2,16 @@
 This REDCap module adds extra functions for use in calculated fields.
 
 ## Functions
+* **checkvalueoncurrentinstance( field, value, allowNewInstance, maxInstances, unique )**<br>
+  this function is intended for use in form display logic, to control access to specific instances
+  of the form based on the value of a field
+  * This function may return unexpected values if used in other contexts.
+  * Supply a field name (as a string) and a value. The function will return true if the field
+    matches the value.
+  * To control whether new instances can be created, set the following parameters as follows:
+    * allowNewInstance - true to allow new instances, false to prohibit new instances
+    * maxInstances - prohibit instances exceeding a given number (0 = no limit)
+    * unique - prohibit a new instance if the field matches the value on an existing instance
 * **datalookup( name, param1, param2, ... )**<br>
   supply a lookup name followed by parameters to invoke a REDCap data lookup defined in the module
   project settings
@@ -68,8 +78,12 @@ the expense of more complicated calculation logic.
 
 ### Automatically update calculated values
 If this setting is enabled, the data quality rule for *Incorrect values for calculated fields* will
-be automatically run to fix calculated values on page load if at least 15 minutes has passed since
+be automatically run to fix calculated values on page load if at least 10 minutes has passed since
 it was last run.
+
+Note that if there is a lot of data in the project and updating calculated values takes a long time,
+this feature may apply to only a subset of data at a time. In this case, several runs will need to
+complete in order for all calculated values to be fixed.
 
 ***The following settings are only available to administrators.***
 
