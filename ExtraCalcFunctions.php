@@ -32,10 +32,12 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		// If auto-updating of calculated values is enabled, do this if it has not been done in the
 		// last 10 minutes (frequency is reduced if recalculations take a long time).
 		$this->needsAutoCalc = false;
+		$projectStatus = ( $project_id === null ) ? '' : $this->getProjectStatus( $project_id );
 		$lastDuration = $project_id === null
 		                ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-dur' ) ?? 0 );
 		$autoCalcWait = $lastDuration < 60 ? 600 : ( $lastDuration * 10 );
 		if ( $project_id !== null && defined( 'USERID' ) &&
+		     $projectStatus != 'AC' && $projectStatus != 'DONE' &&
 		     $this->getProjectSetting( 'calc-values-auto-update' ) &&
 		     ( ( defined( 'SUPER_USER' ) && SUPER_USER == 1 &&
 		         isset( $_SERVER['HTTP_X_RC_ECF_AUTO_RECALC'] ) ) ||
