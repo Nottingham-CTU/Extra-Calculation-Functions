@@ -103,8 +103,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				header( 'Content-Type: application/json' );
 				echo ( defined( 'SUPER_USER' ) && SUPER_USER == 1 )
 				     ? json_encode( $dq->errorMsg ) : 'null';
-				if ( $splitRuns > 1 && ( time() - $autoCalcStart ) < 90 &&
-				     $lastDuration < 90 && $lastDuration !== -1 && random_int(0,1) == 1 )
+				if ( $splitRuns > 1 && ( time() - $autoCalcStart ) < 180 &&
+				     $lastDuration < 180 && $lastDuration !== -1 && random_int(0,1) == 1 )
 				{
 					$splitRuns--;
 					$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
