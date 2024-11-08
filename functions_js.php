@@ -53,7 +53,7 @@ function checkvalueoncurrentinstance()
 datalookup = (function()
 {
 	var luCache = {}
-	return function ()
+	var luFunc = function ()
 	{
 		if ( arguments.length < 1 )
 		{
@@ -72,6 +72,7 @@ datalookup = (function()
 		}
 		if ( luCache[ luName ][ luArgs ] == undefined )
 		{
+			luFunc.waiting = true
 			luCache[ luName ][ luArgs ] = ''
 			$.ajax( { url : 'datalookup.php',
 			          method : 'POST', headers : { 'X-RC-ECF-Req' : '1' },
@@ -83,10 +84,12 @@ datalookup = (function()
 			            doBranching()
 			          }
 			        } )
-			return ''
+			throw new Error('Awaiting data')
 		}
 		return luCache[ luName ][ luArgs ]
 	}
+	luFunc.waiting = false
+	return luFunc
 })()
 
 
@@ -135,7 +138,7 @@ function ifnull()
 loglookup = (function()
 {
 	var luCache = {}
-	return function ( type = '', field = '', record = '', event = '', instance = '' )
+	var luFunc = function ( type = '', field = '', record = '', event = '', instance = '' )
 	{
 		if ( type == '' || field == '' )
 		{
@@ -149,6 +152,7 @@ loglookup = (function()
 		luArgs = JSON.stringify( luArgs )
 		if ( luCache[ luArgs ] == undefined )
 		{
+			luFunc.waiting = true
 			luCache[ luArgs ] = ''
 			$.ajax( { url : 'loglookup.php',
 			          method : 'POST', headers : { 'X-RC-ECF-Req' : '1' },
@@ -161,10 +165,12 @@ loglookup = (function()
 			            doBranching()
 			          }
 			        } )
-			return ''
+			throw new Error('Awaiting data')
 		}
 		return luCache[ luArgs ]
 	}
+	luFunc.waiting = false
+	return luFunc
 })()
 
 

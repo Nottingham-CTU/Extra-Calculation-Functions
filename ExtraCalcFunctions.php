@@ -141,6 +141,22 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 ?>
 <script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php?NOAUTH' ), '&v=',
             preg_replace( '/^.*?([0-9.]+)$/', '$1', $this->getModuleDirectoryName() ); ?>"></script>
+<script type="text/javascript">
+  (function()
+  {
+    var oldAlert = alert
+    alert = function( alertText )
+    {
+      if ( datalookup.waiting || loglookup.waiting )
+      {
+        datalookup.waiting = false
+        loglookup.waiting = false
+        return
+      }
+      oldAlert( alertText )
+    }
+  })()
+</script>
 <?php
 
 		// Get the system variables for use by the sysvar function.
