@@ -54,6 +54,11 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				{
 					$splitRuns++;
 					$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
+					if ( $lastDuration === -1 )
+					{
+						$thisIteration++;
+						$this->setProjectSetting( 'calc-values-auto-update-itr', $thisIteration );
+					}
 				}
 				$autoCalcStart = time();
 				$this->setProjectSetting( 'calc-values-auto-update-ts', $autoCalcStart );
