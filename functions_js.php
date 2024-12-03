@@ -53,7 +53,7 @@ function checkvalueoncurrentinstance()
 datalookup = (function()
 {
 	var luCache = {}
-	return function ()
+	var luFunc = function ()
 	{
 		if ( arguments.length < 1 )
 		{
@@ -66,13 +66,13 @@ datalookup = (function()
 			luArgs.push( arguments[i] )
 		}
 		luArgs = JSON.stringify( luArgs )
-		if ( luCache[ luName ] == undefined )
+		if ( luCache[ luName ] === undefined )
 		{
 			luCache[ luName ] = {}
 		}
-		if ( luCache[ luName ][ luArgs ] == undefined )
+		if ( luCache[ luName ][ luArgs ] === undefined )
 		{
-			luCache[ luName ][ luArgs ] = ''
+			luCache[ luName ][ luArgs ] = false
 			$.ajax( { url : 'datalookup.php',
 			          method : 'POST', headers : { 'X-RC-ECF-Req' : '1' },
 			          dataType : 'json', data : { name : luName, args : luArgs },
@@ -83,10 +83,16 @@ datalookup = (function()
 			            doBranching()
 			          }
 			        } )
-			return ''
+		}
+		if ( luCache[ luName ][ luArgs ] === false )
+		{
+			luFunc.waiting = true
+			throw new Error('Awaiting data')
 		}
 		return luCache[ luName ][ luArgs ]
 	}
+	luFunc.waiting = false
+	return luFunc
 })()
 
 
@@ -135,7 +141,7 @@ function ifnull()
 loglookup = (function()
 {
 	var luCache = {}
-	return function ( type = '', field = '', record = '', event = '', instance = '' )
+	var luFunc = function ( type = '', field = '', record = '', event = '', instance = '' )
 	{
 		if ( type == '' || field == '' )
 		{
@@ -147,9 +153,9 @@ loglookup = (function()
 			luArgs.push( arguments[i] )
 		}
 		luArgs = JSON.stringify( luArgs )
-		if ( luCache[ luArgs ] == undefined )
+		if ( luCache[ luArgs ] === undefined )
 		{
-			luCache[ luArgs ] = ''
+			luCache[ luArgs ] = false
 			$.ajax( { url : 'loglookup.php',
 			          method : 'POST', headers : { 'X-RC-ECF-Req' : '1' },
 			          dataType : 'json', data : { type : type, field : field, record : record,
@@ -161,10 +167,16 @@ loglookup = (function()
 			            doBranching()
 			          }
 			        } )
-			return ''
+		}
+		if ( luCache[ luArgs ] === false )
+		{
+			luFunc.waiting = true
+			throw new Error('Awaiting data')
 		}
 		return luCache[ luArgs ]
 	}
+	luFunc.waiting = false
+	return luFunc
 })()
 
 

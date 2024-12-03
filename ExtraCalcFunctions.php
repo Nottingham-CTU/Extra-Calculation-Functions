@@ -32,10 +32,12 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		// If auto-updating of calculated values is enabled, do this if it has not been done in the
 		// last 10 minutes (frequency is reduced if recalculations take a long time).
 		$this->needsAutoCalc = false;
+		$projectStatus = ( $project_id === null ) ? '' : $this->getProjectStatus( $project_id );
 		$lastDuration = $project_id === null
 		                ? 0 : ( $this->getProjectSetting( 'calc-values-auto-update-dur' ) ?? 0 );
 		$autoCalcWait = $lastDuration < 60 ? 600 : ( $lastDuration * 10 );
 		if ( $project_id !== null && defined( 'USERID' ) &&
+		     $projectStatus != 'AC' && $projectStatus != 'DONE' &&
 		     $this->getProjectSetting( 'calc-values-auto-update' ) &&
 		     ( ( defined( 'SUPER_USER' ) && SUPER_USER == 1 &&
 		         isset( $_SERVER['HTTP_X_RC_ECF_AUTO_RECALC'] ) ) ||
@@ -52,6 +54,11 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				{
 					$splitRuns++;
 					$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
+					if ( $lastDuration === -1 )
+					{
+						$thisIteration++;
+						$this->setProjectSetting( 'calc-values-auto-update-itr', $thisIteration );
+					}
 				}
 				$autoCalcStart = time();
 				$this->setProjectSetting( 'calc-values-auto-update-ts', $autoCalcStart );
@@ -101,8 +108,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				header( 'Content-Type: application/json' );
 				echo ( defined( 'SUPER_USER' ) && SUPER_USER == 1 )
 				     ? json_encode( $dq->errorMsg ) : 'null';
-				if ( $splitRuns > 1 && ( time() - $autoCalcStart ) < 90 &&
-				     $lastDuration < 90 && $lastDuration !== -1 && random_int(0,1) == 1 )
+				if ( $splitRuns > 1 && ( time() - $autoCalcStart ) < 180 &&
+				     $lastDuration < 180 && $lastDuration !== -1 && random_int(0,1) == 1 )
 				{
 					$splitRuns--;
 					$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
@@ -139,6 +146,22 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 ?>
 <script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php?NOAUTH' ), '&v=',
             preg_replace( '/^.*?([0-9.]+)$/', '$1', $this->getModuleDirectoryName() ); ?>"></script>
+<script type="text/javascript">
+  (function()
+  {
+    var oldAlert = alert
+    alert = function( alertText )
+    {
+      if ( datalookup.waiting || loglookup.waiting )
+      {
+        datalookup.waiting = false
+        loglookup.waiting = false
+        return
+      }
+      oldAlert( alertText )
+    }
+  })()
+</script>
 <?php
 
 		// Get the system variables for use by the sysvar function.
