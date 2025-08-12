@@ -15,6 +15,21 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 
 	public function redcap_every_page_before_render( $project_id )
 	{
+		// If a REDCap module settings export is requested, ensure this module is not included.
+		if ( substr( PAGE_FULL, strlen( APP_PATH_WEBROOT ), 48 ) ==
+		     'ExternalModules/manager/ajax/export-settings.php' )
+		{
+			$directory = preg_replace( '/_v[0-9.]+$/', '', $this->getModuleDirectoryName() );
+			for ( $i = 0; $i < count( $_POST['prefixes'] ); $i++ )
+			{
+				if ( $_POST['prefixes'][$i] == $directory )
+				{
+					unset( $_POST['prefixes'][$i] );
+					break;
+				}
+			}
+		}
+
 		// Instruct the logic parser to allow the extra functions.
 		\LogicParser::$allowedFunctions[ 'checkvalueoncurrentinstance' ] = true;
 		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
