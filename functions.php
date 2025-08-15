@@ -15,6 +15,14 @@ function checkvalueoncurrentinstance( $fieldName, $value, $allowNewInstance = tr
 	{
 		return true;
 	}
+	if ( isset( $_GET['new'] ) )
+	{
+		parse_str( $_SERVER['QUERY_STRING'], $origQS );
+		if ( ! isset( $origQS['instance'] ) )
+		{
+			return true;
+		}
+	}
 	$recordID = $_GET['id'];
 	$eventID = isset( $_GET['event_id'] ) ? intval( $_GET['event_id'] ) : false;
 	$instanceNum = isset( $_GET['instance'] ) ? intval( $_GET['instance'] ) : 1;
