@@ -65,7 +65,7 @@ class TestT08checkvalueoncurrentinstancefn():
     elements = self.driver.find_elements(By.NAME, "first_name")
     assert len(elements) == 0
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
-    self.driver.find_element(By.CSS_SELECTOR, "button.btnAddRptEv").click()
+    self.driver.find_element(By.CSS_SELECTOR, "span.rc-add-new-instance-btn button").click()
     elements = self.driver.find_elements(By.NAME, "first_name")
     assert len(elements) > 0
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"Design/online_designer.php\"]").click()
