@@ -15,6 +15,21 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 
 	public function redcap_every_page_before_render( $project_id )
 	{
+		// If a REDCap module settings export is requested, ensure this module is not included.
+		if ( substr( PAGE_FULL, strlen( APP_PATH_WEBROOT ), 48 ) ==
+		     'ExternalModules/manager/ajax/export-settings.php' )
+		{
+			$directory = preg_replace( '/_v[0-9.]+$/', '', $this->getModuleDirectoryName() );
+			for ( $i = 0; $i < count( $_POST['prefixes'] ); $i++ )
+			{
+				if ( $_POST['prefixes'][$i] == $directory )
+				{
+					unset( $_POST['prefixes'][$i] );
+					break;
+				}
+			}
+		}
+
 		// Instruct the logic parser to allow the extra functions.
 		\LogicParser::$allowedFunctions[ 'checkvalueoncurrentinstance' ] = true;
 		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
@@ -277,14 +292,19 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 
 
 	// Provide the exportable settings.
-	function exportProjectSettings()
+	function exportProjectSettings( $projectID = null )
 	{
+		if ( $projectID === null )
+		{
+			$projectID = $this->getProjectId();
+		}
 		$directory = $this->getModuleDirectoryName();
-		$directory = preg_replace( '/_v[0-9.]+$', '', $directory );
+		$directory = preg_replace( '/_v[0-9.]+$/', '', $directory );
 		$listProjects = [];
 		$queryProjects = $this->query( 'SELECT project_id, app_title FROM redcap_projects', [] );
 		while ( $infoProject = $queryProjects->fetch_assoc() )
 		{
+			$infoProject = $this->convertIntsToStrings( $infoProject );
 			$listProjects[ $infoProject['project_id'] ] = $infoProject['app_title'];
 		}
 		$listResult = [];
@@ -293,16 +313,38 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 		                               'JOIN redcap_external_modules em ' .
 		                               'ON ems.external_module_id = em.external_module_id ' .
 		                               'WHERE em.directory_prefix = ? AND ems.project_id = ? ' .
-		                               'AND ems.`key` NOT LIKE \'calc-values-auto-update-%\'',
-		                               [ $directory, $this->getProjectId() ] );
+		                               'AND ems.`key` NOT LIKE \'calc-values-auto-update-%\' ' .
+		                               'AND ems.`key` <> \'enabled\' ' .
+		                               'AND ems.`key` <> \'custom-data-lookup\' ' .
+		                               'ORDER BY if(ems.`key` LIKE \'custom-data-lookup-%\',1,0),' .
+		                               'if(ems.`key` = \'custom-data-lookup-enable\',0,1),' .
+		                               'if(ems.`key` = \'custom-data-lookup-name\',0,1),ems.`key`',
+		                               [ $directory, $projectID ] );
+		$dataLookupEnable = true;
 		while ( $infoSettings = $querySettings->fetch_assoc() )
 		{
+			if ( ( substr( $infoSettings['key'], 0, 9 ) == 'reserved-' &&
+			       $infoSettings['value'] == 'false' ) ||
+			     ( ! $dataLookupEnable &&
+			       substr( $infoSettings['key'], 0, 19 ) == 'custom-data-lookup-' ) )
+			{
+				continue;
+			}
+			if ( $infoSettings['key'] == 'custom-data-lookup-enable' )
+			{
+				$dataLookupEnable = ( $infoSettings['value'] == 'true' );
+				continue;
+			}
 			if ( $infoSettings['key'] == 'custom-data-lookup-project' )
 			{
 				$infoSettings['value'] = json_decode( $infoSettings['value'], true );
 				for ( $i = 0; $i < count( $infoSettings['value'] ); $i++ )
 				{
-					$infoSettings['value'][ $i ] = $listProjects[ $infoSettings['value'][ $i ] ];
+					if ( $infoSettings['value'][ $i ] !== null &&
+					     array_key_exists( $infoSettings['value'][ $i ], $listProjects ) )
+					{
+						$infoSettings['value'][ $i ] = $listProjects[ $infoSettings['value'][ $i ] ];
+					}
 				}
 				$infoSettings['value'] = json_encode( $infoSettings['value'] );
 			}

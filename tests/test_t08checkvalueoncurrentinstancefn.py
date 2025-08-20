@@ -12,12 +12,12 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class TestT08checkvalueoncurrentinstancefn():
   def setup_method(self, method):
-    self.driver = self.selectedBrowser
+    self.driver = webdriver.Firefox()
     self.vars = {}
-
+  
   def teardown_method(self, method):
     self.driver.quit()
-
+  
   def test_t08checkvalueoncurrentinstancefn(self):
     self.driver.get("http://127.0.0.1/")
     self.driver.find_element(By.LINK_TEXT, "My Projects").click()
@@ -50,7 +50,7 @@ class TestT08checkvalueoncurrentinstancefn():
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
     if self.driver.execute_script("return ($(\'.dataEntryLeavePageBtn\').length > 0)"):
       self.driver.find_element(By.CSS_SELECTOR, ".dataEntryLeavePageBtn").click()
-    self.driver.find_element(By.CSS_SELECTOR, "button.btnAddRptEv").click()
+    self.driver.find_element(By.CSS_SELECTOR, "span.rc-add-new-instance-btn button").click()
     elements = self.driver.find_elements(By.NAME, "first_name")
     assert len(elements) == 0
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"Design/online_designer.php\"]").click()
@@ -65,7 +65,7 @@ class TestT08checkvalueoncurrentinstancefn():
     elements = self.driver.find_elements(By.NAME, "first_name")
     assert len(elements) == 0
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
-    self.driver.find_element(By.CSS_SELECTOR, "button.btnAddRptEv").click()
+    self.driver.find_element(By.CSS_SELECTOR, "span.rc-add-new-instance-btn button").click()
     elements = self.driver.find_elements(By.NAME, "first_name")
     assert len(elements) > 0
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"Design/online_designer.php\"]").click()
@@ -78,7 +78,7 @@ class TestT08checkvalueoncurrentinstancefn():
     self.driver.find_element(By.XPATH, "//button[contains(.,\"Save\")]").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.ID, "south")))
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
-    self.driver.find_element(By.CSS_SELECTOR, "button.btnAddRptEv").click()
+    self.driver.find_element(By.CSS_SELECTOR, "span.rc-add-new-instance-btn button").click()
     elements = self.driver.find_elements(By.NAME, "first_name")
     assert len(elements) == 0
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"Design/online_designer.php\"]").click()
@@ -89,7 +89,7 @@ class TestT08checkvalueoncurrentinstancefn():
     self.driver.find_element(By.XPATH, "//button[contains(.,\"Save\")]").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.ID, "south")))
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
-    self.driver.find_element(By.CSS_SELECTOR, "button.btnAddRptEv").click()
+    self.driver.find_element(By.CSS_SELECTOR, "span.rc-add-new-instance-btn button").click()
     elements = self.driver.find_elements(By.NAME, "first_name")
     assert len(elements) > 0
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"Design/online_designer.php\"]").click()
@@ -102,7 +102,7 @@ class TestT08checkvalueoncurrentinstancefn():
     self.driver.find_element(By.XPATH, "//button[contains(.,\"Save\")]").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.ID, "south")))
     self.driver.find_element(By.LINK_TEXT, "Record Status Dashboard").click()
-    self.driver.find_element(By.CSS_SELECTOR, "button.btnAddRptEv").click()
+    self.driver.find_element(By.CSS_SELECTOR, "span.rc-add-new-instance-btn button").click()
     elements = self.driver.find_elements(By.NAME, "first_name")
     assert len(elements) == 0
     self.driver.find_element(By.CSS_SELECTOR, "a[href*=\"Design/online_designer.php\"]").click()
@@ -119,4 +119,4 @@ class TestT08checkvalueoncurrentinstancefn():
     if element.is_selected: element.click()
     self.driver.find_element(By.XPATH, "//button[contains(.,\"Save\")]").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.ID, "south")))
-
+  
