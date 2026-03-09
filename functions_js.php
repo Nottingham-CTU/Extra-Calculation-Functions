@@ -55,6 +55,24 @@ datalookup = (function()
 	var luCache = {}
 	var luFunc = function ()
 	{
+		if ( ! reportBranchingAndCalculationErrors.excalc )
+		{
+			var oldReportBranchingAndCalculationErrors = reportBranchingAndCalculationErrors
+			reportBranchingAndCalculationErrors = function( onPageLoad = false )
+			{
+				if ( reportBranchingAndCalculationErrors.excalcreset )
+				{
+					for ( const field of Object.keys(Calculations.errorTracker) )
+					{
+						Calculations.errorTracker[field] = 0
+					}
+				}
+				oldReportBranchingAndCalculationErrors( onPageLoad )
+			}
+			reportBranchingAndCalculationErrors.excalc = true
+			reportBranchingAndCalculationErrors.excalcreset = true
+			setTimeout(function(){reportBranchingAndCalculationErrors.excalcreset = false},8000)
+		}
 		if ( arguments.length < 1 )
 		{
 			return ''
@@ -143,6 +161,24 @@ loglookup = (function()
 	var luCache = {}
 	var luFunc = function ( type = '', field = '', record = '', event = '', instance = '' )
 	{
+		if ( ! reportBranchingAndCalculationErrors.excalc )
+		{
+			var oldReportBranchingAndCalculationErrors = reportBranchingAndCalculationErrors
+			reportBranchingAndCalculationErrors = function( onPageLoad = false )
+			{
+				if ( reportBranchingAndCalculationErrors.excalcreset )
+				{
+					for ( const field of Object.keys(Calculations.errorTracker) )
+					{
+						Calculations.errorTracker[field] = 0
+					}
+				}
+				oldReportBranchingAndCalculationErrors( onPageLoad )
+			}
+			reportBranchingAndCalculationErrors.excalc = true
+			reportBranchingAndCalculationErrors.excalcreset = true
+			setTimeout(function(){reportBranchingAndCalculationErrors.excalcreset = false},8000)
+		}
 		if ( type == '' || field == '' )
 		{
 			return ''
