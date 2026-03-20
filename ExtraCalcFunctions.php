@@ -150,6 +150,37 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				$this->needsAutoCalc = true;
 			}
 		}
+
+
+		// If any data entry page, check the form for calculated fields (including text fields with
+		// @CALCTEXT action tag) and if the calculation contains 'datalookup' or 'loglookup' then
+		// add @SAVE-PROMPT-EXEMPT to the field's action tags.
+
+		if ( $_GET['page'] != '' &&
+		     substr( PAGE_FULL, strlen( APP_PATH_WEBROOT ), 10 ) == 'DataEntry/')
+		{
+			$listFields = \REDCap::getDataDictionary( 'array', false, null, $_GET['page'] );
+			foreach ( $listFields as $infoField )
+			{
+				if ( ( $infoField['field_type'] == 'calc' &&
+				       ( strpos( $infoField['select_choices_or_calculations'],
+				                 'datalookup' ) !== false ||
+				         strpos( $infoField['select_choices_or_calculations'],
+				                 'loglookup' ) !== false ) ) ||
+				     ( $infoField['field_type'] == 'text' &&
+				       strpos( $infoField['field_annotation'], '@CALCTEXT' ) !== false &&
+				       ( strpos( $infoField['field_annotation'],
+				                 'datalookup' ) !== false ||
+				         strpos( $infoField['field_annotation'],
+				                 'loglookup' ) !== false ) ) )
+				{
+					$GLOBALS['Proj']->metadata[$infoField['field_name']]['misc'] =
+						"@SAVE-PROMPT-EXEMPT " .
+						$GLOBALS['Proj']->metadata[$infoField['field_name']]['misc'];
+				}
+			}
+		}
+
 	}
 
 
@@ -172,22 +203,6 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 ?>
 <script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php?NOAUTH' ), '&v=',
             preg_replace( '/^.*?([0-9.]+)$/', '$1', $this->getModuleDirectoryName() ); ?>"></script>
-<script type="text/javascript">
-  (function()
-  {
-    var oldAlert = alert
-    alert = function( alertText )
-    {
-      if ( datalookup.waiting || loglookup.waiting )
-      {
-        datalookup.waiting = false
-        loglookup.waiting = false
-        return
-      }
-      oldAlert( alertText )
-    }
-  })()
-</script>
 <?php
 
 		// Get the system variables for use by the sysvar function.

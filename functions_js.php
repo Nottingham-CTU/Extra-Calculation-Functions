@@ -55,24 +55,6 @@ datalookup = (function()
 	var luCache = {}
 	var luFunc = function ()
 	{
-		if ( ! reportBranchingAndCalculationErrors.excalc )
-		{
-			var oldReportBranchingAndCalculationErrors = reportBranchingAndCalculationErrors
-			reportBranchingAndCalculationErrors = function( onPageLoad = false )
-			{
-				if ( reportBranchingAndCalculationErrors.excalcreset )
-				{
-					for ( const field of Object.keys(Calculations.errorTracker) )
-					{
-						Calculations.errorTracker[field] = 0
-					}
-				}
-				oldReportBranchingAndCalculationErrors( onPageLoad )
-			}
-			reportBranchingAndCalculationErrors.excalc = true
-			reportBranchingAndCalculationErrors.excalcreset = true
-			setTimeout(function(){reportBranchingAndCalculationErrors.excalcreset = false},8000)
-		}
 		if ( arguments.length < 1 )
 		{
 			return ''
@@ -104,12 +86,10 @@ datalookup = (function()
 		}
 		if ( luCache[ luName ][ luArgs ] === false )
 		{
-			luFunc.waiting = true
-			throw new Error('Awaiting data')
+			return ''
 		}
 		return luCache[ luName ][ luArgs ]
 	}
-	luFunc.waiting = false
 	return luFunc
 })()
 
@@ -161,24 +141,6 @@ loglookup = (function()
 	var luCache = {}
 	var luFunc = function ( type = '', field = '', record = '', event = '', instance = '' )
 	{
-		if ( ! reportBranchingAndCalculationErrors.excalc )
-		{
-			var oldReportBranchingAndCalculationErrors = reportBranchingAndCalculationErrors
-			reportBranchingAndCalculationErrors = function( onPageLoad = false )
-			{
-				if ( reportBranchingAndCalculationErrors.excalcreset )
-				{
-					for ( const field of Object.keys(Calculations.errorTracker) )
-					{
-						Calculations.errorTracker[field] = 0
-					}
-				}
-				oldReportBranchingAndCalculationErrors( onPageLoad )
-			}
-			reportBranchingAndCalculationErrors.excalc = true
-			reportBranchingAndCalculationErrors.excalcreset = true
-			setTimeout(function(){reportBranchingAndCalculationErrors.excalcreset = false},8000)
-		}
 		if ( type == '' || field == '' )
 		{
 			return ''
@@ -206,12 +168,10 @@ loglookup = (function()
 		}
 		if ( luCache[ luArgs ] === false )
 		{
-			luFunc.waiting = true
-			throw new Error('Awaiting data')
+			return ''
 		}
 		return luCache[ luArgs ]
 	}
-	luFunc.waiting = false
 	return luFunc
 })()
 
