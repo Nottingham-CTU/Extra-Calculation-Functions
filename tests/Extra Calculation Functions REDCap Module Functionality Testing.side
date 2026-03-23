@@ -1,0 +1,2770 @@
+{
+  "id": "34badd67-8ddd-4648-b78d-a98978b01899",
+  "version": "2.0",
+  "name": "Extra Calculation Functions REDCap Module Functionality Testing",
+  "url": "http://127.0.0.1",
+  "tests": [
+    {
+      "id": "eb3f8738-e559-4a68-8c00-3c5089604e1f",
+      "name": "init",
+      "commands": [
+        {
+          "id": "d1312823-3201-444f-b857-fb72b170e544",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1166a0ee-ac3f-4e6e-875f-cf9f3349be6d",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"ControlCenter/index.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8bb97f3e-729b-4593-b8d0-da9f8134d6dc",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"ExternalModules/manager/control_center.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "aa3774bd-3c06-49fa-80b9-8042e9b5eb3c",
+          "comment": "",
+          "command": "click",
+          "target": "css=tr[data-module=\"extra_calculation_functions\"] .external-modules-configure-button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "0a3cc466-fb3f-48c1-a3d8-5d83c493155e",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "name=sysvar-enable",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "08821969-1145-49e6-802a-bdff6b4fcfbf",
+          "comment": "",
+          "command": "if",
+          "target": "$('[name=\"sysvar-enable\"]:checked').length == 0",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "02eeb75f-2456-4f85-be19-44b1ee4e30a4",
+          "comment": "",
+          "command": "check",
+          "target": "name=sysvar-enable",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "aea4444d-db44-4b85-bff5-648d9de7b729",
+          "comment": "",
+          "command": "end",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "3b24bb16-a922-47be-ba44-935ada814309",
+          "comment": "",
+          "command": "if",
+          "target": "$('input[type=\"text\"][name=\"sysvar-name____0\"]').val() == ''",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "909b9955-2c0c-408a-96ae-4f1400ba47ef",
+          "comment": "",
+          "command": "type",
+          "target": "name=sysvar-name____0",
+          "targets": [],
+          "value": "examplesysvar"
+        },
+        {
+          "id": "ead94785-29ad-4b34-bfd8-ee37a70f65fb",
+          "comment": "",
+          "command": "end",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b4510338-0090-4966-a9f5-d525e6b4a638",
+          "comment": "",
+          "command": "if",
+          "target": "$('input[type=\"text\"][name=\"sysvar-value____0\"]').val() == ''",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "894b625a-8651-49f4-afa2-f672916f4179",
+          "comment": "",
+          "command": "type",
+          "target": "name=sysvar-value____0",
+          "targets": [],
+          "value": "examplesysvarvalue"
+        },
+        {
+          "id": "4262d71b-8dfb-4f77-8aa2-beda04e1ad8a",
+          "comment": "",
+          "command": "end",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "713fbd4d-6765-4289-8643-2f66f408997f",
+          "comment": "",
+          "command": "click",
+          "target": "css=#external-modules-configure-modal .modal-footer .save",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "f2cbf4e1-383d-49f1-a1e3-e701fb11fa6d",
+          "comment": "",
+          "command": "pause",
+          "target": "2000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "9a8b5dde-dea9-4f02-8ecc-937ed6801e72",
+          "comment": "",
+          "command": "click",
+          "target": "css=tr[data-module=\"extra_calculation_functions\"] .external-modules-configure-button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b8b2598a-723c-4f23-8542-a26e5971c7ac",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "name=sysvar-enable",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "3499d0b5-b556-43d8-bfcd-6186aef01973",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=input[type=\"checkbox\"][name=\"sysvar-enable\"]:checked",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "766e2723-2ec5-4c13-939c-f23f76d82d0c",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=input[type=\"text\"][name=\"sysvar-name____0\"]:not([value=\"\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "2ad17702-9cfd-4f32-a16e-c86db1a1c030",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=input[type=\"text\"][name=\"sysvar-value____0\"]:not([value=\"\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8f154e5a-aabd-4520-839f-c8d3b93e9ab2",
+          "comment": "",
+          "command": "runScript",
+          "target": "sessionStorage.setItem('test-sysvardetails',JSON.stringify({\"name\":$('[name=\"sysvar-name____0\"]').val(),\"value\":$('[name=\"sysvar-value____0\"]').val()}))",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "6c54f144-1573-4613-bf5c-808087c99b03",
+          "comment": "",
+          "command": "click",
+          "target": "css=#external-modules-configure-modal .modal-footer .save",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1921d262-1a3c-4c3f-ae11-e2903401dba3",
+          "comment": "",
+          "command": "pause",
+          "target": "2000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "326dd50a-16b2-4a52-9a45-d926a87715cd",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b6f036ab-363c-41dd-8aef-205f8a414402",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "3c31dc0f-3e79-432f-9c04-193e2843691c",
+          "comment": "",
+          "command": "assertElementNotPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e3d8950f-ea47-4aa1-aff9-750a5c98c6f2",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=New Project",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "52a21076-53f0-4f7b-a377-01ff9da30bfa",
+          "comment": "",
+          "command": "type",
+          "target": "id=app_title",
+          "targets": [],
+          "value": "Extra Calculation Functions Test"
+        },
+        {
+          "id": "86633b9d-a7ea-4d47-b10c-87a7f8bf851d",
+          "comment": "",
+          "command": "select",
+          "target": "id=purpose",
+          "targets": [],
+          "value": "label=Practice / Just for fun"
+        },
+        {
+          "id": "e5548ce5-375a-4d1a-a724-21791563549e",
+          "comment": "",
+          "command": "click",
+          "target": "id=project_template_radio1",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "a2b0a273-8ce6-48b9-8cac-4823a8c6774b",
+          "comment": "",
+          "command": "click",
+          "target": "css=input[name=\"copyof\"][value=\"5\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "9d95ec77-fec0-44fa-bda8-891cf2a359aa",
+          "comment": "",
+          "command": "click",
+          "target": "css=.btn-primaryrc",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "d311f322-2d06-4df2-8fa9-460d36d72f32",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"ExternalModules/manager/project.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "ef9638cb-63db-4cce-87e0-14099077e813",
+          "comment": "",
+          "command": "click",
+          "target": "id=external-modules-enable-modules-button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "3bc55a12-fbf6-410c-b5f1-cfb70e190770",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=tr[data-module=\"extra_calculation_functions\"] .enable-button",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "ae176184-f7e6-48a4-a9fc-f97a05365672",
+          "comment": "",
+          "command": "click",
+          "target": "css=tr[data-module=\"extra_calculation_functions\"] .enable-button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e884d63f-b666-4177-af21-6e364cb6d98c",
+          "comment": "",
+          "command": "pause",
+          "target": "5000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "337a8353-d686-4032-a391-956b11c3010f",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=#external-modules-enabled tr[data-module=\"extra_calculation_functions\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "83dad9e0-5bd0-45b0-959e-5cfbba40af75",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Add / Edit Records",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "4bf2d0af-66e6-4561-9324-2eb1227c8eff",
+          "comment": "",
+          "command": "click",
+          "target": "css=button.btn-rcgreen:not(.btn-rcgreen-light)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "46493b1f-3d61-42e6-a041-345239714063",
+          "comment": "",
+          "command": "runScript",
+          "target": "autoFill();$('[name=\"height\"]').val('')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "d8393e22-6cc4-4879-a8a7-66ac2b5bbf1a",
+          "comment": "",
+          "command": "type",
+          "target": "css=input[name=\"height\"]",
+          "targets": [],
+          "value": "165"
+        },
+        {
+          "id": "6879bca1-e502-4964-8c20-3ed051fb397a",
+          "comment": "",
+          "command": "select",
+          "target": "name=demographics_complete",
+          "targets": [],
+          "value": "value=0"
+        },
+        {
+          "id": "cca306a5-3dca-4c0d-8069-588c2c18bc7a",
+          "comment": "",
+          "command": "runScript",
+          "target": "dataEntrySubmit('submit-btn-saverecord')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "2c609056-ecb3-4d5c-bf31-734599ac5c65",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"]):not([href*=\"&auto=1\"])",
+          "targets": [],
+          "value": "60000"
+        },
+        {
+          "id": "8b350ec0-dfb0-454b-83d0-e701c41b6883",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"]):not([href*=\"&auto=1\"])",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "bce7952c-9096-4b44-945c-fdf7e26a0ec3",
+      "name": "teardown",
+      "commands": [
+        {
+          "id": "03609fc1-d697-4bbc-a998-318955a0e293",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "30a2919e-d804-41b8-8bb9-be44015ab821",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8bc8d9e7-ffe5-4670-aad0-10e4a03b77c9",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "a6c311cf-ae28-472e-8d05-58f5a962afbd",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "fba09264-c702-4e74-a335-c0e59072abbf",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Extra Calculation Functions Test",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cf0c31e7-2a86-4576-961c-69736d30e317",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Other Functionality",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "93abf84c-5367-4431-8053-40951ea05c87",
+          "comment": "",
+          "command": "click",
+          "target": "css=#row_delete_project .btn-danger",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e0794bc4-fd54-4770-bb5d-bdd91181d4e9",
+          "comment": "",
+          "command": "type",
+          "target": "id=delete_project_confirm",
+          "targets": [],
+          "value": "DELETE"
+        },
+        {
+          "id": "647f1213-b3d2-4d2f-8ff8-6d8223d5952a",
+          "comment": "",
+          "command": "click",
+          "target": "css=.ui-dialog-buttonset > .ui-button:nth-child(2)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "96c49f48-5abd-40ec-8aaf-5654f9cae040",
+          "comment": "",
+          "command": "click",
+          "target": "xpath=(//button[text()=\"CONFIRM DELETION\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "48728448-133a-4ea1-82fe-d4f031e87992",
+          "comment": "",
+          "command": "executeScript",
+          "target": "sessionStorage.removeItem('test-sysvardetails')",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "5c40de66-f548-4adf-827a-61b651943a0c",
+      "name": "t01 - datalookup function",
+      "commands": [
+        {
+          "id": "5f53dc18-8735-46da-8a2f-bd39b90e9a33",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "f4b5a771-3fbb-4c55-ae70-37bb7f939313",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "a39b6dc0-badc-4603-b786-ef750ef2738e",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1822a760-5422-49ab-965b-f1156ea17b9a",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "71d5ef6e-65d4-4d7a-a2b0-8f1eea12844f",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Extra Calculation Functions Test",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b31f67f9-a1ee-4298-9e70-3baf7bd6c6f7",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"ExternalModules/manager/project.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1e0d7e49-a779-43d9-b5ed-1055477e4ea8",
+          "comment": "",
+          "command": "click",
+          "target": "css=tr[data-module=\"extra_calculation_functions\"] .external-modules-configure-button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "a03a8713-2577-4fe9-9256-1c6cb55c8f43",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "name=custom-data-lookup-enable",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "64ca30f2-88af-4a56-9a0b-ca503d70f3a5",
+          "comment": "",
+          "command": "check",
+          "target": "name=custom-data-lookup-enable",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cf3f2d03-7e55-424f-871d-9e6310c2b749",
+          "comment": "",
+          "command": "type",
+          "target": "name=custom-data-lookup-name____0",
+          "targets": [],
+          "value": "getheight"
+        },
+        {
+          "id": "cc03543b-3339-4306-9b5a-3c9472de2ca2",
+          "comment": "",
+          "command": "type",
+          "target": "name=custom-data-lookup-filter____0",
+          "targets": [],
+          "value": "[record_id] = ?"
+        },
+        {
+          "id": "2ef05d4b-3373-4656-a7e3-339c2019e749",
+          "comment": "",
+          "command": "type",
+          "target": "name=custom-data-lookup-field____0",
+          "targets": [],
+          "value": "height"
+        },
+        {
+          "id": "b0eb1b55-30c1-4ee6-b23d-d811859c9491",
+          "comment": "",
+          "command": "click",
+          "target": "css=#external-modules-configure-modal .modal-footer .save",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "31dd7f1f-2e5c-43eb-b2de-ce216f9b3522",
+          "comment": "",
+          "command": "pause",
+          "target": "2000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e1b0e542-7b06-4dbb-93ee-27db67abd886",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7c16eab2-7288-4965-8b97-cae334d80809",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Basic Demography Form",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e5e6f5fd-1c60-4935-ba64-578ea8ae585d",
+          "comment": "",
+          "command": "click",
+          "target": "id=btn-first_name-sh-f",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "510af74b-c2fa-4fe1-a411-68871250a96d",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "4897640d-9138-4703-ac02-9730197a83bf",
+          "comment": "",
+          "command": "select",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "value=text"
+        },
+        {
+          "id": "7dc180e5-bb3e-4733-bb7a-a53c374e1023",
+          "comment": "",
+          "command": "type",
+          "target": "id=field_name",
+          "targets": [],
+          "value": "test_datalookup"
+        },
+        {
+          "id": "d9b91102-b9fd-44a8-8df1-2845c39525bc",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#field_annotation').val('@CALCTEXT(datalookup(\\'getheight\\',1))')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "6cde0b03-7e2e-42b5-82f6-2b77193aee7d",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[style*=\"bold\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e3dc28f8-f07c-4c95-8065-1a59b7ff99f3",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=test_datalookup-tr",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "fcdfd44e-f7e9-4da7-9748-f94013f8cbd8",
+          "comment": "",
+          "command": "pause",
+          "target": "1000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "aab09254-053f-44d3-9f9c-df6f95ee1b3c",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "9744af25-47e3-4bf4-8c24-ebc2b9b757e8",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "99ce8e79-a766-472f-a2e3-7e84ca4a752d",
+          "comment": "",
+          "command": "pause",
+          "target": "2000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "2cef400b-5790-4eca-9470-d1c166b54dbe",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_datalookup",
+          "targets": [],
+          "value": "165"
+        }
+      ]
+    },
+    {
+      "id": "0faa116d-1dc7-4889-848c-ae5c3a5523c7",
+      "name": "t02 - ifenum function",
+      "commands": [
+        {
+          "id": "47b01d49-5ce3-428f-b8f3-74781eefcb85",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "9996c4b0-d77b-44c5-9a67-6d14521fc2df",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "aafe0933-3924-4f41-9e66-baab34073eb6",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e7a0b988-eb57-42bf-bfcf-a0e383d947c4",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "f8f8552d-1fd1-42a0-af01-753807a25940",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Extra Calculation Functions Test",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "81bd50ee-f192-4ca6-863e-39474c2389d1",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8866a3bb-f0ba-43a7-8aa9-b30f720d893d",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Basic Demography Form",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "22a5dcbe-b3ce-45ae-a563-a9e14a8e75f5",
+          "comment": "",
+          "command": "click",
+          "target": "id=btn-first_name-sh-f",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "66d9c8f2-ad7b-4401-b74f-2ee1839ef64b",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "3b4be5c4-aad2-4d8b-b869-eb72b6160ae4",
+          "comment": "",
+          "command": "select",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "value=text"
+        },
+        {
+          "id": "db6b0d2a-fbb8-46da-906d-eb7a0bc13777",
+          "comment": "",
+          "command": "type",
+          "target": "id=field_name",
+          "targets": [],
+          "value": "test_ifenum"
+        },
+        {
+          "id": "3bfb5cdb-6de7-4512-a897-600c5556f0c5",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#field_annotation').val('@CALCTEXT(ifenum([weight],0,60,1,65,2,70,3,75,4)))')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b8ee829d-3df8-4105-ab59-131f8523fc65",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[style*=\"bold\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7eff5436-8a9d-44ff-8361-cb888d543eec",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=test_ifenum-tr",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "c3e0cda3-4693-4139-aeb4-2f14a6a4c0b9",
+          "comment": "",
+          "command": "pause",
+          "target": "1000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "5e1a4a39-e0ac-4255-ae7f-9643dad688c9",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8c2c28e7-e4a8-4090-a15c-5f982288ce0a",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e9453478-a1e6-4efc-b27f-ef50da3ff1d0",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('[name=\"weight\"]').val('55');calculate();$('body').attr('data-donecalc','1')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7cdbf0dd-829f-48a4-abc7-7f5ed9352307",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=body[data-donecalc=\"1\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "236c90c5-910e-4bb2-a185-c54e75b2311b",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_ifenum",
+          "targets": [],
+          "value": "0"
+        },
+        {
+          "id": "cd0941bc-fda0-46c4-9fc6-391de3b56f25",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('[name=\"weight\"]').val('60');calculate();$('body').attr('data-donecalc','2')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "68dc68e8-2771-46e7-a266-13809d219300",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=body[data-donecalc=\"2\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "1884dcd1-c0f0-4b06-8a26-0aaa34d4118f",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_ifenum",
+          "targets": [],
+          "value": "1"
+        },
+        {
+          "id": "0e49052f-03bb-4095-b876-e5b1ea247f7a",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('[name=\"weight\"]').val('65');calculate();$('body').attr('data-donecalc','3')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8ce747c0-1fbe-40f2-b205-06ecdeebcd07",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=body[data-donecalc=\"3\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "dd7a39cf-7c7b-439b-ad1c-81c0b3d2593f",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_ifenum",
+          "targets": [],
+          "value": "2"
+        },
+        {
+          "id": "f184a180-7683-4efa-a016-c17705fa063e",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('[name=\"weight\"]').val('70');calculate();$('body').attr('data-donecalc','4')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "16c05456-a52a-439e-a7f8-c9e0717d27b6",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=body[data-donecalc=\"4\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "fd9a3a20-3473-4c43-81a8-95a03a328216",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_ifenum",
+          "targets": [],
+          "value": "3"
+        },
+        {
+          "id": "0397345a-99f9-43e9-af76-c8938c84ee0e",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('[name=\"weight\"]').val('75');calculate();$('body').attr('data-donecalc','5')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7208d699-cec7-4219-9b74-c8da2213c4aa",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=body[data-donecalc=\"5\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "5dd3038b-01c0-4deb-bfaa-fd0a1f098a07",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_ifenum",
+          "targets": [],
+          "value": "4"
+        }
+      ]
+    },
+    {
+      "id": "763723f8-627f-47b0-9451-4a421d8734be",
+      "name": "t03 - ifnull function",
+      "commands": [
+        {
+          "id": "c80d495c-438c-4bc2-b158-f325e63568bb",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8e141b37-8c54-47cd-9e3f-49c31b25cde4",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "4aafc995-6a28-4c8a-b18b-3fbf6ddba2e5",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "05bdca83-dae5-40d6-8859-30255bf3f82a",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "36782872-59ec-4298-9920-5a7b419fc8d3",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Extra Calculation Functions Test",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "d4ad7cab-88c1-40b4-a8fd-1c572cd70701",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "9076805c-7f38-4f0e-9753-9bff10db05c0",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Basic Demography Form",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "57a48f65-bb09-404c-a568-9afb66a5eb1f",
+          "comment": "",
+          "command": "click",
+          "target": "id=btn-first_name-sh-f",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "ffe4f3fd-49d3-425c-b27b-8c99cfd678b3",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "7be94780-f26a-4a10-931f-ba75f99d3c3d",
+          "comment": "",
+          "command": "select",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "value=text"
+        },
+        {
+          "id": "e79b289d-3eb0-4a8b-a7f0-b5f08a886067",
+          "comment": "",
+          "command": "type",
+          "target": "id=field_name",
+          "targets": [],
+          "value": "test_ifnull"
+        },
+        {
+          "id": "ef5097b2-a327-43db-8a1a-a38b707f2f52",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#field_annotation').val('@CALCTEXT(ifnull([weight],[height])))')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c73cb81d-01f6-4833-8692-a15916318290",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[style*=\"bold\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b1ea388b-1430-4168-900a-a82aa247c94b",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=test_ifnull-tr",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "2e5583b9-4fc7-4cc6-a7f1-74e00da2c6dc",
+          "comment": "",
+          "command": "pause",
+          "target": "1000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "6bc436f3-5977-43c1-83f6-896116828b66",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "715ddc10-ee25-4d30-b4eb-1e8d529b40f1",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "ff2052b1-592f-44e9-a6e4-79a8994305ee",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "name=weight",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "bbce4394-3930-4d8b-bfe4-745d71c68ded",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('[name=\"weight\"]').val('');$('[name=\"height\"]').val('165');calculate();$('body').attr('data-donecalc','1')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7c427438-4c52-4450-a0f2-4d757168e19b",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=body[data-donecalc=\"1\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "cf9b2e07-eb45-4743-b8c0-2e30238dff3c",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_ifnull",
+          "targets": [],
+          "value": "165"
+        },
+        {
+          "id": "d24d0f79-ac4e-4835-b947-d83e98b28c42",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('[name=\"weight\"]').val('60');calculate();$('body').attr('data-donecalc','2')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1d12f1e4-6ee3-44da-8d0b-7fd8897a5bcd",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=body[data-donecalc=\"2\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "6cff4b90-583d-4d23-bb27-6877978d39d9",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_ifnull",
+          "targets": [],
+          "value": "60"
+        }
+      ]
+    },
+    {
+      "id": "a42443ec-d93f-495d-a126-da7d95d7e13f",
+      "name": "t04 - loglookup function",
+      "commands": [
+        {
+          "id": "f10d3425-cfca-446d-a2ec-c3a0ec387984",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b459553b-1933-4e59-8c73-66c3d8bfa88f",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "719a3ae0-297d-47b6-b170-4a6e156951a6",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "522bb096-f61f-46f6-b77c-72a865d852c1",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "96841988-e84b-4ee9-bf52-4a195a9904e2",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Extra Calculation Functions Test",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "6507be9a-e91b-4cec-8146-4f0f0469ddeb",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b097605e-e6be-461f-a181-bb8cd38074d5",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Basic Demography Form",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "bfa4d181-3966-4105-896f-70833fa092ee",
+          "comment": "",
+          "command": "click",
+          "target": "id=btn-first_name-sh-f",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "266bd70d-5378-4e49-8399-f68851166995",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "05f15a99-27ab-4893-a158-be6b27092812",
+          "comment": "",
+          "command": "select",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "value=text"
+        },
+        {
+          "id": "09f4f69f-5667-4534-b8bf-0dbde78fb278",
+          "comment": "",
+          "command": "type",
+          "target": "id=field_name",
+          "targets": [],
+          "value": "test_loglookup1"
+        },
+        {
+          "id": "1d747f61-d0ea-4c18-b2c5-0147182a416d",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#field_annotation').val('@CALCTEXT(loglookup(\\'first-user\\',\\'height\\',\\'1\\'))')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "ce19c340-8485-4b05-bdc2-999c2246ef7f",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[style*=\"bold\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "2bfd4038-18aa-40e2-a2c7-890eeac974be",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=test_loglookup1-tr",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "fb32b362-010a-4b24-80a8-a6a6200a9d22",
+          "comment": "",
+          "command": "pause",
+          "target": "1000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "5a1e00c0-07bf-412c-b476-8d00ad18fd82",
+          "comment": "",
+          "command": "click",
+          "target": "id=btn-first_name-sh-f",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "2116068c-3f85-4845-9327-4eb67a61a8b8",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "3678a40d-ffae-4871-9714-e62f2df4f835",
+          "comment": "",
+          "command": "select",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "value=text"
+        },
+        {
+          "id": "46fdb4cc-ad3f-4a59-a655-4a22dde054d6",
+          "comment": "",
+          "command": "type",
+          "target": "id=field_name",
+          "targets": [],
+          "value": "test_loglookup2"
+        },
+        {
+          "id": "2bd601c3-8048-41f7-94ec-b7954a0c033c",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#field_annotation').val('@CALCTEXT(left(loglookup(\\'first-date\\',\\'height\\',\\'1\\'),7))')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8f9570a7-fa01-43dd-8732-68b6c45076c4",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[style*=\"bold\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "a191c9d5-3918-4cc8-9e08-457107c59469",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=test_loglookup2-tr",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "34f3ecf2-3608-48a4-ad2e-151b323d7e34",
+          "comment": "",
+          "command": "pause",
+          "target": "1000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1635fb54-6760-4449-b897-b59294cc8302",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "653618c9-704e-4c7e-afcd-fb15c841ff67",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "f6655fd6-c872-4ab1-95c8-308035110055",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "name=first_name",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "d7772b7e-dd5c-409b-a964-b32b8dabadfa",
+          "comment": "",
+          "command": "storeText",
+          "target": "id=username-reference",
+          "targets": [],
+          "value": "username"
+        },
+        {
+          "id": "cc174858-81b8-445b-ba1b-d3f19417c471",
+          "comment": "",
+          "command": "executeScript",
+          "target": "return new Date().toISOString().substring(0,7)",
+          "targets": [],
+          "value": "yearMonth"
+        },
+        {
+          "id": "9fa66e53-09be-4522-bb4a-d00fc1cd617c",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_loglookup1",
+          "targets": [],
+          "value": "${username}"
+        },
+        {
+          "id": "aea12776-026c-418e-becf-126cd9570058",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_loglookup2",
+          "targets": [],
+          "value": "${yearMonth}"
+        }
+      ]
+    },
+    {
+      "id": "a633b5fe-461e-44cc-a541-a0c277b0f7c2",
+      "name": "t05 - makedate function",
+      "commands": [
+        {
+          "id": "b6e823a5-1d95-4976-a873-af0bf7e6a426",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7710be0d-6535-4822-8bd7-4eb3cd3481fb",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "82bad8e7-db30-4d68-84e4-f0f347d09983",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "6c7bb584-dc0c-4e47-b79e-96ec3db6ef9a",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1d029cf7-6d21-4c8d-b973-0800d48d801f",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Extra Calculation Functions Test",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b2d7d5dc-6961-4236-b9c7-953a39432db5",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c556438e-d063-44d8-80e1-0f8135a82e77",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Basic Demography Form",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "af0b2be3-7e2e-4b72-aaf9-13d30ced8463",
+          "comment": "",
+          "command": "click",
+          "target": "id=btn-first_name-sh-f",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "5399e138-3ff9-4fe7-a8bc-6aad74d86d82",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "66809167-07a1-4ebf-95db-15e1f0cdf288",
+          "comment": "",
+          "command": "select",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "value=text"
+        },
+        {
+          "id": "59d882d1-bef8-4ebe-aa53-62d83bd0fa0d",
+          "comment": "",
+          "command": "type",
+          "target": "id=field_name",
+          "targets": [],
+          "value": "test_makedate"
+        },
+        {
+          "id": "b36f61cf-00e1-4785-a2cc-17694a483a1a",
+          "comment": "",
+          "command": "select",
+          "target": "id=val_type",
+          "targets": [],
+          "value": "value=date_dmy"
+        },
+        {
+          "id": "ea287f5e-98d0-4a24-85a7-7c2bf77ba69d",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#field_annotation').val('@CALCTEXT(makedate(\\'dmy\\',2000,1,1))')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c4ba2e19-080d-4891-894d-c40655e336bc",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[style*=\"bold\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "5bb1afbc-dd16-4370-bc87-7d9c7a5d75f8",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=test_makedate-tr",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "697858a0-29c0-460f-a985-577820d4a449",
+          "comment": "",
+          "command": "pause",
+          "target": "1000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "84dc4268-8618-4236-b227-584ffe78af61",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "d9979e31-63ab-4dad-8f9e-b541575c7ec5",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "50f0f03a-c9e3-47fd-b505-4ec72da3f2ba",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "name=test_makedate",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "803979f6-8d0b-416b-a239-42d9826041fe",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_makedate",
+          "targets": [],
+          "value": "01-01-2000"
+        },
+        {
+          "id": "d605e8a3-84d9-42ca-a79b-d33708ea1ba1",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=input[name=\"test_makedate\"][class*=\"calcChanged\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "bf2b3722-4062-4c30-854a-00ab45eedd17",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#south').remove();dataEntrySubmit('submit-btn-savecontinue')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "5b43bad5-73b8-42ef-803f-8c0f30b2defb",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=south",
+          "targets": [],
+          "value": "60000"
+        },
+        {
+          "id": "9787b373-f22c-45b6-bd18-291ce19217b5",
+          "comment": "",
+          "command": "assertValue",
+          "target": "name=test_makedate",
+          "targets": [],
+          "value": "01-01-2000"
+        },
+        {
+          "id": "255abda6-cddc-4c47-b8bc-4b6a67515a5f",
+          "comment": "",
+          "command": "assertElementNotPresent",
+          "target": "css=input[name=\"test_makedate\"][class*=\"calcChanged\"]",
+          "targets": [],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "8c49153c-3a19-4a63-931f-69223e76f338",
+      "name": "t06 - randomnumber function",
+      "commands": [
+        {
+          "id": "c7176c4f-e5b0-4a3e-a37d-ca4aa820425d",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "6c0c2ffb-0074-4533-a525-948ef2ee3d1b",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "f481fd49-e495-4739-8c75-df841106e22f",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "32ea9ed2-20f6-4fad-b75c-610cd2f49ecf",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "fdf10982-cbc0-4960-9c1d-3087d69dc02c",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Extra Calculation Functions Test",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8b960909-5b82-470d-82cd-b38093b1666a",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7b8195fd-a595-424d-bfb5-11f821cc0256",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Basic Demography Form",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "3f401acc-e43c-40fd-964a-64527bcaa85c",
+          "comment": "",
+          "command": "click",
+          "target": "id=btn-first_name-sh-f",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e01cad4b-6f84-4ddc-905b-f4fe61ba1e99",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "9dce0d1a-eea1-4a84-bd04-19462af6fee5",
+          "comment": "",
+          "command": "select",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "value=text"
+        },
+        {
+          "id": "513e16d4-bd48-4480-a112-f7cdd37dea2a",
+          "comment": "",
+          "command": "type",
+          "target": "id=field_name",
+          "targets": [],
+          "value": "test_randomnumber"
+        },
+        {
+          "id": "eca1e399-9478-42f1-8a4e-1dc2a7fa81a8",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#field_annotation').val('@CALCTEXT(randomnumber())')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "d7d96066-e8aa-4e09-96e1-a1adea12ec11",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[style*=\"bold\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7018e4ac-0200-4cdc-a495-d8650af2f99f",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=test_randomnumber-tr",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "f6c03585-788a-4b4d-87df-a7fa326e24d1",
+          "comment": "",
+          "command": "pause",
+          "target": "1000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e5c774f7-a52d-456b-9bbe-360f6a54c08e",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e2ae6226-6116-4f03-8d0a-c91afd95e304",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "18778b82-b8ca-4033-b03f-ce8ec9831493",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=[name=\"test_randomnumber\"].calcChanged",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "271e7832-f428-4cc3-acdc-6dbc13b4a820",
+          "comment": "",
+          "command": "executeScript",
+          "target": "return $('input[name=\"test_randomnumber\"]').val()",
+          "targets": [],
+          "value": "randomNumber"
+        },
+        {
+          "id": "39df5b16-1f29-4d67-b87d-371e56e1e62c",
+          "comment": "",
+          "command": "runScript",
+          "target": "setTimeout(function(){$('[name=\"test_randomnumber\"]').removeClass('calcChanged')},1000)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "5f6dbc65-45c2-48ee-8aca-3c3b286b5ab4",
+          "comment": "",
+          "command": "waitForElementNotVisible",
+          "target": "css=[name=\"test_randomnumber\"].calcChanged",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "77bb4370-d3c0-40c8-b106-ebedd3b60eee",
+          "comment": "",
+          "command": "runScript",
+          "target": "calculate()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "2f3dc418-895e-4103-94a5-074ccdb9fcd6",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=[name=\"test_randomnumber\"].calcChanged",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "a646a4b7-9ebb-4fd0-bd98-d27e7e90749d",
+          "comment": "",
+          "command": "executeScript",
+          "target": "return ( ${randomNumber} == $('input[name=\"test_randomnumber\"]').val() ) ? '1' : '0'",
+          "targets": [],
+          "value": "sameNumber"
+        },
+        {
+          "id": "4de69d19-e573-4142-bd6a-1827f1ef0218",
+          "comment": "",
+          "command": "assert",
+          "target": "sameNumber",
+          "targets": [],
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "id": "81de8e7a-e8d8-43fa-b7d1-674ba3c75369",
+      "name": "t07 - sysvar function",
+      "commands": [
+        {
+          "id": "32fbc5b2-3979-4a91-9cdc-05e01f24cfd7",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "6ebb6355-4ec2-4b7a-842d-8850a4495371",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "44057d0b-c7ff-496f-9ea1-18261f5bff05",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "547a40b7-af38-452d-a4a9-7bf9f27ddc61",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "f1c51fb1-bf0c-4fbb-8a55-88e6e01c2606",
+          "comment": "",
+          "command": "runScript",
+          "target": "if (sessionStorage.getItem('test-sysvardetails') != null) document.body.setAttribute('data-sysvar-set','1')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "38e5439d-c256-4938-8c24-156587273e51",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-sysvar-set]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "ab266383-00a7-41ce-86a3-b8db5f5db77b",
+          "comment": "",
+          "command": "executeScript",
+          "target": "return JSON.parse(sessionStorage.getItem('test-sysvardetails')).name",
+          "targets": [],
+          "value": "sysvarName"
+        },
+        {
+          "id": "2120c8b5-407d-4bcd-bbfd-edc6e05a621e",
+          "comment": "",
+          "command": "executeScript",
+          "target": "return JSON.parse(sessionStorage.getItem('test-sysvardetails')).value",
+          "targets": [],
+          "value": "sysvarValue"
+        },
+        {
+          "id": "7ddb0429-7111-4db3-bebc-e1dd7b8a6ef9",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Extra Calculation Functions Test",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "03294bbd-f82a-469c-8c1b-bd9b634fddbf",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "113f3818-9597-4a8c-964d-0d8cf23b4a03",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Basic Demography Form",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "4715262f-5d7a-41be-9686-715f4ae38876",
+          "comment": "",
+          "command": "click",
+          "target": "id=btn-first_name-sh-f",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "3eb062e1-b81c-4809-abe8-dce6a1524717",
+          "comment": "",
+          "command": "waitForElementVisible",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "72efb189-d3f8-42f9-b9b3-60dacaad0298",
+          "comment": "",
+          "command": "select",
+          "target": "id=field_type",
+          "targets": [],
+          "value": "value=text"
+        },
+        {
+          "id": "74f9bf06-c63c-40be-928a-5dd860a8fd00",
+          "comment": "",
+          "command": "type",
+          "target": "id=field_name",
+          "targets": [],
+          "value": "test_sysvar"
+        },
+        {
+          "id": "d02dc25a-d716-46a1-8c59-d421112e3ab2",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#field_annotation').val('@CALCTEXT(sysvar(\\''+${sysvarName}+'\\'))')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "0f9d38b6-39e3-446c-8444-0919eaa22d19",
+          "comment": "",
+          "command": "click",
+          "target": "css=button[style*=\"bold\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "195cfb49-b80a-431e-b1ee-35a1efa01bda",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=test_sysvar-tr",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "3192024f-102a-44f8-8f19-8af00935bbb8",
+          "comment": "",
+          "command": "pause",
+          "target": "1000",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "028bbeb7-5fd8-4ba5-af31-a59a99e14f64",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8ada5f3f-e8ef-44da-87a2-549dda54f664",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "6bab5c7c-7746-48ca-bf0c-93cbf55ba79e",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "name=test_sysvar",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "c77d11cd-eb79-451c-aea6-5c59b1037559",
+          "comment": "",
+          "command": "assertValue",
+          "target": "css=input[name=\"test_sysvar\"]",
+          "targets": [],
+          "value": "${sysvarValue}"
+        }
+      ]
+    },
+    {
+      "id": "66b8de36-6519-4eaf-ae19-5ec7024afeea",
+      "name": "t08 - checkvalueoncurrentinstance fn",
+      "commands": [
+        {
+          "id": "294ccda1-c294-47fc-90fa-2d64216a7998",
+          "comment": "",
+          "command": "open",
+          "target": "/",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "596f2eb9-12e7-484b-8cc2-84d24e7b4a16",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=My Projects",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "217caf50-932f-4915-b179-bf5c9b28bddf",
+          "comment": "",
+          "command": "runScript",
+          "target": "if($('#table-proj_table').text().indexOf('Extra Calculation Functions Test')>-1) document.body.setAttribute('data-hasproj',1)",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b05cea09-80ad-43b9-83d1-4645153115c8",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=body[data-hasproj]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "81f3d1c5-fd2f-4988-8760-75dde97ec76d",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Extra Calculation Functions Test",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "083936ee-4ea6-4d93-af1b-462184cfb719",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Project Setup",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "399c8345-3b44-4829-8a6c-d5a34cf89acb",
+          "comment": "",
+          "command": "click",
+          "target": "id=enableRepeatingFormsEventsBtn",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "dfe046af-5925-4bf5-8bc6-7d5f09432b2f",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#south').remove()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e2fd6cc3-9e98-4f70-b867-a3ad135fb2d4",
+          "comment": "",
+          "command": "check",
+          "target": "css=.repeat_form_chkbox",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "107cac08-dc45-4c68-891e-c2658ed2c7d5",
+          "comment": "",
+          "command": "click",
+          "target": "xpath=//button[contains(.,\"Save\")]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "ddf33969-6876-4c61-b0dd-6d749bf2e4cf",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=south",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "f64304d0-4da1-4ed6-a3f7-637ed50ea4f8",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "css=#enableRepeatingFormsEventsOption[style*=\"color:green\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c0aa59b3-165c-48ec-9f4d-38fc8353f094",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"Design/online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "91db8f65-a443-4171-8339-b3afeb12089f",
+          "comment": "",
+          "command": "runScript",
+          "target": "displayFormDisplayLogicPopup()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "81054d39-2fae-4c28-b85e-493f5eaeea4f",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=[onchange*=\"checkRepeatSelection\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "dbd306df-d847-4e95-9703-74a750abe3cc",
+          "comment": "",
+          "command": "select",
+          "target": "css=[onchange*=\"checkRepeatSelection\"]",
+          "targets": [],
+          "value": "label=Basic Demography Form"
+        },
+        {
+          "id": "ecb9693b-e89b-4b0e-b9ae-6f2eb94c16db",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#control-condition-1').val('checkvalueoncurrentinstance(\"demographics_complete\",0,false,0,false)')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "98a8e83e-1854-47e0-b3e9-4a3936d74f07",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#south').remove()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "903bb88e-d1c8-4df1-9ba4-3bff71a4d0ec",
+          "comment": "",
+          "command": "click",
+          "target": "xpath=//button[contains(.,\"Save\")]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "d0d4b24c-23e5-47d3-abb8-b7ed4ca539a8",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=south",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "e908604e-de6c-41cc-ae27-97456168252c",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "55023495-b0f4-405a-9f5c-3cdcd4116db2",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "790e8d08-956f-4da9-b16e-6e707d8d3b5d",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "name=first_name",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8fa1a32e-5c32-4eda-a25a-37e2193d0c52",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "40886b55-c034-4924-9e93-d07fde35f976",
+          "comment": "",
+          "command": "if",
+          "target": "$('.dataEntryLeavePageBtn').length > 0",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7db15784-99ad-4083-a469-746b11fafe2f",
+          "comment": "",
+          "command": "click",
+          "target": "css=.dataEntryLeavePageBtn",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "ad3386d0-5adb-495b-a956-54c8bd807fc8",
+          "comment": "",
+          "command": "end",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "34b19e94-d187-422c-b516-8c642294b4d3",
+          "comment": "",
+          "command": "click",
+          "target": "css=span.rc-add-new-instance-btn button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "36f4b4b1-8656-42f4-9042-99d5d17a9fcd",
+          "comment": "",
+          "command": "assertElementNotPresent",
+          "target": "name=first_name",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "165bb42d-5a40-4280-9fee-d997e2dd5e5f",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"Design/online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "d80ea6df-287c-4410-ba56-f2dfd5341277",
+          "comment": "",
+          "command": "runScript",
+          "target": "displayFormDisplayLogicPopup()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "a2e38c63-544b-4ea0-9625-2caae624dcb4",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=[onchange*=\"checkRepeatSelection\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "a8d5677c-e7d0-47f4-9570-8f235d9deb48",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#control-condition-1').val('checkvalueoncurrentinstance(\"demographics_complete\",2,true,0,false)')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "4c520891-aa1b-4f9f-b4b7-7b1c2aead835",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#south').remove()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "70b65af4-ed44-45a8-bdd9-4469ad4b26ef",
+          "comment": "",
+          "command": "click",
+          "target": "xpath=//button[contains(.,\"Save\")]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "d5b3dc9b-8769-4783-a324-239b0758ed3d",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=south",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "b2ea0cfc-9a2b-4b0c-9d0c-0df3fcb8780b",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "202b389e-02c6-4a98-97aa-278431ec85d6",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"DataEntry/index.php\"]:not([href*=\"id=&\"])",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8ed4d03d-c594-4fb0-ad5d-37ded30ab5d3",
+          "comment": "",
+          "command": "assertElementNotPresent",
+          "target": "name=first_name",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "43d2d45e-df19-4530-920e-aec807188897",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "525dacc4-a093-4269-be53-eda1e1e29d40",
+          "comment": "",
+          "command": "click",
+          "target": "css=span.rc-add-new-instance-btn button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e706d8c5-1a1e-41fe-a9e0-1e2ff18bbbb6",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "name=first_name",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "8b3e1870-b2e9-44fd-9a9e-7a59174408bd",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"Design/online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "3b92e962-44c1-45bb-9994-430a6a939b04",
+          "comment": "",
+          "command": "if",
+          "target": "$('.dataEntryLeavePageBtn').length > 0",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "7f8713af-4f62-444e-b812-72fffd5fe7aa",
+          "comment": "",
+          "command": "click",
+          "target": "css=.dataEntryLeavePageBtn",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "3ea38698-0a6b-4f31-b14c-142bc2c8f544",
+          "comment": "",
+          "command": "end",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "da04d7a0-efda-4637-9b10-7a0f8d374d58",
+          "comment": "",
+          "command": "runScript",
+          "target": "displayFormDisplayLogicPopup()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "bc76466b-5e81-4c48-8b91-a5ed38d0eec3",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=[onchange*=\"checkRepeatSelection\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "ea9c55d9-b79f-44a0-8c99-f3eb1140abe0",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#control-condition-1').val('checkvalueoncurrentinstance(\"demographics_complete\",2,true,1,false)')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e0d304ff-ad75-4b3a-bc5d-03c0e1f2357b",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#south').remove()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "9aa50bd2-96ba-4077-9037-82042936c3b3",
+          "comment": "",
+          "command": "click",
+          "target": "xpath=//button[contains(.,\"Save\")]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "f07d9ce2-011c-44e1-b997-f6d1b688568f",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=south",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "6a6e17ac-74dd-4bd9-9916-538f40e52372",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "270fd274-2d1b-4d11-8962-bce3656d6faa",
+          "comment": "",
+          "command": "click",
+          "target": "css=span.rc-add-new-instance-btn button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "e12231de-f513-49ad-8282-12d0c2d36f92",
+          "comment": "",
+          "command": "assertElementNotPresent",
+          "target": "name=first_name",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "5d48353c-cd37-4799-830c-0978a94e68e7",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"Design/online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b7d50647-b3da-418c-9067-0b3a573af8f2",
+          "comment": "",
+          "command": "runScript",
+          "target": "displayFormDisplayLogicPopup()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "187bbad2-4b55-4715-821e-8b409d7d213e",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=[onchange*=\"checkRepeatSelection\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "3b0f2a70-580c-419b-bed8-741dbe8b5db1",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#control-condition-1').val('checkvalueoncurrentinstance(\"demographics_complete\",2,true,0,true)')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "297557c2-463e-473a-953a-68fd04883284",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#south').remove()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1d12fad8-5628-4e7a-aee7-d54731a630dc",
+          "comment": "",
+          "command": "click",
+          "target": "xpath=//button[contains(.,\"Save\")]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b7196bf1-b98e-4a75-a41f-8b12812750d9",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=south",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "5a5ced8b-cbd2-40a2-88f3-9ca443f37c6f",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "34e8ddcf-bf03-4de1-8f20-46b39e609c46",
+          "comment": "",
+          "command": "click",
+          "target": "css=span.rc-add-new-instance-btn button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "cf7e0bc6-ca6f-45a4-bded-14861206f5d4",
+          "comment": "",
+          "command": "assertElementPresent",
+          "target": "name=first_name",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "508669e4-afa7-470b-8440-d2b4fe824fd6",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"Design/online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "41209ee3-e732-4be2-a985-a84e5ac10491",
+          "comment": "",
+          "command": "if",
+          "target": "$('.dataEntryLeavePageBtn').length > 0",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "935fb98b-fd70-44ff-b746-293b1481ae85",
+          "comment": "",
+          "command": "click",
+          "target": "css=.dataEntryLeavePageBtn",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "a87259d0-5124-463d-8c40-3296649e243c",
+          "comment": "",
+          "command": "end",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "32164381-c7c3-4ead-a55e-c34e77ebeef8",
+          "comment": "",
+          "command": "runScript",
+          "target": "displayFormDisplayLogicPopup()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "dc578b6a-ca08-43e0-8e1a-97e42527b427",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "css=[onchange*=\"checkRepeatSelection\"]",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "88f8a593-d7ff-4544-8ff6-fa90663dc181",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#control-condition-1').val('checkvalueoncurrentinstance(\"demographics_complete\",0,true,0,true)')",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b1c1806f-a58a-43d4-8576-704d7b16fa15",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#south').remove()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1d0ac81b-e166-47a7-a74a-8e254c4d20a5",
+          "comment": "",
+          "command": "click",
+          "target": "xpath=//button[contains(.,\"Save\")]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "f6c415f7-ef2c-4ceb-9c33-4f228c6477d8",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=south",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "03bd86f0-ee5d-4556-8994-25af6b25e6f8",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Record Status Dashboard",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b7f67f61-a8f1-4433-bee8-6ca34f8b25c9",
+          "comment": "",
+          "command": "click",
+          "target": "css=span.rc-add-new-instance-btn button",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1675d784-e1e8-4e5d-9d06-7f15949150ac",
+          "comment": "",
+          "command": "assertElementNotPresent",
+          "target": "name=first_name",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "94fb4d8d-110a-436a-a6e5-70685f7bf7e8",
+          "comment": "",
+          "command": "click",
+          "target": "css=a[href*=\"Design/online_designer.php\"]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "a0b42f63-5a2b-4aed-98fd-25c9428e9ab9",
+          "comment": "",
+          "command": "runScript",
+          "target": "displayFormDisplayLogicPopup()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "2409b670-a492-42e1-ac2d-e2a06108e4e6",
+          "comment": "",
+          "command": "chooseOkOnNextConfirmation",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "87da2db9-3144-4622-93c5-1904de1e7298",
+          "comment": "",
+          "command": "click",
+          "target": "id=deleteAll",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "90b4d600-7db4-42ff-818d-15e23a0b5861",
+          "comment": "",
+          "command": "webdriverChooseOkOnVisibleConfirmation",
+          "target": "",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "1e65a0c7-b59f-4df3-a248-3c327b6c838f",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#south').remove()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "b463ad5d-6f4a-4147-a4a3-0565ce5477bd",
+          "comment": "",
+          "command": "click",
+          "target": "xpath=//button[contains(.,\"Save\")]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "97096cb1-3a4f-42a8-82ca-3fe1becd0a2d",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=south",
+          "targets": [],
+          "value": "30000"
+        },
+        {
+          "id": "70b0b04b-f843-4b74-80cd-543619a06e2f",
+          "comment": "",
+          "command": "click",
+          "target": "linkText=Project Setup",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "eb0c985e-6eab-4c32-a21e-39f8b227ce7c",
+          "comment": "",
+          "command": "click",
+          "target": "id=enableRepeatingFormsEventsBtn",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "d503339f-a731-4674-aac5-a4495711695a",
+          "comment": "",
+          "command": "runScript",
+          "target": "$('#south').remove()",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "3eb619f6-4fcc-4278-824c-05a4477577b2",
+          "comment": "",
+          "command": "uncheck",
+          "target": "css=.repeat_form_chkbox",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "4d4acce8-6a4a-448d-9299-3c24a93e2cad",
+          "comment": "",
+          "command": "click",
+          "target": "xpath=//button[contains(.,\"Save\")]",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "f2d53106-b72f-4093-9b0c-9d2c3454a4d1",
+          "comment": "",
+          "command": "waitForElementPresent",
+          "target": "id=south",
+          "targets": [],
+          "value": "30000"
+        }
+      ]
+    }
+  ],
+  "suites": [],
+  "urls": [
+    "http://127.0.0.1/",
+    "https://redcap03.nottingham.ac.uk/"
+  ],
+  "plugins": []
+}

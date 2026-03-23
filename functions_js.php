@@ -86,12 +86,10 @@ datalookup = (function()
 		}
 		if ( luCache[ luName ][ luArgs ] === false )
 		{
-			luFunc.waiting = true
-			throw new Error('Awaiting data')
+			return ''
 		}
 		return luCache[ luName ][ luArgs ]
 	}
-	luFunc.waiting = false
 	return luFunc
 })()
 
@@ -170,12 +168,10 @@ loglookup = (function()
 		}
 		if ( luCache[ luArgs ] === false )
 		{
-			luFunc.waiting = true
-			throw new Error('Awaiting data')
+			return ''
 		}
 		return luCache[ luArgs ]
 	}
-	luFunc.waiting = false
 	return luFunc
 })()
 
