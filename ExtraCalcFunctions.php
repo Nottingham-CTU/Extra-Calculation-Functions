@@ -107,7 +107,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				for ( $i = floor( ( ($thisIteration - 1) / $splitRuns ) * count( $listRecords ) );
 				      $i < floor( ( $thisIteration / $splitRuns ) * count( $listRecords ) ); $i++ )
 				{
-					$dq->executeRule( 'pd-10', $listRecords[$i] );
+					$dq->executeRule( 'pd-10', [ $listRecords[$i] ] );
 					if ( memory_get_usage() / $memLimit > 0.9 )
 					{
 						// Too much memory is being used, exit before an error is triggered.
