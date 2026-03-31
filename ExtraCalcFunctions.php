@@ -63,8 +63,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 			{
 				$memLimit = strtolower( ini_get('memory_limit') );
 				$memMult = 1 * ( preg_match('/[kmg]/', $memLimit) ? 1024 : 1 );
-				$memMult = 1 * ( preg_match('/[mg]/', $memLimit) ? 1024 : 1 );
-				$memMult = 1 * ( strpos($memLimit, 'g') !== false ? 1024 : 1 );
+				$memMult = $memMult * ( preg_match('/[mg]/', $memLimit) ? 1024 : 1 );
+				$memMult = $memMult * ( strpos($memLimit, 'g') !== false ? 1024 : 1 );
 				$memLimit = preg_replace('/^([0-9]+)/', '$1', $memLimit) * $memMult;
 				$thisIteration = $project_id === null ? 0 :
 				                 ( $this->getProjectSetting( 'calc-values-auto-update-itr' ) ?? 1 );
@@ -107,7 +107,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				for ( $i = floor( ( ($thisIteration - 1) / $splitRuns ) * count( $listRecords ) );
 				      $i < floor( ( $thisIteration / $splitRuns ) * count( $listRecords ) ); $i++ )
 				{
-					$dq->executeRule( 'pd-10', $listRecords[$i] );
+					$dq->executeRule( 'pd-10', [ $listRecords[$i] ] );
 					if ( memory_get_usage() / $memLimit > 0.9 )
 					{
 						// Too much memory is being used, exit before an error is triggered.
