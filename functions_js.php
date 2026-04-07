@@ -52,6 +52,7 @@ function checkvalueoncurrentinstance()
 
 datalookup = (function()
 {
+	var luWaitingVal = ''
 	var luCache = {}
 	var luFunc = function ()
 	{
@@ -86,9 +87,13 @@ datalookup = (function()
 		}
 		if ( luCache[ luName ][ luArgs ] === false )
 		{
-			return ''
+			return luWaitingVal
 		}
 		return luCache[ luName ][ luArgs ]
+	}
+	luFunc.setWaitingValue = function ( vVal )
+	{
+		luWaitingVal = vVal
 	}
 	return luFunc
 })()
@@ -138,6 +143,7 @@ function ifnull()
 
 loglookup = (function()
 {
+	var luWaitingVal = ''
 	var luCache = {}
 	var luFunc = function ( type = '', field = '', record = '', event = '', instance = '' )
 	{
@@ -168,9 +174,13 @@ loglookup = (function()
 		}
 		if ( luCache[ luArgs ] === false )
 		{
-			return ''
+			return luWaitingVal
 		}
 		return luCache[ luArgs ]
+	}
+	luFunc.setWaitingValue = function ( vVal )
+	{
+		luWaitingVal = vVal
 	}
 	return luFunc
 })()

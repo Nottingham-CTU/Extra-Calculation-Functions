@@ -9,6 +9,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 	{
 		$this->removeProjectSetting( 'calc-values-auto-update-ts' );
 		$this->removeProjectSetting( 'calc-values-auto-update-dur' );
+		$this->removeProjectSetting( 'calc-values-auto-update-itr' );
+		$this->removeProjectSetting( 'calc-values-auto-update-spl' );
 	}
 
 
@@ -227,6 +229,14 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 <script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php?NOAUTH' ), '&v=',
             preg_replace( '/^.*?([0-9.]+)$/', '$1', $this->getModuleDirectoryName() ); ?>"></script>
 <?php
+		// Set the waiting value for datalookup/loglookup if supplied.
+		$lookupWaitingValue = $this->getProjectSetting( 'lookup-return-while-waiting' );
+		if ( $lookupWaitingValue != '' )
+		{
+			echo '<script type="text/javascript">datalookup.setWaitingValue(',
+			     json_encode( $lookupWaitingValue ), ');loglookup.setWaitingValue(',
+			     json_encode( $lookupWaitingValue ), ")</script>\n";
+		}
 
 		// Get the system variables for use by the sysvar function.
 		if ( $this->getSystemSetting( 'sysvar-enable' ) )

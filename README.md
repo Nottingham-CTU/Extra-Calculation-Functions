@@ -89,6 +89,13 @@ complete in order for all calculated values to be fixed.
 Enabling this setting will restrict the automatic updating of calculated values only to fields which
 utilise the `datalookup` or `loglookup` functions.
 
+### Value returned by lookup functions while waiting for data
+When the *datalookup* or *loglookup* function is run in the browser, it may have to return a value
+before the lookup is complete (as this requires a separate request to the server to take place).
+This *value while waiting* defaults to a blank value, but can be overridden here. When the lookup is
+complete, the calculations and branching logic on the page will be re-run so the value from the
+lookup can be used.
+
 ***The following settings are only available to administrators.***
 
 ### Enable custom data lookup
