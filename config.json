@@ -52,6 +52,12 @@
 			"type" : "checkbox"
 		},
 		{
+			"key" : "calc-values-auto-update-lookup-only",
+			"name" : "Only update calculations with lookup functions",
+			"type" : "checkbox",
+			"branchingLogic" : { "field" : "calc-values-auto-update", "value" : true }
+		},
+		{
 			"key" : "calc-values-auto-update-ts",
 			"name" : "",
 			"type" : "text",

@@ -85,6 +85,10 @@ Note that if there is a lot of data in the project and updating calculated value
 this feature may apply to only a subset of data at a time. In this case, several runs will need to
 complete in order for all calculated values to be fixed.
 
+### Only update calculations with lookup functions
+Enabling this setting will restrict the automatic updating of calculated values only to fields which
+utilise the `datalookup` or `loglookup` functions.
+
 ***The following settings are only available to administrators.***
 
 ### Enable custom data lookup

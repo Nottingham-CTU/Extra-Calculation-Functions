@@ -29,6 +29,13 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				}
 			}
 		}
+		// If calc-values-auto-update is turned off, also unset lookup-only.
+		elseif ( substr( PAGE_FULL, strlen( APP_PATH_WEBROOT ), 35 ) ==
+		         'ExternalModules/manager/project.php' &&
+		         $this->getProjectSetting( 'calc-values-auto-update' ) === false )
+		{
+			$this->setProjectSetting( 'calc-values-auto-update-lookup-only', false );
+		}
 
 		// Instruct the logic parser to allow the extra functions.
 		\LogicParser::$allowedFunctions[ 'checkvalueoncurrentinstance' ] = true;
@@ -78,6 +85,21 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 					{
 						$thisIteration++;
 						$this->setProjectSetting( 'calc-values-auto-update-itr', $thisIteration );
+					}
+				}
+				$listFields = [];
+				if ( $this->getProjectSetting( 'calc-values-auto-update-lookup-only' ) )
+				{
+					$queryFields =
+						$this->query( "SELECT field_name FROM redcap_metadata WHERE project_id = ?" .
+						              " AND (element_type = 'calc' AND (element_enum LIKE " .
+						              "'%datalookup%' OR element_enum LIKE '%loglookup%')) OR " .
+						              "(element_type = 'text' AND (misc LIKE '%@CALCDATE%' OR " .
+						              "misc LIKE '%@CALCTEXT%') AND (misc LIKE '%datalookup%' " .
+						              "OR misc LIKE '%loglookup%'))", [ $project_id ] );
+					while ( $lookupField = $queryFields->fetch_assoc() )
+					{
+						$listFields[] = $lookupField['field_name'];
 					}
 				}
 				$autoCalcStart = time();
@@ -168,7 +190,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				         strpos( $infoField['select_choices_or_calculations'],
 				                 'loglookup' ) !== false ) ) ||
 				     ( $infoField['field_type'] == 'text' &&
-				       strpos( $infoField['field_annotation'], '@CALCTEXT' ) !== false &&
+				       ( strpos( $infoField['field_annotation'], '@CALCDATE' ) !== false ||
+				         strpos( $infoField['field_annotation'], '@CALCTEXT' ) !== false ) &&
 				       ( strpos( $infoField['field_annotation'],
 				                 'datalookup' ) !== false ||
 				         strpos( $infoField['field_annotation'],
