@@ -249,9 +249,8 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 			{
 				$vars[] = [ 'n' => $varNames[$i], 'v' => $varValues[$i] ];
 			}
-			echo '<script type="text/javascript">(function(){var sv = sysvar;var vars = ';
-			echo json_encode( $vars );
-			echo ';sysvar = function(name){return sv(name,vars)}})()</script>', "\n";
+			echo '<script type="text/javascript">sysvar.setVars(',
+			     json_encode( $vars ), ")</script>\n";
 		}
 
 

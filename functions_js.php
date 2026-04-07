@@ -231,18 +231,23 @@ function randomnumber()
 
 // sysvar: return the value of the specified system variable
 
-function sysvar( name )
+sysvar = (function()
 {
-	if ( arguments.length == 2 && Array.isArray( arguments[1] ) )
+	var vVars = []
+	var sysvar = function (name)
 	{
-		var vars = arguments[1]
-		for ( var i = 0; i < vars.length; i++ )
+		for ( var i = 0; i < vVars.length; i++ )
 		{
-			if ( vars[i].n == name )
+			if ( vVars[i].n == name )
 			{
-				return vars[i].v
+				return vVars[i].v
 			}
 		}
+		return ''
 	}
-	return ''
-}
+	sysvar.setVars = function (vars)
+	{
+		vVars = vars
+	}
+	return sysvar
+})()

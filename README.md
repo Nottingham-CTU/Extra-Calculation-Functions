@@ -66,7 +66,7 @@ This REDCap module adds extra functions for use in calculated fields.
     so that the calculated field's current value (once set) is preferred over a new value.
     <br>e.g. `ifnull( [calc_field_name], randomnumber() )`
 * **sysvar( varname )**<br>
- returns the value for the specified system variable as defined in the module system settings
+  returns the value for the specified system variable as defined in the module system settings
 
 Note that where the arguments to *ifenum* and *ifnull* are themselves functions, they will all be
 evaluated prior to the *ifenum* or *ifnull* logic execution (eager evaluation), even if those
