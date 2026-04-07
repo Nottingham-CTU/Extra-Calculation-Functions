@@ -2,6 +2,12 @@
 This REDCap module adds extra functions for use in calculated fields.
 
 ## Functions
+* **char( codepoint, ... )**<br>
+  returns characters for the specified Unicode codepoints
+  * Enter one or more codepoints (integers). The returned string will contain the characters for
+    all the supplied codepoints.
+  * Codepoints corresponding to ASCII control characters are ignored, except 9 (tab), 10 (line feed)
+    and 13 (carriage return).
 * **checkvalueoncurrentinstance( field, value, allowNewInstance, maxInstances, unique )**<br>
   this function is intended for use in form display logic, to control access to specific instances
   of the form based on the value of a field
@@ -59,6 +65,10 @@ This REDCap module adds extra functions for use in calculated fields.
 * **makedate( format, year, month, day )**<br>
   returns the date value for the supplied year, month and day components, according to the specified
   format ('dmy', 'mdy', or 'ymd')
+* **pick( object/array, key/index, ... )**<br>
+  get the item from a JSON encoded object or array by key or index
+  * If the key/index does not exist an empty string is returned.
+  * For nested objects/arrays multiple keys/indexes can be supplied.
 * **randomnumber()**<br>
   returns a cryptographically secure random number between 0 and 1
   * Note that this function will return a different value each time the calculation is run. To

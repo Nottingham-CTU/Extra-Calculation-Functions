@@ -39,6 +39,26 @@ __halt_compiler();
 
 
 
+// char
+
+function char()
+{
+	var vOutput = ''
+	for ( var i = 0; i < arguments.length; i++ )
+	{
+		if ( ! Number.isInteger(arguments[i]) || arguments[i] < 9 ||
+		     arguments[i] == 11 || arguments[i] == 12 ||
+		     ( arguments[i] > 13 && arguments[i] < 32 ) || arguments[i] == 127 )
+		{
+			continue
+		}
+		vOutput += String.fromCodePoint(arguments[i])
+	}
+	return vOutput
+}
+
+
+
 // checkvalueoncurrentinstance
 
 function checkvalueoncurrentinstance()
@@ -210,6 +230,41 @@ function makedate( fmt = '', y = '', m = '', d = '' )
 	}
 	return '' + y + '-' +
 	       ( (''+m).length == 1 ? '0' : '' ) + m + '-' + ( (''+d).length == 1 ? '0' : '' ) + d
+}
+
+
+
+// pick: get an item from an object or array
+
+function pick()
+{
+	var vArgs = arguments
+	var vObj = vArgs[0]
+	try
+	{
+		vObj = JSON.parse(vObj)
+	}
+	catch (e)
+	{
+		return ''
+	}
+	if ( typeof vObj != 'object' )
+	{
+		return ''
+	}
+	for (var i = 1; i < vArgs.length; i++)
+	{
+		if ( ! (vArgs[i] in vObj) )
+		{
+			return ''
+		}
+		vObj = vObj[ vArgs[i] ]
+	}
+	if ( typeof vObj == 'object' )
+	{
+		vObj = JSON.stringify(vObj)
+	}
+	return vObj
 }
 
 

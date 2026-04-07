@@ -4,6 +4,26 @@
 
 
 
+// char: get the characters corresponding to the supplied unicode codepoints.
+
+function char()
+{
+	$args = func_get_args();
+	$output = '';
+	foreach ( $args as $arg )
+	{
+		if ( preg_match( '/^[0-9]+$/', $arg ) || $arg < 9 || $arg == 11 || $arg == 12 ||
+		     ( $arg > 13 && $arg < 32 ) || $arg == 127 )
+		{
+			continue;
+		}
+		$output .= mb_chr( $arg, 'UTF-8' );
+	}
+	return $output;
+}
+
+
+
 // checkvalueoncurrentinstance: check if the value of the specified field matches the supplied value
 // on the current instance of the form - if a form instance is not loaded always return true
 
@@ -155,6 +175,37 @@ function makedate( $fmt = '', $y = '', $m = '', $d = '' )
 	}
 	return $y . '-' .
 	       ( strlen( $m ) == 1 ? '0' : '' ) . $m . '-' . ( strlen( $d ) == 1 ? '0' : '' ) . $d;
+}
+
+
+
+// pick: get an item from an object or array
+
+function pick()
+{
+	$args = func_get_args();
+	$obj = array_shift( $args );
+	try
+	{
+		$obj = json_decode( $obj, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR );
+	}
+	catch ( Exception $e )
+	{
+		return '';
+	}
+	for ( $i = 0; $i < count( $args ); $i++ )
+	{
+		if ( ! array_key_exists( $args[$i], $obj ) )
+		{
+			return '';
+		}
+		$obj = $obj[ $args[$i] ];
+	}
+	if ( is_array( $obj ) )
+	{
+		$obj = json_encode( $obj, JSON_UNESCAPED_SLASHES );
+	}
+	return $obj;
 }
 
 

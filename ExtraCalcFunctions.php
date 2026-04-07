@@ -40,12 +40,14 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		}
 
 		// Instruct the logic parser to allow the extra functions.
+		\LogicParser::$allowedFunctions[ 'char' ] = true;
 		\LogicParser::$allowedFunctions[ 'checkvalueoncurrentinstance' ] = true;
 		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifenum' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifnull' ] = true;
 		\LogicParser::$allowedFunctions[ 'loglookup' ] = true;
 		\LogicParser::$allowedFunctions[ 'makedate' ] = true;
+		\LogicParser::$allowedFunctions[ 'pick' ] = true;
 		\LogicParser::$allowedFunctions[ 'randomnumber' ] = true;
 		\LogicParser::$allowedFunctions[ 'sysvar' ] = true;
 
@@ -262,6 +264,14 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 			$listSpecialFunctions =
 				[
 					[
+						'char (codepoint, ... )',
+						'Returns characters for the specified Unicode codepoint(s)',
+						'This function allows arbitrary Unicode codepoints to be specified in ' .
+						'order for those characters to be returned. Codepoints corresponding to ' .
+						'ASCII control characters are ignored, except 9 (tab), 10 (line feed) ' .
+						'and 13 (carriage return).'
+					],
+					[
 						'checkvalueoncurrentinstance (field, value, allowNewInstance, ' .
 						'maxInstances, unique)',
 						'Checks the value of a field on the current instance',
@@ -304,6 +314,14 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 						'Construct date value',
 						"Returns the date value for the supplied year, month and day components, " .
 						"according to the specified format ('dmy', 'mdy' or 'ymd')."
+					],
+					[
+						'pick (object/array, key/index, ...)',
+						'Get the item from a JSON encoded object or array by key or index',
+						'Returns the item at the specified key or index. If the key/index does ' .
+						'not exist an empty string is returned. For nested objects/arrays ' .
+						'multiple keys/indexes can be supplied. If the returned item is itself ' .
+						'an object or array it will be returned as JSON.'
 					],
 					[
 						'randomnumber()',
