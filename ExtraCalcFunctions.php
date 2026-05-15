@@ -115,12 +115,12 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				{
 					$oldAction = $_POST['action'];
 				}
-				if ( isset( $user_rights['group_id'] ) )
+				if ( isset( $GLOBALS['user_rights']['group_id'] ) )
 				{
-					$oldGroupID = $user_rights['group_id'];
+					$oldGroupID = $GLOBALS['user_rights']['group_id'];
 				}
 				$_POST['action'] = 'fixCalcs';
-				$user_rights['group_id'] = null;
+				$GLOBALS['user_rights']['group_id'] = null;
 				$dq = new \DataQuality();
 				$queryRecords = $this->query( 'SELECT DISTINCT record FROM redcap_record_list ' .
 				                              'WHERE project_id = ? ORDER BY record',
@@ -151,11 +151,11 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				}
 				if ( $oldGroupID === null )
 				{
-					unset( $user_rights['group_id'] );
+					unset( $GLOBALS['user_rights']['group_id'] );
 				}
 				else
 				{
-					$user_rights['group_id'] = $oldGroupID;
+					$GLOBALS['user_rights']['group_id'] = $oldGroupID;
 				}
 				header( 'Content-Type: application/json' );
 				echo ( defined( 'SUPER_USER' ) && SUPER_USER == 1 )
@@ -163,7 +163,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				if ( $splitRuns > 1 && ( time() - $autoCalcStart ) < 180 &&
 				     $lastDuration < 180 && $lastDuration !== -1 && random_int(0,1) == 1 )
 				{
-					$splitRuns--;
+					$splitRuns = intval( $splitRuns * 4 / 5 );
 					$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
 				}
 				$this->setProjectSetting( 'calc-values-auto-update-dur', time() - $autoCalcStart );
