@@ -52,11 +52,43 @@
 			"type" : "checkbox"
 		},
 		{
+			"key" : "calc-values-auto-update-lookup-only",
+			"name" : "Only update calculations with lookup functions",
+			"type" : "checkbox",
+			"branchingLogic" : { "field" : "calc-values-auto-update", "value" : true }
+		},
+		{
 			"key" : "calc-values-auto-update-ts",
 			"name" : "",
 			"type" : "text",
 			"hidden" : true,
 			"super-users-only" : true
+		},
+		{
+			"key" : "calc-values-auto-update-dur",
+			"name" : "",
+			"type" : "text",
+			"hidden" : true,
+			"super-users-only" : true
+		},
+		{
+			"key" : "calc-values-auto-update-itr",
+			"name" : "",
+			"type" : "text",
+			"hidden" : true,
+			"super-users-only" : true
+		},
+		{
+			"key" : "calc-values-auto-update-spl",
+			"name" : "",
+			"type" : "text",
+			"hidden" : true,
+			"super-users-only" : true
+		},
+		{
+			"key" : "lookup-return-while-waiting",
+			"name" : "Value returned by lookup functions while waiting for data",
+			"type" : "text"
 		},
 		{
 			"key" : "custom-data-lookup-enable",

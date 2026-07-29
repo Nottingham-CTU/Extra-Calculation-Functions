@@ -9,6 +9,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 	{
 		$this->removeProjectSetting( 'calc-values-auto-update-ts' );
 		$this->removeProjectSetting( 'calc-values-auto-update-dur' );
+		$this->removeProjectSetting( 'calc-values-auto-update-itr' );
+		$this->removeProjectSetting( 'calc-values-auto-update-spl' );
 	}
 
 
@@ -29,14 +31,23 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				}
 			}
 		}
+		// If calc-values-auto-update is turned off, also unset lookup-only.
+		elseif ( substr( PAGE_FULL, strlen( APP_PATH_WEBROOT ), 35 ) ==
+		         'ExternalModules/manager/project.php' &&
+		         $this->getProjectSetting( 'calc-values-auto-update' ) === false )
+		{
+			$this->setProjectSetting( 'calc-values-auto-update-lookup-only', false );
+		}
 
 		// Instruct the logic parser to allow the extra functions.
+		\LogicParser::$allowedFunctions[ 'char' ] = true;
 		\LogicParser::$allowedFunctions[ 'checkvalueoncurrentinstance' ] = true;
 		\LogicParser::$allowedFunctions[ 'datalookup' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifenum' ] = true;
 		\LogicParser::$allowedFunctions[ 'ifnull' ] = true;
 		\LogicParser::$allowedFunctions[ 'loglookup' ] = true;
 		\LogicParser::$allowedFunctions[ 'makedate' ] = true;
+		\LogicParser::$allowedFunctions[ 'pick' ] = true;
 		\LogicParser::$allowedFunctions[ 'randomnumber' ] = true;
 		\LogicParser::$allowedFunctions[ 'sysvar' ] = true;
 
@@ -80,6 +91,21 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 						$this->setProjectSetting( 'calc-values-auto-update-itr', $thisIteration );
 					}
 				}
+				$listFields = [];
+				if ( $this->getProjectSetting( 'calc-values-auto-update-lookup-only' ) )
+				{
+					$queryFields =
+						$this->query( "SELECT field_name FROM redcap_metadata WHERE project_id = ?" .
+						              " AND (element_type = 'calc' AND (element_enum LIKE " .
+						              "'%datalookup%' OR element_enum LIKE '%loglookup%')) OR " .
+						              "(element_type = 'text' AND (misc LIKE '%@CALCDATE%' OR " .
+						              "misc LIKE '%@CALCTEXT%') AND (misc LIKE '%datalookup%' " .
+						              "OR misc LIKE '%loglookup%'))", [ $project_id ] );
+					while ( $lookupField = $queryFields->fetch_assoc() )
+					{
+						$listFields[] = $lookupField['field_name'];
+					}
+				}
 				$autoCalcStart = time();
 				$this->setProjectSetting( 'calc-values-auto-update-ts', $autoCalcStart );
 				$this->setProjectSetting( 'calc-values-auto-update-dur', -1 );
@@ -89,12 +115,12 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				{
 					$oldAction = $_POST['action'];
 				}
-				if ( isset( $user_rights['group_id'] ) )
+				if ( isset( $GLOBALS['user_rights']['group_id'] ) )
 				{
-					$oldGroupID = $user_rights['group_id'];
+					$oldGroupID = $GLOBALS['user_rights']['group_id'];
 				}
 				$_POST['action'] = 'fixCalcs';
-				$user_rights['group_id'] = null;
+				$GLOBALS['user_rights']['group_id'] = null;
 				$dq = new \DataQuality();
 				$queryRecords = $this->query( 'SELECT DISTINCT record FROM redcap_record_list ' .
 				                              'WHERE project_id = ? ORDER BY record',
@@ -125,11 +151,11 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				}
 				if ( $oldGroupID === null )
 				{
-					unset( $user_rights['group_id'] );
+					unset( $GLOBALS['user_rights']['group_id'] );
 				}
 				else
 				{
-					$user_rights['group_id'] = $oldGroupID;
+					$GLOBALS['user_rights']['group_id'] = $oldGroupID;
 				}
 				header( 'Content-Type: application/json' );
 				echo ( defined( 'SUPER_USER' ) && SUPER_USER == 1 )
@@ -137,7 +163,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				if ( $splitRuns > 1 && ( time() - $autoCalcStart ) < 180 &&
 				     $lastDuration < 180 && $lastDuration !== -1 && random_int(0,1) == 1 )
 				{
-					$splitRuns--;
+					$splitRuns = intval( $splitRuns * 4 / 5 );
 					$this->setProjectSetting( 'calc-values-auto-update-spl', $splitRuns );
 				}
 				$this->setProjectSetting( 'calc-values-auto-update-dur', time() - $autoCalcStart );
@@ -168,7 +194,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				         strpos( $infoField['select_choices_or_calculations'],
 				                 'loglookup' ) !== false ) ) ||
 				     ( $infoField['field_type'] == 'text' &&
-				       strpos( $infoField['field_annotation'], '@CALCTEXT' ) !== false &&
+				       ( strpos( $infoField['field_annotation'], '@CALCDATE' ) !== false ||
+				         strpos( $infoField['field_annotation'], '@CALCTEXT' ) !== false ) &&
 				       ( strpos( $infoField['field_annotation'],
 				                 'datalookup' ) !== false ||
 				         strpos( $infoField['field_annotation'],
@@ -204,6 +231,14 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 <script type="text/javascript" src="<?php echo $this->getUrl( 'functions_js.php?NOAUTH' ), '&v=',
             preg_replace( '/^.*?([0-9.]+)$/', '$1', $this->getModuleDirectoryName() ); ?>"></script>
 <?php
+		// Set the waiting value for datalookup/loglookup if supplied.
+		$lookupWaitingValue = $this->getProjectSetting( 'lookup-return-while-waiting' );
+		if ( $lookupWaitingValue != '' )
+		{
+			echo '<script type="text/javascript">datalookup.setWaitingValue(',
+			     json_encode( $lookupWaitingValue ), ');loglookup.setWaitingValue(',
+			     json_encode( $lookupWaitingValue ), ")</script>\n";
+		}
 
 		// Get the system variables for use by the sysvar function.
 		if ( $this->getSystemSetting( 'sysvar-enable' ) )
@@ -216,9 +251,8 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 			{
 				$vars[] = [ 'n' => $varNames[$i], 'v' => $varValues[$i] ];
 			}
-			echo '<script type="text/javascript">(function(){var sv = sysvar;var vars = ';
-			echo json_encode( $vars );
-			echo ';sysvar = function(name){return sv(name,vars)}})()</script>', "\n";
+			echo '<script type="text/javascript">sysvar.setVars(',
+			     json_encode( $vars ), ")</script>\n";
 		}
 
 
@@ -229,6 +263,14 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 		{
 			$listSpecialFunctions =
 				[
+					[
+						'char (codepoint, ... )',
+						'Returns characters for the specified Unicode codepoint(s)',
+						'This function allows arbitrary Unicode codepoints to be specified in ' .
+						'order for those characters to be returned. Codepoints corresponding to ' .
+						'ASCII control characters are ignored, except 9 (tab), 10 (line feed) ' .
+						'and 13 (carriage return).'
+					],
 					[
 						'checkvalueoncurrentinstance (field, value, allowNewInstance, ' .
 						'maxInstances, unique)',
@@ -272,6 +314,14 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 						'Construct date value',
 						"Returns the date value for the supplied year, month and day components, " .
 						"according to the specified format ('dmy', 'mdy' or 'ymd')."
+					],
+					[
+						'pick (object/array, key/index, ...)',
+						'Get the item from a JSON encoded object or array by key or index',
+						'Returns the item at the specified key or index. If the key/index does ' .
+						'not exist an empty string is returned. For nested objects/arrays ' .
+						'multiple keys/indexes can be supplied. If the returned item is itself ' .
+						'an object or array it will be returned as JSON.'
 					],
 					[
 						'randomnumber()',

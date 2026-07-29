@@ -2,6 +2,12 @@
 This REDCap module adds extra functions for use in calculated fields.
 
 ## Functions
+* **char( codepoint, ... )**<br>
+  returns characters for the specified Unicode codepoints
+  * Enter one or more codepoints (integers). The returned string will contain the characters for
+    all the supplied codepoints.
+  * Codepoints corresponding to ASCII control characters are ignored, except 9 (tab), 10 (line feed)
+    and 13 (carriage return).
 * **checkvalueoncurrentinstance( field, value, allowNewInstance, maxInstances, unique )**<br>
   this function is intended for use in form display logic, to control access to specific instances
   of the form based on the value of a field
@@ -59,6 +65,10 @@ This REDCap module adds extra functions for use in calculated fields.
 * **makedate( format, year, month, day )**<br>
   returns the date value for the supplied year, month and day components, according to the specified
   format ('dmy', 'mdy', or 'ymd')
+* **pick( object/array, key/index, ... )**<br>
+  get the item from a JSON encoded object or array by key or index
+  * If the key/index does not exist an empty string is returned.
+  * For nested objects/arrays multiple keys/indexes can be supplied.
 * **randomnumber()**<br>
   returns a cryptographically secure random number between 0 and 1
   * Note that this function will return a different value each time the calculation is run. To
@@ -66,7 +76,7 @@ This REDCap module adds extra functions for use in calculated fields.
     so that the calculated field's current value (once set) is preferred over a new value.
     <br>e.g. `ifnull( [calc_field_name], randomnumber() )`
 * **sysvar( varname )**<br>
- returns the value for the specified system variable as defined in the module system settings
+  returns the value for the specified system variable as defined in the module system settings
 
 Note that where the arguments to *ifenum* and *ifnull* are themselves functions, they will all be
 evaluated prior to the *ifenum* or *ifnull* logic execution (eager evaluation), even if those
@@ -84,6 +94,17 @@ it was last run.
 Note that if there is a lot of data in the project and updating calculated values takes a long time,
 this feature may apply to only a subset of data at a time. In this case, several runs will need to
 complete in order for all calculated values to be fixed.
+
+### Only update calculations with lookup functions
+Enabling this setting will restrict the automatic updating of calculated values only to fields which
+utilise the `datalookup` or `loglookup` functions.
+
+### Value returned by lookup functions while waiting for data
+When the *datalookup* or *loglookup* function is run in the browser, it may have to return a value
+before the lookup is complete (as this requires a separate request to the server to take place).
+This *value while waiting* defaults to a blank value, but can be overridden here. When the lookup is
+complete, the calculations and branching logic on the page will be re-run so the value from the
+lookup can be used.
 
 ***The following settings are only available to administrators.***
 

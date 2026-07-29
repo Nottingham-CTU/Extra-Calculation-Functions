@@ -39,6 +39,26 @@ __halt_compiler();
 
 
 
+// char
+
+function char()
+{
+	var vOutput = ''
+	for ( var i = 0; i < arguments.length; i++ )
+	{
+		if ( ! Number.isInteger(arguments[i]) || arguments[i] < 9 ||
+		     arguments[i] == 11 || arguments[i] == 12 ||
+		     ( arguments[i] > 13 && arguments[i] < 32 ) || arguments[i] == 127 )
+		{
+			continue
+		}
+		vOutput += String.fromCodePoint(arguments[i])
+	}
+	return vOutput
+}
+
+
+
 // checkvalueoncurrentinstance
 
 function checkvalueoncurrentinstance()
@@ -52,6 +72,7 @@ function checkvalueoncurrentinstance()
 
 datalookup = (function()
 {
+	var luWaitingVal = ''
 	var luCache = {}
 	var luFunc = function ()
 	{
@@ -86,9 +107,13 @@ datalookup = (function()
 		}
 		if ( luCache[ luName ][ luArgs ] === false )
 		{
-			return ''
+			return luWaitingVal
 		}
 		return luCache[ luName ][ luArgs ]
+	}
+	luFunc.setWaitingValue = function ( vVal )
+	{
+		luWaitingVal = vVal
 	}
 	return luFunc
 })()
@@ -138,6 +163,7 @@ function ifnull()
 
 loglookup = (function()
 {
+	var luWaitingVal = ''
 	var luCache = {}
 	var luFunc = function ( type = '', field = '', record = '', event = '', instance = '' )
 	{
@@ -168,9 +194,13 @@ loglookup = (function()
 		}
 		if ( luCache[ luArgs ] === false )
 		{
-			return ''
+			return luWaitingVal
 		}
 		return luCache[ luArgs ]
+	}
+	luFunc.setWaitingValue = function ( vVal )
+	{
+		luWaitingVal = vVal
 	}
 	return luFunc
 })()
@@ -204,6 +234,41 @@ function makedate( fmt = '', y = '', m = '', d = '' )
 
 
 
+// pick: get an item from an object or array
+
+function pick()
+{
+	var vArgs = arguments
+	var vObj = vArgs[0]
+	try
+	{
+		vObj = JSON.parse(vObj)
+	}
+	catch (e)
+	{
+		return ''
+	}
+	if ( typeof vObj != 'object' )
+	{
+		return ''
+	}
+	for (var i = 1; i < vArgs.length; i++)
+	{
+		if ( ! (vArgs[i] in vObj) )
+		{
+			return ''
+		}
+		vObj = vObj[ vArgs[i] ]
+	}
+	if ( typeof vObj == 'object' )
+	{
+		vObj = JSON.stringify(vObj)
+	}
+	return vObj
+}
+
+
+
 // randomnumber: generate a secure random number between 0 and 1
 
 function randomnumber()
@@ -221,18 +286,23 @@ function randomnumber()
 
 // sysvar: return the value of the specified system variable
 
-function sysvar( name )
+sysvar = (function()
 {
-	if ( arguments.length == 2 && Array.isArray( arguments[1] ) )
+	var vVars = []
+	var sysvar = function (name)
 	{
-		var vars = arguments[1]
-		for ( var i = 0; i < vars.length; i++ )
+		for ( var i = 0; i < vVars.length; i++ )
 		{
-			if ( vars[i].n == name )
+			if ( vVars[i].n == name )
 			{
-				return vars[i].v
+				return vVars[i].v
 			}
 		}
+		return ''
 	}
-	return ''
-}
+	sysvar.setVars = function (vars)
+	{
+		vVars = vars
+	}
+	return sysvar
+})()
