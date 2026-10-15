@@ -133,7 +133,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				for ( $i = floor( ( ($thisIteration - 1) / $splitRuns ) * count( $listRecords ) );
 				      $i < floor( ( $thisIteration / $splitRuns ) * count( $listRecords ) ); $i++ )
 				{
-					$dq->executeRule( 'pd-10', [ $listRecords[$i] ] );
+					$dq->executeRule( 'pd-10', [ $listRecords[$i] ], null, false, $listFields);
 					if ( memory_get_usage() / $memLimit > 0.9 )
 					{
 						// Too much memory is being used, exit before an error is triggered.
@@ -356,7 +356,67 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 
 	}
 
+        
+        public function redcap_save_record( $project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance)
+        {
+     
+            if ( $this->getProjectSetting( 'calc-values-on-save-enable' ) )
+            {  
+                $forms = $this->getProjectSetting('calc-values-on-save-form', $project_id);
+                $fields = $this->getProjectSetting('calc-values-on-save-field', $project_id); 
 
+                // Get all configured instruments on save, require a recalulation of fields
+                if($forms !== null)
+                {
+                    for ($i = 0; $i < count($forms); $i++)
+                    {
+                         if ($forms[$i] === $instrument) {
+                            $listFields = [];    
+                            for ($field = 0; $field < count($fields[$i]); $field++)
+                            {  
+                                $listFields[] = $fields[$i][$field];   
+                            }
+                            $oldAction = null;
+                            $oldGroupID = null;
+                            if ( isset( $_POST['action'] ) )
+                            {
+                                $oldAction = $_POST['action'];
+                            }
+                            if ( isset( $GLOBALS['user_rights']['group_id'] ) )
+                            {
+                                $oldGroupID = $GLOBALS['user_rights']['group_id'];
+                            }
+                            $_POST['action'] = 'fixCalcs';
+                            $GLOBALS['user_rights']['group_id'] = null;
+                            $dq = new \DataQuality();
+                            $dq->executeRule( 'pd-10', null, null, false, $listFields);
+                            if ( $oldAction === null )
+                            {
+                                unset( $_POST['action'] );
+                            }
+                            else
+                            {
+                                $_POST['action'] = $oldAction;
+                            }
+                            if ( $oldGroupID === null )
+                            {
+                                unset( $GLOBALS['user_rights']['group_id'] );
+                            }
+                            else
+                            {
+                                $GLOBALS['user_rights']['group_id'] = $oldGroupID;
+                            }
+                          
+                         }
+                    }
+                }
+            }
+        }
+      
+        function fixcalcs($record=null, $dag=null, $is_export=false, $fields = [])
+        {
+            
+        }
 
 	// Echo plain text to output (without Psalm taints).
 	// Use only for e.g. JSON or CSV output.
@@ -537,6 +597,33 @@ $(function()
 						{
 							$errMsg .= "\n- Filter logic for lookup " . ($i+1) . " is invalid";
 						}
+					}
+				}
+			}
+                        if ( $settings['calc-values-on-save-enable'] )
+			{
+				if ( count( $settings['calc-values-on-save'] ) == 0 )
+				{
+					$errMsg .= "\n- At least 1 form and field must be defined";
+				}
+				else
+				{
+					for ( $i = 0; $i < count( $settings['calc-values-on-save-form'] ); $i++ )
+					{
+						if ( $settings['calc-values-on-save-form'][$i] == '' )
+						{
+							$errMsg .= "\n- Name of form " . ($i+1) . " to save is missing";
+						}
+                                                for ( $j = 0; $j < count( $settings['calc-values-on-save-field'][$i] ); $j++ )
+                                                {
+					
+                                                    if ( $settings['calc-values-on-save-field'][$i][$j] == '' )
+                                                    {
+                                                        $form_name = ['calc-values-on-save-form'][$i];
+                                                        $errMsg .= "\n- Field ". ($j+1)." to calculate on form ".($i+1)." save is missing";
+                                                    }
+                                                }
+						
 					}
 				}
 			}
