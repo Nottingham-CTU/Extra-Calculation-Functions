@@ -6,7 +6,8 @@
 		"redcap_every_page_before_render",
 		"redcap_every_page_top",
 		"redcap_data_entry_form_top",
-		"redcap_survey_page_top"
+		"redcap_survey_page_top",
+                "redcap_save_record"
 	],
 	"authors": [
 		{
@@ -158,6 +159,36 @@
 					"type" : "text",
 					"super-users-only" : true
 				}
+			]
+		},
+                {
+			"key" : "calc-values-on-save-enable",
+			"name" : "Update calculated values on save",
+			"type" : "checkbox",
+			"super-users-only" : true
+		},
+		{
+			"key" : "calc-values-on-save",
+			"name" : "Calculate values on save",
+			"type" : "sub_settings",
+			"repeatable" : true,
+			"super-users-only" : true,
+			"branchingLogic" : { "field" : "calc-values-on-save-enable", "value" : true },
+			"sub_settings" : [
+				{
+					"key" : "calc-values-on-save-form",
+					"name" : "Form to be saved to trigger calculation",
+					"type" : "form-list",
+					"super-users-only" : true
+				},
+				{
+					"key" : "calc-values-on-save-field",
+					"name" : "Field to calculate",
+                                        "type" : "field-list",
+					"repeatable" : true,
+					"super-users-only" : true
+				}
+				
 			]
 		}
 	],

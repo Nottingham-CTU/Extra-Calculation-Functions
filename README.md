@@ -143,6 +143,14 @@ returned.
 ### List separator
 If a list of items is to be returned, specify the separator character/string here.
 
+### Update field calculated values on saving a form
+If this setting is enabled, the data quality rule for *Incorrect values for calculated fields * will
+be automatically run to fix calculated values on selected fields on saving a selected form.<br>
+The following settings are configured for this feature:
+* ** Form to be saved to trigger calculation **
+* ** Field(s) to calculate **
+
+If calculated values on saving a form is selected, at least one field to recalculated on saving a form must be defined.
 
 ## System-level configuration options
 
