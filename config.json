@@ -7,7 +7,7 @@
 		"redcap_every_page_top",
 		"redcap_data_entry_form_top",
 		"redcap_survey_page_top",
-                "redcap_save_record"
+		"redcap_save_record"
 	],
 	"authors": [
 		{
@@ -87,6 +87,31 @@
 			"super-users-only" : true
 		},
 		{
+			"key" : "calc-values-on-save-enable",
+			"name" : "Update calculated values on form save",
+			"type" : "checkbox"
+		},
+		{
+			"key" : "calc-values-on-save",
+			"name" : "Calculate values on save",
+			"type" : "sub_settings",
+			"repeatable" : true,
+			"branchingLogic" : { "field" : "calc-values-on-save-enable", "value" : true },
+			"sub_settings" : [
+				{
+					"key" : "calc-values-on-save-form",
+					"name" : "Form to trigger calculation when saved",
+					"type" : "form-list"
+				},
+				{
+					"key" : "calc-values-on-save-field",
+					"name" : "Field to calculate",
+					"type" : "field-list",
+					"repeatable" : true
+				}
+			]
+		},
+		{
 			"key" : "lookup-return-while-waiting",
 			"name" : "Value returned by lookup functions while waiting for data",
 			"type" : "text"
@@ -159,36 +184,6 @@
 					"type" : "text",
 					"super-users-only" : true
 				}
-			]
-		},
-                {
-			"key" : "calc-values-on-save-enable",
-			"name" : "Update calculated values on save",
-			"type" : "checkbox",
-			"super-users-only" : true
-		},
-		{
-			"key" : "calc-values-on-save",
-			"name" : "Calculate values on save",
-			"type" : "sub_settings",
-			"repeatable" : true,
-			"super-users-only" : true,
-			"branchingLogic" : { "field" : "calc-values-on-save-enable", "value" : true },
-			"sub_settings" : [
-				{
-					"key" : "calc-values-on-save-form",
-					"name" : "Form to be saved to trigger calculation",
-					"type" : "form-list",
-					"super-users-only" : true
-				},
-				{
-					"key" : "calc-values-on-save-field",
-					"name" : "Field to calculate",
-                                        "type" : "field-list",
-					"repeatable" : true,
-					"super-users-only" : true
-				}
-				
 			]
 		}
 	],

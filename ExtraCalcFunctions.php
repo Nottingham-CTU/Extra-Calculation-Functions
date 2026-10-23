@@ -4,6 +4,13 @@ namespace Nottingham\ExtraCalcFunctions;
 
 class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 {
+	const QUERY_CALC_FIELDS = "SELECT field_name FROM redcap_metadata WHERE project_id = ? AND " .
+	                          "(element_type = 'calc' AND (element_enum LIKE '%datalookup%' OR " .
+	                          "element_enum LIKE '%loglookup%')) OR " .
+	                          "(element_type = 'text' AND (misc LIKE '%@CALCDATE%' OR " .
+	                          "misc LIKE '%@CALCTEXT%') AND (misc LIKE '%datalookup%' OR " .
+	                          "misc LIKE '%loglookup%'))";
+
 
 	public function redcap_module_project_disable( $version, $project_id )
 	{
@@ -11,6 +18,40 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 		$this->removeProjectSetting( 'calc-values-auto-update-dur' );
 		$this->removeProjectSetting( 'calc-values-auto-update-itr' );
 		$this->removeProjectSetting( 'calc-values-auto-update-spl' );
+	}
+
+
+
+	public function redcap_module_configuration_settings( $project_id, $settings )
+	{
+		if ( $project_id !== null )
+		{
+			$queryFields = $this->query( self::QUERY_CALC_FIELDS, [ $project_id ] );
+			while ( $lookupField = $queryFields->fetch_assoc() )
+			{
+				$listFields[] = $lookupField['field_name'];
+			}
+			foreach ( $settings as $i => $s )
+			{
+				if ( $s['key'] == 'calc-values-on-save' )
+				{
+					foreach( $s['sub_settings'] as $j => $subS )
+					{
+						if ( $subS['key'] == 'calc-values-on-save-field' )
+						{
+							$settings[$i]['sub_settings'][$j]['type'] = 'dropdown';
+							$choices = [];
+							foreach ( $listFields as $fieldName )
+							{
+								$choices[] = [ 'name' => $fieldName, 'value' => $fieldName ];
+							}
+							$settings[$i]['sub_settings'][$j]['choices'] = $choices;
+						}
+					}
+				}
+			}
+		}
+		return $settings;
 	}
 
 
@@ -94,13 +135,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				$listFields = [];
 				if ( $this->getProjectSetting( 'calc-values-auto-update-lookup-only' ) )
 				{
-					$queryFields =
-						$this->query( "SELECT field_name FROM redcap_metadata WHERE project_id = ?" .
-						              " AND (element_type = 'calc' AND (element_enum LIKE " .
-						              "'%datalookup%' OR element_enum LIKE '%loglookup%')) OR " .
-						              "(element_type = 'text' AND (misc LIKE '%@CALCDATE%' OR " .
-						              "misc LIKE '%@CALCTEXT%') AND (misc LIKE '%datalookup%' " .
-						              "OR misc LIKE '%loglookup%'))", [ $project_id ] );
+					$queryFields = $this->query( self::QUERY_CALC_FIELDS, [ $project_id ] );
 					while ( $lookupField = $queryFields->fetch_assoc() )
 					{
 						$listFields[] = $lookupField['field_name'];
@@ -133,7 +168,7 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 				for ( $i = floor( ( ($thisIteration - 1) / $splitRuns ) * count( $listRecords ) );
 				      $i < floor( ( $thisIteration / $splitRuns ) * count( $listRecords ) ); $i++ )
 				{
-					$dq->executeRule( 'pd-10', [ $listRecords[$i] ], null, false, $listFields);
+					$dq->executeRule( 'pd-10', [ $listRecords[$i] ], null, false, $listFields );
 					if ( memory_get_usage() / $memLimit > 0.9 )
 					{
 						// Too much memory is being used, exit before an error is triggered.
@@ -356,67 +391,55 @@ $.ajax( { url : '', method : 'GET', headers : { 'X-RC-ECF-Auto-ReCalc' : '1' } }
 
 	}
 
-        
-        public function redcap_save_record( $project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance)
-        {
-     
-            if ( $this->getProjectSetting( 'calc-values-on-save-enable' ) )
-            {  
-                $forms = $this->getProjectSetting('calc-values-on-save-form', $project_id);
-                $fields = $this->getProjectSetting('calc-values-on-save-field', $project_id); 
 
-                // Get all configured instruments on save, require a recalulation of fields
-                if($forms !== null)
-                {
-                    for ($i = 0; $i < count($forms); $i++)
-                    {
-                         if ($forms[$i] === $instrument) {
-                            $listFields = [];    
-                            for ($field = 0; $field < count($fields[$i]); $field++)
-                            {  
-                                $listFields[] = $fields[$i][$field];   
-                            }
-                            $oldAction = null;
-                            $oldGroupID = null;
-                            if ( isset( $_POST['action'] ) )
-                            {
-                                $oldAction = $_POST['action'];
-                            }
-                            if ( isset( $GLOBALS['user_rights']['group_id'] ) )
-                            {
-                                $oldGroupID = $GLOBALS['user_rights']['group_id'];
-                            }
-                            $_POST['action'] = 'fixCalcs';
-                            $GLOBALS['user_rights']['group_id'] = null;
-                            $dq = new \DataQuality();
-                            $dq->executeRule( 'pd-10', null, null, false, $listFields);
-                            if ( $oldAction === null )
-                            {
-                                unset( $_POST['action'] );
-                            }
-                            else
-                            {
-                                $_POST['action'] = $oldAction;
-                            }
-                            if ( $oldGroupID === null )
-                            {
-                                unset( $GLOBALS['user_rights']['group_id'] );
-                            }
-                            else
-                            {
-                                $GLOBALS['user_rights']['group_id'] = $oldGroupID;
-                            }
-                          
-                         }
-                    }
-                }
-            }
-        }
-      
-        function fixcalcs($record=null, $dag=null, $is_export=false, $fields = [])
-        {
-            
-        }
+
+	public function redcap_save_record( $project_id, $record, $instrument, $event_id, $group_id,
+	                                    $survey_hash, $response_id, $repeat_instance )
+	{
+		if ( $this->getProjectSetting( 'calc-values-on-save-enable' ) )
+		{
+			$listForms = $this->getProjectSetting( 'calc-values-on-save-form', $project_id );
+			$listFields = $this->getProjectSetting( 'calc-values-on-save-field', $project_id );
+			$formID = array_search( $instrument, $listForms );
+
+			if( $formID !== false ) // This form is in the list for recalc on save.
+			{
+				$listFields = $listFields[ $formID ]; // The fields to recalc for this form.
+				$oldAction = null;
+				$oldGroupID = null;
+				if ( isset( $_POST['action'] ) )
+				{
+					$oldAction = $_POST['action'];
+				}
+				if ( isset( $GLOBALS['user_rights']['group_id'] ) )
+				{
+					$oldGroupID = $GLOBALS['user_rights']['group_id'];
+				}
+				$_POST['action'] = 'fixCalcs';
+				$GLOBALS['user_rights']['group_id'] = null;
+				$dq = new \DataQuality();
+				$dq->executeRule( 'pd-10', null, null, false, $listFields );
+				if ( $oldAction === null )
+				{
+					unset( $_POST['action'] );
+				}
+				else
+				{
+					$_POST['action'] = $oldAction;
+				}
+				if ( $oldGroupID === null )
+				{
+					unset( $GLOBALS['user_rights']['group_id'] );
+				}
+				else
+				{
+					$GLOBALS['user_rights']['group_id'] = $oldGroupID;
+				}
+			}
+		}
+	}
+
+
 
 	// Echo plain text to output (without Psalm taints).
 	// Use only for e.g. JSON or CSV output.
@@ -600,7 +623,7 @@ $(function()
 					}
 				}
 			}
-                        if ( $settings['calc-values-on-save-enable'] )
+			if ( $settings['calc-values-on-save-enable'] )
 			{
 				if ( count( $settings['calc-values-on-save'] ) == 0 )
 				{
@@ -612,18 +635,18 @@ $(function()
 					{
 						if ( $settings['calc-values-on-save-form'][$i] == '' )
 						{
-							$errMsg .= "\n- Name of form " . ($i+1) . " to save is missing";
+							$errMsg .= "\n- Form to trigger calculation when saved " . ($i+1) .
+							           " is missing";
 						}
-                                                for ( $j = 0; $j < count( $settings['calc-values-on-save-field'][$i] ); $j++ )
-                                                {
-					
-                                                    if ( $settings['calc-values-on-save-field'][$i][$j] == '' )
-                                                    {
-                                                        $form_name = ['calc-values-on-save-form'][$i];
-                                                        $errMsg .= "\n- Field ". ($j+1)." to calculate on form ".($i+1)." save is missing";
-                                                    }
-                                                }
-						
+						for ( $j = 0;
+						      $j < count( $settings['calc-values-on-save-field'][$i] ); $j++ )
+						{
+							if ( $settings['calc-values-on-save-field'][$i][$j] == '' )
+							{
+								$errMsg .= "\n- Field to calculate " . ($j+1) .
+								           " (form to trigger calc " . ($i+1) . ") is missing";
+							}
+						}
 					}
 				}
 			}

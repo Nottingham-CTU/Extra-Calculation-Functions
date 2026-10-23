@@ -99,6 +99,16 @@ complete in order for all calculated values to be fixed.
 Enabling this setting will restrict the automatic updating of calculated values only to fields which
 utilise the `datalookup` or `loglookup` functions.
 
+### Update field calculated values on saving a form
+If this setting is enabled, the data quality rule for *Incorrect values for calculated fields* will
+be automatically run to fix calculated values on selected fields when saving a form.<br>
+The following settings are configured for this feature:
+* Form to be saved to trigger calculation
+* Field(s) to calculate
+
+If calculated values on saving a form is selected, at least one field to recalculated on saving a
+form must be defined.
+
 ### Value returned by lookup functions while waiting for data
 When the *datalookup* or *loglookup* function is run in the browser, it may have to return a value
 before the lookup is complete (as this requires a separate request to the server to take place).
@@ -143,14 +153,6 @@ returned.
 ### List separator
 If a list of items is to be returned, specify the separator character/string here.
 
-### Update field calculated values on saving a form
-If this setting is enabled, the data quality rule for *Incorrect values for calculated fields * will
-be automatically run to fix calculated values on selected fields on saving a selected form.<br>
-The following settings are configured for this feature:
-* ** Form to be saved to trigger calculation **
-* ** Field(s) to calculate **
-
-If calculated values on saving a form is selected, at least one field to recalculated on saving a form must be defined.
 
 ## System-level configuration options
 
