@@ -5,11 +5,11 @@ namespace Nottingham\ExtraCalcFunctions;
 class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 {
 	const QUERY_CALC_FIELDS = "SELECT field_name FROM redcap_metadata WHERE project_id = ? AND " .
-	                          "(element_type = 'calc' AND (element_enum LIKE '%datalookup%' OR " .
+	                          "((element_type = 'calc' AND (element_enum LIKE '%datalookup%' OR " .
 	                          "element_enum LIKE '%loglookup%')) OR " .
 	                          "(element_type = 'text' AND (misc LIKE '%@CALCDATE%' OR " .
 	                          "misc LIKE '%@CALCTEXT%') AND (misc LIKE '%datalookup%' OR " .
-	                          "misc LIKE '%loglookup%'))";
+	                          "misc LIKE '%loglookup%')))";
 
 
 	public function redcap_module_project_disable( $version, $project_id )
@@ -26,7 +26,8 @@ class ExtraCalcFunctions extends \ExternalModules\AbstractExternalModule
 	{
 		if ( $project_id !== null )
 		{
-			$queryFields = $this->query( self::QUERY_CALC_FIELDS, [ $project_id ] );
+			$queryFields = $this->query( str_replace( '%datalookup%', '%',
+			                                          self::QUERY_CALC_FIELDS ), [ $project_id ] );
 			while ( $lookupField = $queryFields->fetch_assoc() )
 			{
 				$listFields[] = $lookupField['field_name'];
